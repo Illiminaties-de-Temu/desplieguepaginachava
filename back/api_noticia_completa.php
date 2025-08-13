@@ -1,49 +1,64 @@
 <?php
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *'); // Solo para desarrollo
+header('Access-Control-Allow-Origin: *'); // Permite CORS (temporal para desarrollo)
 
-// Ruta absoluta al config.php
-require_once __DIR__ . '/../config.php';
-
-// Manejo de errores
+// Debug (solo para desarrollo)
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
+// Ruta absoluta al config.php (ajusta según tu estructura)
+require_once __DIR__ . '/../config.php';
+
 try {
-    if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-        throw new Exception('ID de noticia inválido');
+    // Validación del ID
+    if (!isset($_GET['id']) || !ctype_digit($_GET['id'])) {
+        throw new Exception("ID inválido o no proporcionado", 400);
     }
 
     $id = intval($_GET['id']);
-    
-    $stmt = $pdo->prepare("
-        SELECT id, Titulo AS titulo, Contenido AS contenido, 
-               Imagenes AS imagenes, fecha AS fecha_publicacion
-        FROM noticias 
-        WHERE id = ?
-    ");
-    
-    $stmt->execute([$id]);
+
+    // Consulta SQL corregida
+    $sql = "SELECT 
+                id, 
+                Titulo AS titulo, 
+                Contenido AS contenido, 
+                Imagenes AS imagenes, 
+                fecha AS fecha_publicacion 
+            FROM noticias 
+            WHERE id = :id";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+
     $noticia = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$noticia) {
-        throw new Exception('Noticia no encontrada');
+        throw new Exception("Noticia no encontrada", 404);
     }
 
-    // Procesar imágenes
-    $noticia['imagenes'] = array_filter(array_map('trim', explode(',', $noticia['imagenes'])));
-    $noticia['imagenes'] = array_map(function($img) {
-        return '/back/uploads/' . ltrim($img, '/');
-    }, $noticia['imagenes']);
+    // Procesamiento seguro de imágenes
+    $noticia['imagenes'] = !empty($noticia['imagenes']) ? 
+        array_map(function($img) {
+            return '/back/uploads/' . trim($img);
+        }, explode(',', $noticia['imagenes'])) : 
+        [];
 
     // Respuesta exitosa
+    http_response_code(200);
     echo json_encode([
         'success' => true,
         'data' => $noticia
     ], JSON_UNESCAPED_UNICODE);
 
-} catch (Exception $e) {
+} catch (PDOException $e) {
     http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Error de base de datos: ' . $e->getMessage()
+    ]);
+} catch (Exception $e) {
+    http_response_code($e->getCode() ?: 500);
     echo json_encode([
         'success' => false,
         'error' => $e->getMessage()
