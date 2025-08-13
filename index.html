@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Metadatos básicos -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  <title>Chava Calderon</title>
+  
+  <!-- Hojas de estilo externas -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.css" 
+        integrity="sha512-xWIcG98IArXxegzS8Vo9iYMKuPgbXOG8O1mlHrj4MmNFxsBDltGxHJGg4JK80MVEmLRpdbWtphhm+S6Wx9o73g==" 
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+  
+  <!-- Estilos de Astro -->
+  <link rel="stylesheet" href="/_astro/index.-G2uvBIl.css">
+  <link rel="stylesheet" href="/_astro/about.CJdYp1i6.css">
+  
+  <!-- Estilos personalizados -->
+  <style>
+    @import "https://fonts.googleapis.com/css2?family=Gothic+A1&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap";
+    
+    :root {
+      /* Variables de color */
+      --azul-primario: #05184a;
+      --azul-secundario: #1d4ed8;
+      --azul-claro: #60a5fa;
+      --azul-muy-claro: #dbeafe;
+      --azul-oscuro: #1e293b;
+      --azul-marino: #0f172a;
+      --azul-cielo: #0ea5e9;
+      --blanco: #ffffff;
+      --gris-claro: #f8fafc;
+      --gris-medio: #64748b;
+      --gris-fuerte: rgb(66, 72, 82);
+      --azul-gradiente: linear-gradient(135deg, #0a1840 0%, #051c40 100%);
+      --azul-fondo-imagenes: linear-gradient(
+        to right,
+        rgba(5, 26, 82, 0.689) 100%,
+        rgba(2, 16, 55, 0.05) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      --azul-fondo: linear-gradient(135deg, #0a1128 0%, #001f54 50%, #034078 100%);
+      --titulo-gradiante: linear-gradient(135deg, #1d4ed8, #05184a);
+    }
+    
+    /* Reset básico */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;
+    }
+    
+    html {
+      overflow-x: hidden;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ==================== -->
+  <!-- HEADER Y NAVEGACIÓN  -->
+  <!-- ==================== -->
+  <header>8
+    <nav class="navbar">
+      <!-- Botón hamburguesa (solo móvil) -->
+      <button class="hamburger-btn" id="hamburger-btn">
+        <i class="fas fa-bars"></i>
+      </button>
+      
+      <!-- Logo -->
+      <div class="logo">
+        <img src="/logo_chava.png" alt="Logo">
+      </div>
+      
+      <!-- Menú desktop -->
+      <ul class="menu">
+        <li><a href="/">Inicio</a></li>
+        <!--<li><a href="/events">Próximos Eventos</a></li>-->
+        <li><a href="/about">Sobre mí</a></li>
+        <!-- <li><a href="/team">Equipo</a></li>-->
+        <li><a href="/contact">Contacto</a></li>
+        <li><a href="/gallery">Galería</a></li>
+      </ul>
+      
+      <!-- Redes sociales desktop -->
+      <ul class="social-icons">
+        <li><a href="https://www.facebook.com/ChavaCalderonMX/" target="_blank"><img src="/facebook.png" alt="facebook chava calderon"></a></li>
+        <li><a href="https://www.instagram.com/schavacalderon_/?hl=es" target="_blank"><img src="/logotipo-de-instagram.png" alt="instagram chava calderon"></a></li>
+        <li><a href="https://www.tiktok.com/@chava.calderon90" target="_blank"><img src="/tik-tok.png" alt="tik tok chava calderon"></a></li>
+      </ul>
+    </nav>
+    
+    <!-- Menú mobile overlay -->
+    <div class="mobile-menu" id="mobile-menu">
+      <button class="close-btn" id="close-btn">
+        <i class="fas fa-times"></i>
+      </button>
+      
+      <ul class="menu">
+        <li><a href="/">Inicio</a></li>
+        <!-- <li><a href="/events">Próximos Eventos</a></li>-->
+        <li><a href="/about">Sobre mí</a></li>
+        <!-- <li><a href="/team">Equipo</a></li> -->
+        <li><a href="/contact">Contacto</a></li>
+        <li><a href="/gallery">Galería</a></li>
+      </ul>
+      
+      <!-- Redes sociales MOVIL -->
+      <ul class="social-icons">
+        <li><a href="https://www.facebook.com/ChavaCalderonMX/" target="_blank"><img src="/facebook.png" alt="facebook chava calderon"></a></li>
+        <li><a href="https://www.instagram.com/schavacalderon_/?hl=es" target="_blank"><img src="/logotipo-de-instagram.png" alt="instagram chava calderon"></a></li>
+        <li><a href="https://www.tiktok.com/@chava.calderon90" target="_blank"><img src="/tik-tok.png" alt="tik tok chava calderon"></a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Script para el funcionamiento del navbar -->
+  <script>
+    /**
+     * Función principal para inicializar el navbar móvil
+     * Maneja la apertura/cierre del menú móvil y sus interacciones
+     */
+    function initNavbar() {
+      // Elementos del DOM
+      const hamburgerBtn = document.getElementById('hamburger-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const closeBtn = document.getElementById('close-btn');
+      
+      // Verificar que todos los elementos existan
+      if (!hamburgerBtn || !mobileMenu || !closeBtn) {
+        console.error('Elementos del navbar no encontrados');
+        return;
+      }
+      
+      // Abrir menú móvil
+      hamburgerBtn.addEventListener('click', function() {
+        mobileMenu.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+      
+      // Cerrar menú móvil
+      closeBtn.addEventListener('click', function() {
+        mobileMenu.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      });
+      
+      // Cerrar menú al hacer clic en los enlaces
+      const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+      mobileMenuLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+          mobileMenu.classList.remove('active');
+          document.body.style.overflow = 'auto';
+        });
+      });
+      
+      // Cerrar menú al hacer clic en el fondo
+      mobileMenu.addEventListener('click', function(e) {
+        if (e.target === mobileMenu) {
+          mobileMenu.classList.remove('active');
+          document.body.style.overflow = 'auto';
+        }
+      });
+      
+      // Cerrar menú con tecla Escape
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+          mobileMenu.classList.remove('active');
+          document.body.style.overflow = 'auto';
+        }
+      });
+    }
+    
+    // Inicializar cuando el DOM esté listo
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initNavbar);
+    } else {
+      initNavbar();
+    }
+  </script>
+
+  <!-- ==================== -->
+  <!-- CONTENIDO PRINCIPAL -->
+  <!-- ==================== -->
+  <main>
+    <!-- Sección Hero - Portada principal -->
+    <section class="seccion-hero">
+      <div class="contenido-hero">
+        <!-- Contenido de texto a la derecha -->
+        <div class="contenido-superpuesto">
+          <h2>Ing. Salvador <br><span class="sobrenombre">"Chava"</span><br> Calderón Aguirre</h2>
+          <p>Los líderes no nacen, SE HACEN. Se forman a través del esfuerzo constante, entusiasmo y metas claras!</p>
+          <a href="about" class="boton-cta">Conoce más</a>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Sección Acerca de - Información personal -->
+    <section class="seccion-acerca">
+      <div class="contenido-acerca">
+        <!-- Elementos decorativos -->
+        <div class="elemento-geometrico"></div>
+        <div class="elemento-geometrico"></div>
+        <div class="elemento-geometrico"></div>
+        
+        <!-- Líneas conectoras -->
+        <div class="linea-conectora"></div>
+        <div class="linea-conectora"></div>
+        
+        <!-- Destellos -->
+        <div class="destello"></div>
+        <div class="destello"></div>
+        <div class="destello"></div>
+        
+        <div class="texto-e-imagen">
+          <div class="texto-acerca">
+            <h3>¿Quién soy?</h3>
+            <h2>Un Ciudadano Como Tú, Trabajando por un Parral Mejor</h2>
+            <p>
+              Soy un servidor público apasionado por mejorar la calidad de vida de cada ciudadano, 
+              trabajando con responsabilidad, transparencia y compromiso. Creo firmemente en el poder 
+              del diálogo y la participación ciudadana como pilares del desarrollo. Mi objetivo es 
+              construir un entorno donde cada persona tenga acceso a oportunidades que impulsen su 
+              bienestar, promoviendo proyectos que generen un impacto positivo y duradero en nuestra 
+              comunidad. Mi mayor satisfacción es servir con cercanía, escuchando y atendiendo las 
+              necesidades de quienes confían en mi liderazgo.
+            </p>
+            
+            <!-- Botón con imagen flotante -->
+            <div class="imagen-flotante">
+              <a href="/about" class="boton-flotante">
+                <img src="/foto_chava_escritorio_primer_plano.jpg" alt="Botón Leer Más">
+                <div class="contenido-boton">Leer<br>Más</div>
+                <div class="icono-mas">+</div>
+              </a>
+            </div>
+          </div>
+          
+          <!-- Video de fondo -->
+          <div class="video-acerca">
+            <div class="marco-video"></div>
+            <iframe 
+              src="https://www.youtube.com/embed/Ecr3Lb69R_8?autoplay=1&loop=1&mute=1&playlist=Ecr3Lb69R_8" 
+              title="Video de presentación" 
+              allow="autoplay; encrypted-media" 
+              allowfullscreen>
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Sección de Noticias - Carrusel y grid de noticias -->
+<section class="seccion-contenido">
+  <div class="contenedor-noticias">
+    <h3>Noticias Destacadas</h3>
+    
+    <!-- Carrusel de noticias destacadas -->
+    <div class="contenedor-carrusel">
+      <div class="carrusel-noticias" id="carruselNoticias">
+        <!-- Slide de carga -->
+        <div class="noticia-slide activa" style="background-image: url('/chava1.jpeg');">
+          <div class="contenido-noticia">
+            <p>Cargando noticias destacadas...</p>
+            <div class="info-noticia">
+              <span>Por Sistema</span>
+              <span>Justo un momento</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Controles del carrusel -->
+      <button class="boton-carrusel anterior" id="botonAnterior">❮</button>
+      <button class="boton-carrusel siguiente" id="botonSiguiente">❯</button>
+      
+      <!-- Indicadores de posición -->
+      <div class="puntos-carrusel" id="puntosCarrusel">
+        <div class="punto activo"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Cargar noticias destacadas desde la API
+    fetch('/back/api_noticias_destacadas.php')
+        .then(response => {
+            if (!response.ok) throw new Error('Error en la red');
+            return response.json();
+        })
+        .then(data => {
+            if (data.success && data.data.length > 0) {
+                const carrusel = document.getElementById('carruselNoticias');
+                const puntos = document.getElementById('puntosCarrusel');
+                
+                // Limpiar contenedores
+                carrusel.innerHTML = '';
+                puntos.innerHTML = '';
+                
+                // Crear slides para cada noticia
+                data.data.forEach((noticia, index) => {
+                    // Crear slide
+                    const slide = document.createElement('div');
+                    slide.className = `noticia-slide ${index === 0 ? 'activa' : ''}`;
+                    slide.style.backgroundImage = `url('${noticia.imagen}')`;
+                    slide.dataset.id = noticia.id;
+                    
+                    // Contenido de la noticia
+                    slide.innerHTML = `
+                        <div class="contenido-noticia">
+                            ${noticia.titulo ? `<h4>${noticia.titulo}</h4>` : ''}
+                            <p>${noticia.contenido}...</p>
+                            <div class="info-noticia">
+                                <span>${noticia.fecha}</span>
+                            </div>
+                            ${noticia.todas_imagenes && noticia.todas_imagenes.length > 1 ? 
+                                `<div class="contador-imagenes">+${noticia.todas_imagenes.length - 1} imágenes</div>` : ''}
+                        </div>
+                    `;
+                    
+                    // Añadir evento click para abrir noticia completa
+                    slide.addEventListener('click', function() {
+                        window.open(`noticia_completa.html?id=${noticia.id}`, '_blank');
+                    });
+                    
+                    carrusel.appendChild(slide);
+                    
+                    // Crear punto indicador
+                    const punto = document.createElement('div');
+                    punto.className = `punto ${index === 0 ? 'activo' : ''}`;
+                    puntos.appendChild(punto);
+                });
+                
+                // Inicializar funcionalidad del carrusel
+                inicializarCarrusel();
+            } else {
+                mostrarError('No hay noticias destacadas disponibles');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            mostrarError('Error al cargar las noticias');
+        });
+    
+    // Función para mostrar errores
+    function mostrarError(mensaje) {
+        const carrusel = document.getElementById('carruselNoticias');
+        carrusel.innerHTML = `
+            <div class="noticia-slide activa" style="background-image: url('/chava1.jpeg');">
+                <div class="contenido-noticia">
+                    <p>${mensaje}</p>
+                    <div class="info-noticia">
+                        <span>Error</span>
+                        <span>Intente más tarde</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    
+    // Función para manejar el carrusel (manteniendo tu funcionalidad existente)
+    function inicializarCarrusel() {
+        const slides = document.querySelectorAll('.noticia-slide');
+        const puntos = document.querySelectorAll('.punto');
+        const btnAnterior = document.getElementById('botonAnterior');
+        const btnSiguiente = document.getElementById('botonSiguiente');
+        let slideActual = 0;
+        
+        function mostrarSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('activa', i === index);
+                if (puntos[i]) {
+                    puntos[i].classList.toggle('activo', i === index);
+                }
+            });
+            slideActual = index;
+        }
+        
+        if (btnAnterior && btnSiguiente) {
+            btnAnterior.addEventListener('click', () => {
+                const nuevoIndex = (slideActual - 1 + slides.length) % slides.length;
+                mostrarSlide(nuevoIndex);
+            });
+            
+            btnSiguiente.addEventListener('click', () => {
+                const nuevoIndex = (slideActual + 1) % slides.length;
+                mostrarSlide(nuevoIndex);
+            });
+        }
+        
+        // Cambio automático cada 5 segundos
+        setInterval(() => {
+            const nuevoIndex = (slideActual + 1) % slides.length;
+            mostrarSlide(nuevoIndex);
+        }, 7000);
+    }
+});
+</script>
+      
+      <!-- Sección de filtros y más noticias -->
+      <div class="seccion-mas-noticias">
+        <!-- Grid de noticias -->
+        <div class="grid-noticias" id="gridNoticias">
+          <!-- Noticia 1 -->
+          <article class="tarjeta-noticia" data-categoria="nacional" style="background-image: url('/chava4.jpeg');">
+            <div class="contenido-tarjeta">
+              <h4>Senado Aprueba Presupuesto Nacional 2026</h4>
+              <p>Tras intensos debates, se ratifica el presupuesto que incluye mayor inversión en educación y salud pública.</p>
+              <div class="meta-tarjeta">
+                <span class="categoria-tag">Nacional</span>
+                <span>12 Jul 2025</span>
+              </div>
+            </div>
+          </article>
+          
+          <!-- Noticia 2 -->
+          <article class="tarjeta-noticia" data-categoria="internacional" style="background-image: url('/chava5.jpeg');">
+            <div class="contenido-tarjeta">
+              <h4>Alianza Estratégica con Países Vecinos</h4>
+              <p>Se firma un tratado de cooperación comercial y política que fortalece las relaciones diplomáticas regionales.</p>
+              <div class="meta-tarjeta">
+                <span class="categoria-tag">Internacional</span>
+                <span>11 Jul 2025</span>
+              </div>
+            </div>
+          </article>
+          
+          <!-- Noticia 3 -->
+          <article class="tarjeta-noticia" data-categoria="elecciones" style="background-image: url('/chava6.jpeg');">
+            <div class="contenido-tarjeta">
+              <h4>Candidatos Presentan Propuestas Ambientales</h4>
+              <p>Los aspirantes a la alcaldía exponen sus planes para enfrentar el cambio climático y proteger el medio ambiente.</p>
+              <div class="meta-tarjeta">
+                <span class="categoria-tag">Elecciones</span>
+                <span>10 Jul 2025</span>
+              </div>
+            </div>
+          </article>
+          
+          <!-- Noticia 4 -->
+          <article class="tarjeta-noticia" data-categoria="gobierno" style="background-image: url('/chava7.jpeg');">
+            <div class="contenido-tarjeta">
+              <h4>Ministro Presenta Plan de Seguridad Ciudadana</h4>
+              <p>Nueva estrategia incluye mayor presencia policial y programas de prevención del delito en zonas vulnerables.</p>
+              <div class="meta-tarjeta">
+                <span class="categoria-tag">Gobierno</span>
+                <span>09 Jul 2025</span>
+              </div>
+            </div>
+          </article>
+          
+          <!-- Noticia 5 -->
+          <article class="tarjeta-noticia" data-categoria="nacional" style="background-image: url('/chava8.jpg');">
+            <div class="contenido-tarjeta">
+              <h4>Reforma Constitucional en Debate</h4>
+              <p>Constitucionalistas analizan las implicaciones de las modificaciones propuestas al marco legal del país.</p>
+              <div class="meta-tarjeta">
+                <span class="categoria-tag">Nacional</span>
+                <span>08 Jul 2025</span>
+              </div>
+            </div>
+          </article>
+          
+          <!-- Noticia 6 -->
+          <article class="tarjeta-noticia" data-categoria="internacional" style="background-image: url('/chava9.jpeg');">
+            <div class="contenido-tarjeta">
+              <h4>Participación en Foro de Derechos Humanos</h4>
+              <p>Delegación nacional presenta avances en políticas de inclusión y protección de minorías en conferencia internacional.</p>
+              <div class="meta-tarjeta">
+                <span class="categoria-tag">Internacional</span>
+                <span>07 Jul 2025</span>
+              </div>
+            </div>
+          </article>
+        </div>
+        
+        <!-- Botón para cargar más noticias -->
+        <div class="contenedor-cargar-mas">
+          <button class="btn-cargar-mas" id="btnCargarMas">Cargar más noticias</button>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Script para el carrusel y filtrado de noticias -->
+    <script type="module">
+      /**
+       * Función para inicializar el carrusel de noticias y los filtros
+       */
+      document.addEventListener("DOMContentLoaded", function() {
+        // Variables para el carrusel
+        let currentSlide = 0;
+        const slides = document.querySelectorAll(".noticia-slide");
+        const dots = document.querySelectorAll(".punto");
+        const prevBtn = document.getElementById("botonAnterior");
+        const nextBtn = document.getElementById("botonSiguiente");
+        
+        /**
+         * Muestra un slide específico
+         * @param {number} index - Índice del slide a mostrar
+         */
+        function showSlide(index) {
+          slides.forEach((slide, i) => {
+            slide.classList.remove("activa");
+            dots[i].classList.remove("activo");
+          });
+          
+          slides[index].classList.add("activa");
+          dots[index].classList.add("activo");
+        }
+        
+        /**
+         * Cambia al slide siguiente/anterior
+         * @param {number} change - Cantidad de slides a avanzar (positivo) o retroceder (negativo)
+         */
+        function changeSlide(change) {
+          currentSlide += change;
+          
+          if (currentSlide >= slides.length) {
+            currentSlide = 0;
+          } else if (currentSlide < 0) {
+            currentSlide = slides.length - 1;
+          }
+          
+          showSlide(currentSlide);
+        }
+        
+        /**
+         * Va directamente a un slide específico
+         * @param {number} index - Índice del slide a mostrar
+         */
+        function goToSlide(index) {
+          currentSlide = index;
+          showSlide(currentSlide);
+        }
+        
+        // Event listeners para los controles del carrusel
+        prevBtn?.addEventListener("click", () => changeSlide(-1));
+        nextBtn?.addEventListener("click", () => changeSlide(1));
+        
+        // Event listeners para los puntos indicadores
+        dots.forEach((dot, index) => {
+          dot.addEventListener("click", () => goToSlide(index));
+        });
+        
+        // Cambio automático cada 7 segundos
+        setInterval(() => {
+          changeSlide(1);
+        }, 7000);
+        
+        // Filtrado de noticias
+        const filterButtons = document.querySelectorAll(".filtro-btn");
+        const newsCards = document.querySelectorAll(".tarjeta-noticia");
+        
+        filterButtons.forEach(button => {
+          button.addEventListener("click", () => {
+            // Remover clase activa de todos los botones
+            filterButtons.forEach(btn => btn.classList.remove("activo"));
+            
+            // Añadir clase activa al botón clickeado
+            button.classList.add("activo");
+            
+            // Obtener la categoría a filtrar
+            const category = button.getAttribute("data-categoria");
+            
+            // Mostrar/ocultar noticias según la categoría
+            newsCards.forEach(card => {
+              const cardCategory = card.getAttribute("data-categoria");
+              
+              if (category === "todas" || category === cardCategory) {
+                card.classList.remove("oculta");
+              } else {
+                card.classList.add("oculta");
+              }
+            });
+          });
+        });
+        
+        // Botón "Cargar más noticias"
+        document.getElementById("btnCargarMas")?.addEventListener("click", () => {
+          window.location.href = "/gallery";
+        });
+      });
+    </script>
+  </main>
+
+  <!-- ==================== -->
+  <!-- FOOTER              -->
+  <!-- ==================== -->
+  <footer>
+    <!-- Efectos de fondo -->
+    <div class="particles-background" id="particles"></div>
+    
+    <!-- FIGURAS GEOMÉTRICAS DECORATIVAS -->
+    <div class="geometric-shapes">
+      <!-- Esquina superior izquierda -->
+      <div class="shape circle" style="width: 40px; height: 40px; top: 40%; left: 95%; animation-delay: 0s;"></div>
+      <div class="shape triangle" style="top: 10%; left: 19%; animation-delay: 3s;"></div>
+      
+      <!-- Esquina superior derecha -->
+      <div class="shape circle" style="width: 25px; height: 25px; top: 20%; right: 20%; animation-delay: 4s;"></div>
+      
+      <!-- Esquina inferior izquierda -->
+      <div class="shape triangle" style="bottom: 15%; top: 10%; left: 0%; animation-delay: 2s;"></div>
+      <div class="shape circle" style="width: 35px; height: 35px; bottom: 8%; left: 25%; animation-delay: 5s;"></div>
+      
+      <!-- Algunas figuras en los bordes laterales -->
+      <div class="shape circle" style="width: 20px; height: 20px; top: 50%; left: 3%; animation-delay: 6s;"></div>
+    </div>
+    
+    <!-- Efectos visuales -->
+    <div class="waves"></div>
+    <div class="glow-effect"></div>
+    
+    <!-- Contenido del footer -->
+    <div class="footer-container">
+      <!-- Redes sociales -->
+      <div class="footer-social">
+        <ul class="social-icons">
+          <li><a href="https://www.facebook.com/ChavaCalderonMX/" target="_blank"><img src="/facebook.png" alt="facebook chava calderon"></a></li>
+          <li><a href="https://www.instagram.com/schavacalderon_/?hl=es" target="_blank"><img src="/logotipo-de-instagram.png" alt="instagram chava calderon"></a></li>
+          <li><a href="https://www.tiktok.com/@chava.calderon90" target="_blank"><img src="/tik-tok.png" alt="tik tok chava calderon"></a></li>
+        </ul>
+      </div>
+      
+      <!-- Información legal y créditos -->
+      <div class="footer-bottom">
+        <p>&copy; 2025 Chava Calderón. Todos los derechos reservados</p>
+        <p>Desarrollado por <a href="https://geckcodex.online/" target="_blank">GECK Codex</a></p>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- Script para efectos visuales del footer -->
+  <script type="module">
+    /**
+     * Función para crear partículas animadas en el fondo
+     */
+    function initParticles() {
+      const particlesContainer = document.getElementById("particles");
+      
+      /**
+       * Crea una nueva partícula y la anima
+       */
+      function createParticle() {
+        const particle = document.createElement("div");
+        particle.className = "particle";
+        
+        // Tamaño aleatorio entre 1px y 3px
+        const size = Math.random() * 2 + 1;
+        particle.style.width = size + "px";
+        particle.style.height = size + "px";
+        
+        // Posición horizontal aleatoria
+        particle.style.left = Math.random() * 100 + "%";
+        
+        // Duración de animación aleatoria entre 6s y 10s
+        const duration = Math.random() * 4 + 6;
+        particle.style.animationDuration = duration + "s";
+        
+        // Retraso inicial aleatorio hasta 2s
+        const delay = Math.random() * 2;
+        particle.style.animationDelay = delay + "s";
+        
+        // Opacidad aleatoria entre 0.1 y 0.4
+        particle.style.opacity = Math.random() * 0.3 + 0.1;
+        
+        // Añadir partícula al contenedor
+        particlesContainer.appendChild(particle);
+        
+        // Eliminar partícula después de que termine su animación
+        setTimeout(() => {
+          if (particle.parentNode) {
+            particle.parentNode.removeChild(particle);
+          }
+        }, (duration + delay) * 1000);
+      }
+      
+      // Crear nuevas partículas cada 800ms
+      setInterval(createParticle, 800);
+    }
+    
+    // Inicializar partículas cuando el DOM esté listo
+    document.addEventListener("DOMContentLoaded", initParticles);
+    
+    // Efecto de movimiento con el mouse para las figuras geométricas
+    document.addEventListener("mousemove", (e) => {
+      const shapes = document.querySelectorAll(".shape");
+      const mouseX = e.clientX / window.innerWidth;
+      const mouseY = e.clientY / window.innerHeight;
+      
+      shapes.forEach((shape, index) => {
+        const intensity = (index + 1) * 0.2;
+        const moveX = (mouseX - 0.5) * intensity;
+        const moveY = (mouseY - 0.5) * intensity;
+        
+        shape.style.transform += ` translate(${moveX}px, ${moveY}px)`;
+      });
+    });
+    
+    // Efecto hover para los iconos sociales
+    document.querySelectorAll(".social-icons a").forEach(icon => {
+      icon.addEventListener("mouseenter", () => {
+        icon.style.boxShadow = "0 0 25px rgba(0, 191, 255, 0.6)";
+      });
+      
+      icon.addEventListener("mouseleave", () => {
+        icon.style.boxShadow = "";
+      });
+    });
+  </script>
+</body>
+</html>

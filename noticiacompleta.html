@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noticia Completa</title>
+    <style>
+        .galeria-imagenes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .galeria-imagenes img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .imagen-principal {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor-noticia-completa" id="contenedorNoticia">
+        <!-- La noticia se cargará aquí dinámicamente -->
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const noticiaId = urlParams.get('id');
+        
+        if (noticiaId) {
+            fetch(`/back/api_noticia_completa.php?id=${noticiaId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const contenedor = document.getElementById('contenedorNoticia');
+                        
+                        // Crear galería de imágenes
+                        let galeriaHTML = '';
+                        if (data.data.imagenes && data.data.imagenes.length > 0) {
+                            galeriaHTML = `
+                                <div class="imagen-principal">
+                                    <img src="${data.data.imagenes[0]}" alt="${data.data.titulo || 'Imagen principal'}">
+                                </div>
+                                <div class="galeria-imagenes">
+                                    ${data.data.imagenes.map((img, index) => `
+                                        <img src="${img}" alt="Imagen ${index + 1} de la noticia">
+                                    `).join('')}
+                                </div>
+                            `;
+                        }
+                        
+                        contenedor.innerHTML = `
+                            <h1>${data.data.titulo || ''}</h1>
+                            ${galeriaHTML}
+                            <div class="info-noticia"> 
+                                <span>${new Date(data.data.fecha_publicacion).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                            </div>
+                            <div class="contenido-noticia">${data.data.contenido}</div>
+                        `;
+                    } else {
+                        contenedor.innerHTML = '<p>Error al cargar la noticia.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    contenedor.innerHTML = '<p>Error al cargar la noticia.</p>';
+                });
+        } else {
+            contenedor.innerHTML = '<p>Noticia no encontrada.</p>';
+        }
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería Municipal - Presidencia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            background: white;
+            color: #2c3e50;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .counter {
+            background: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            color: #2c3e50;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .loading.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .gallery-image {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .gallery-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-image img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .overlay-content {
+            text-align: center;
+            color: white;
+        }
+
+        .overlay-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .gallery-content {
+            padding: 25px;
+        }
+
+        .gallery-item-category {
+            display: inline-block;
+            padding: 6px 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .gallery-item-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .gallery-item-description {
+            color: #7f8c8d;
+            line-height: 1.5;
+        }
+
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .lightbox-image {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 10px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filters {
+                justify-content: center;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Galería Municipal</h1>
+            <p>Obras, eventos y actividades de nuestra administración</p>
+        </header>
+
+        <div class="controls">
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="obras">Obras Públicas</button>
+                <button class="filter-btn" data-filter="eventos">Eventos</button>
+                <button class="filter-btn" data-filter="servicios">Servicios</button>
+                <button class="filter-btn" data-filter="reuniones">Reuniones</button>
+            </div>
+            
+            <div class="counter">
+                <span id="current-count">12</span> de <span id="total-count">12</span> elementos
+            </div>
+        </div>
+
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+        </div>
+
+        <div id="gallery-grid" class="gallery-grid">
+            <!-- Los elementos se generarán dinámicamente -->
+        </div>
+    </div>
+
+    <div id="lightbox" class="lightbox">
+        <div class="lightbox-content">
+            <button id="lightbox-close" class="lightbox-close">&times;</button>
+            <img id="lightbox-image" class="lightbox-image" src="" alt="">
+        </div>
+    </div>
+
+    <script>
+        // Definición de tipos TypeScript (comentados para compatibilidad en HTML)
+        
+        // interface GalleryItem {
+        //     id: number;
+        //     title: string;
+        //     category: 'obras' | 'eventos' | 'servicios' | 'reuniones';
+        //     description: string;
+        //     image: string;
+        //     alt: string;
+        // }
+
+        // type FilterType = 'all' | 'obras' | 'eventos' | 'servicios' | 'reuniones';
+
+        // interface CategoryLabels {
+        //     [key: string]: string;
+        // }
+
+        // Datos para la galería del presidente municipal con imágenes más confiables
+        const galleryData = [
+            {
+                id: 1,
+                title: "Pavimentación Colonia Centro",
+                category: "obras",
+                description: "Inauguración de 2.5 km de pavimentación en las principales calles del centro histórico.",
+                image: "https://picsum.photos/600/400?random=1",
+                alt: "Pavimentación de calles"
+            },
+            {
+                id: 2,
+                title: "Feria Municipal 2024",
+                category: "eventos",
+                description: "Celebración anual de la feria municipal con actividades culturales y comerciales.",
+                image: "https://picsum.photos/600/400?random=2",
+                alt: "Feria municipal"
+            },
+            {
+                id: 3,
+                title: "Nueva Planta de Tratamiento",
+                category: "servicios",
+                description: "Puesta en marcha de la nueva planta de tratamiento de aguas residuales.",
+                image: "https://picsum.photos/600/400?random=3",
+                alt: "Planta de tratamiento"
+            },
+            {
+                id: 4,
+                title: "Reunión con Empresarios",
+                category: "reuniones",
+                description: "Mesa de trabajo con el sector empresarial para impulsar el desarrollo económico local.",
+                image: "https://picsum.photos/600/400?random=4",
+                alt: "Reunión empresarios"
+            },
+            {
+                id: 5,
+                title: "Parque Recreativo Familiar",
+                category: "obras",
+                description: "Inauguración del nuevo parque familiar con juegos infantiles y áreas verdes.",
+                image: "https://picsum.photos/600/400?random=5",
+                alt: "Parque recreativo"
+            },
+            {
+                id: 6,
+                title: "Día del Niño",
+                category: "eventos",
+                description: "Celebración del Día del Niño en el centro de la ciudad con actividades familiares.",
+                image: "https://picsum.photos/600/400?random=6",
+                alt: "Día del niño"
+            },
+            {
+                id: 7,
+                title: "Programa de Recolección",
+                category: "servicios",
+                description: "Modernización del sistema de recolección de basura con nuevos camiones.",
+                image: "https://picsum.photos/600/400?random=7",
+                alt: "Recolección de basura"
+            },
+            {
+                id: 8,
+                title: "Cabildo Municipal",
+                category: "reuniones",
+                description: "Sesión ordinaria del Cabildo Municipal para aprobar nuevos proyectos.",
+                image: "https://picsum.photos/600/400?random=8",
+                alt: "Cabildo municipal"
+            },
+            {
+                id: 9,
+                title: "Centro de Salud Comunitario",
+                category: "obras",
+                description: "Construcción del nuevo centro de salud para atender a 5,000 habitantes.",
+                image: "https://picsum.photos/600/400?random=9",
+                alt: "Centro de salud"
+            },
+            {
+                id: 10,
+                title: "Festival Cultural",
+                category: "eventos",
+                description: "Primer Festival Cultural Municipal con artistas locales y regionales.",
+                image: "https://picsum.photos/600/400?random=10",
+                alt: "Festival cultural"
+            },
+            {
+                id: 11,
+                title: "Alumbrado Público LED",
+                category: "servicios",
+                description: "Modernización del alumbrado público con tecnología LED en toda la ciudad.",
+                image: "https://picsum.photos/600/400?random=11",
+                alt: "Alumbrado LED"
+            },
+            {
+                id: 12,
+                title: "Consejo Ciudadano",
+                category: "reuniones",
+                description: "Instalación del Consejo Ciudadano para la participación social en las decisiones municipales.",
+                image: "https://picsum.photos/600/400?random=12",
+                alt: "Consejo ciudadano"
+            }
+        ];
+
+        // Clase principal de la galería (TypeScript style pero compatible con JS)
+        class MunicipalGallery {
+            constructor(data) {
+                this.items = data;
+                this.currentFilter = 'all';
+                
+                // Elementos del DOM con verificación de tipos
+                this.galleryGrid = document.getElementById('gallery-grid');
+                this.filterButtons = document.querySelectorAll('.filter-btn');
+                this.currentCountElement = document.getElementById('current-count');
+                this.totalCountElement = document.getElementById('total-count');
+                this.loadingIndicator = document.getElementById('loading');
+                this.lightbox = document.getElementById('lightbox');
+                this.lightboxImage = document.getElementById('lightbox-image');
+                this.lightboxClose = document.getElementById('lightbox-close');
+
+                // Verificar que los elementos existan
+                if (!this.galleryGrid || !this.currentCountElement || !this.totalCountElement || 
+                    !this.loadingIndicator || !this.lightbox || !this.lightboxImage || !this.lightboxClose) {
+                    throw new Error('Required DOM elements not found');
+                }
+
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.renderGallery();
+                this.updateCounter();
+            }
+
+            setupEventListeners() {
+                // Filtros con type assertion
+                this.filterButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const target = e.target;
+                        const filter = target.dataset.filter || 'all';
+                        this.filterGallery(filter);
+                    });
+                });
+
+                // Lightbox
+                this.lightboxClose.addEventListener('click', () => {
+                    this.closeLightbox();
+                });
+
+                this.lightbox.addEventListener('click', (e) => {
+                    if (e.target === this.lightbox) {
+                        this.closeLightbox();
+                    }
+                });
+
+                // Cerrar lightbox con Escape
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        this.closeLightbox();
+                    }
+                });
+            }
+
+            renderGallery() {
+                if (!this.galleryGrid) return;
+                
+                this.galleryGrid.innerHTML = '';
+                
+                this.getFilteredItems().forEach((item, index) => {
+                    const galleryItem = this.createGalleryItem(item, index);
+                    this.galleryGrid.appendChild(galleryItem);
+                });
+            }
+
+            createGalleryItem(item, index) {
+                const article = document.createElement('article');
+                article.className = 'gallery-item';
+                article.dataset.category = item.category;
+                article.style.animationDelay = `${index * 0.1}s`;
+
+                article.innerHTML = `
+                    <div class="gallery-image">
+                        <img src="${item.image}" alt="${item.alt}" loading="lazy">
+                        <div class="gallery-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-icon">👁️</div>
+                                <p>Ver imagen</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gallery-content">
+                        <span class="gallery-item-category">${this.getCategoryLabel(item.category)}</span>
+                        <h3 class="gallery-item-title">${item.title}</h3>
+                        <p class="gallery-item-description">${item.description}</p>
+                    </div>
+                `;
+
+                // Evento para abrir lightbox
+                const image = article.querySelector('img');
+                article.addEventListener('click', () => {
+                    if (image) {
+                        this.openLightbox(image.src, item.alt);
+                    }
+                });
+
+                return article;
+            }
+
+            filterGallery(filter) {
+                this.currentFilter = filter;
+                
+                // Actualizar botones activos
+                this.filterButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.filter === filter) {
+                        btn.classList.add('active');
+                    }
+                });
+
+                // Mostrar indicador de carga
+                this.showLoading();
+
+                // Simular tiempo de carga para mejor UX
+                setTimeout(() => {
+                    this.renderGallery();
+                    this.updateCounter();
+                    this.hideLoading();
+                }, 300);
+            }
+
+            getFilteredItems() {
+                if (this.currentFilter === 'all') {
+                    return this.items;
+                }
+                return this.items.filter(item => item.category === this.currentFilter);
+            }
+
+            getCategoryLabel(category) {
+                const labels = {
+                    'obras': 'Obras Públicas',
+                    'eventos': 'Eventos',
+                    'servicios': 'Servicios',
+                    'reuniones': 'Reuniones'
+                };
+                return labels[category] || category;
+            }
+
+            updateCounter() {
+                if (!this.currentCountElement || !this.totalCountElement) return;
+                
+                const filteredCount = this.getFilteredItems().length;
+                this.currentCountElement.textContent = filteredCount.toString();
+                this.totalCountElement.textContent = this.items.length.toString();
+            }
+
+            showLoading() {
+                if (!this.loadingIndicator || !this.galleryGrid) return;
+                
+                this.loadingIndicator.classList.add('show');
+                this.galleryGrid.style.opacity = '0.3';
+            }
+
+            hideLoading() {
+                if (!this.loadingIndicator || !this.galleryGrid) return;
+                
+                this.loadingIndicator.classList.remove('show');
+                this.galleryGrid.style.opacity = '1';
+            }
+
+            openLightbox(src, alt) {
+                if (!this.lightboxImage || !this.lightbox) return;
+                
+                this.lightboxImage.src = src;
+                this.lightboxImage.alt = alt;
+                this.lightbox.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+
+            closeLightbox() {
+                if (!this.lightbox) return;
+                
+                this.lightbox.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Inicializar la galería cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                new MunicipalGallery(galleryData);
+            } catch (error) {
+                console.error('Error al inicializar la galería:', error);
+            }
+        });
+    </script>
+</body>
+</html>
