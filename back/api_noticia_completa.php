@@ -13,11 +13,7 @@ $noticiaId = intval($_GET['id']); // Convertir a entero por seguridad
 try {
     $stmt = $pdo->prepare("
         SELECT 
-            id,
-            Titulo,
-            Contenido,
-            Imagenes,
-            fecha
+            *
         FROM noticias
         WHERE id = :id
     ");
