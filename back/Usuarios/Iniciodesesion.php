@@ -161,7 +161,7 @@
             </div>
         <?php endif; ?>
         
-        <form id="login-form" class="login-form" action="Login/login.php" method="post">
+        <form id="login-form" class="login-form" action="login/login.php" method="post">
             <div class="form-group">
                 <input type="text" name="username" id="username" placeholder="Nombre de usuario" required>
             </div>

@@ -3,7 +3,7 @@ session_start();
 
 // Verificar si el usuario está logueado y es master
 if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master') {
-    header("Location: ../Login/Out.php");
+    header("Location: ../login/out.php");
     exit();
 }
 ?>
@@ -20,7 +20,7 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
 <body>
     <div class="container">
         <div class="header">
-            <a href="../Login/Out.php" class="logout-btn">Cerrar Sesión</a>
+            <a href="../login/out.php" class="logout-btn">Cerrar Sesión</a>
             <h1>Panel de Administración</h1>
             <div class="user-info">
                 Usuario: <?php echo htmlspecialchars($_SESSION['nombreusuario']); ?> | 

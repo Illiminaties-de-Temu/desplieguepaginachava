@@ -3,7 +3,7 @@ session_start();
 
 // Verificar si el usuario está logueado y es master
 if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master') {
-    header("Location: ../Login/Out.php");
+    header("Location: ../login/out.php");
     exit();
 }
 
