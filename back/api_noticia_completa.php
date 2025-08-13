@@ -1,53 +1,52 @@
 <?php
 header('Content-Type: application/json');
-require_once __DIR__ . '/config.php';
+header('Access-Control-Allow-Origin: *'); // Solo para desarrollo
 
-// Verificar si se proporcionó el ID
-if (!isset($_GET['id']) || empty($_GET['id'])) {
-    echo json_encode(['success' => false, 'error' => 'ID de noticia no proporcionado']);
-    exit;
-}
+// Ruta absoluta al config.php
+require_once __DIR__ . '/../config.php';
 
-$noticiaId = intval($_GET['id']); // Convertir a entero por seguridad
+// Manejo de errores
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 try {
+    if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+        throw new Exception('ID de noticia inválido');
+    }
+
+    $id = intval($_GET['id']);
+    
     $stmt = $pdo->prepare("
-        SELECT 
-            *
-        FROM noticias
-        WHERE id = :id
+        SELECT id, Titulo AS titulo, Contenido AS contenido, 
+               Imagenes AS imagenes, fecha AS fecha_publicacion
+        FROM noticias 
+        WHERE id = ?
     ");
-    $stmt->bindParam(':id', $noticiaId, PDO::PARAM_INT);
-    $stmt->execute();
+    
+    $stmt->execute([$id]);
     $noticia = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($noticia) {
-        // Procesar las imágenes si existen
-        $imagenes = !empty($noticia['imagenes']) ? explode(',', $noticia['imagenes']) : [];
-        
-        $noticia['imagenes'] = array_filter(array_map(function($img) {
-            $trimmed = trim($img);
-            return !empty($trimmed) ? '/back/' . $trimmed : null;
-        }, $imagenes));
-        
-        // Asegurar que el contenido tenga formato HTML seguro
-        $noticia['contenido'] = nl2br(htmlspecialchars($noticia['contenido']));
-        
-        echo json_encode([
-            'success' => true, 
-            'data' => $noticia
-        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-    } else {
-        echo json_encode([
-            'success' => false, 
-            'error' => 'Noticia no encontrada'
-        ]);
+    if (!$noticia) {
+        throw new Exception('Noticia no encontrada');
     }
-} catch(PDOException $e) {
-    error_log('Error en api_noticia_completa.php: ' . $e->getMessage());
+
+    // Procesar imágenes
+    $noticia['imagenes'] = array_filter(array_map('trim', explode(',', $noticia['imagenes'])));
+    $noticia['imagenes'] = array_map(function($img) {
+        return '/back/uploads/' . ltrim($img, '/');
+    }, $noticia['imagenes']);
+
+    // Respuesta exitosa
     echo json_encode([
-        'success' => false, 
-        'error' => 'Error al obtener la noticia'
+        'success' => true,
+        'data' => $noticia
+    ], JSON_UNESCAPED_UNICODE);
+
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'error' => $e->getMessage()
     ]);
 }
 ?>
