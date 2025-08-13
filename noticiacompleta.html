@@ -33,7 +33,7 @@
         const noticiaId = urlParams.get('id');
         
         if (noticiaId) {
-            fetch('../back/api_noticia_completa.php?id=${noticiaId}')
+            fetch('/back/api_noticia_completa.php?id=${noticiaId}')
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
