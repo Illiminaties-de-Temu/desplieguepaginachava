@@ -40,7 +40,7 @@ try {
     // Procesamiento seguro de imágenes
     $noticia['imagenes'] = !empty($noticia['imagenes']) ? 
         array_map(function($img) {
-            return '/back/uploads/' . trim($img);
+            return '/back/' . trim($img);
         }, explode(',', $noticia['imagenes'])) : 
         [];
 
