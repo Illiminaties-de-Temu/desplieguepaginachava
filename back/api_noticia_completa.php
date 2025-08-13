@@ -7,7 +7,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 // Ruta absoluta al config.php (ajusta según tu estructura)
-require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/config.php';
 
 try {
     // Validación del ID
