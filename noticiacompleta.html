@@ -92,12 +92,6 @@
             `;
         }
 
-        // Función para formatear fecha
-        function formatearFecha(fechaStr) {
-            const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
-            return new Date(fechaStr).toLocaleDateString('es-ES', opciones);
-        }
-
         // Obtener los datos de la noticia
         fetch(`/back/api_noticia_completa.php?id=${noticiaId}`)
             .then(response => {
