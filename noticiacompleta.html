@@ -77,3 +77,19 @@
     </script>
 </body>
 </html>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Noticia completa cargada');
+    console.log('URL actual:', window.location.href);
+    console.log('ID de noticia:', new URLSearchParams(window.location.search).get('id'));
+    
+    // Prueba directa de la API
+    fetch(`/back/api_noticia_completa.php?id=${new URLSearchParams(window.location.search).get('id')}`)
+        .then(response => {
+            console.log('Status API:', response.status);
+            return response.json();
+        })
+        .then(data => console.log('Datos API:', data))
+        .catch(error => console.error('Error API:', error));
+});
+</script>

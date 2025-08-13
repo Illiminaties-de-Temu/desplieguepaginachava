@@ -323,9 +323,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     `;
                     
                     // Añadir evento click para abrir noticia completa
-                    slide.addEventListener('click', function() {
-                        window.open(`noticia_completa.html?id=${noticia.id}`, '_blank');
-                    });
+                    slide.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = `noticia_completa.html?id=${noticia.id}`;
+                });
                     
                     carrusel.appendChild(slide);
                     
