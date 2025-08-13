@@ -5,6 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Noticia Completa</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .loading {
+            text-align: center;
+            padding: 50px;
+        }
+        .error {
+            color: red;
+            text-align: center;
+            padding: 50px;
+        }
+        .imagen-principal img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
         .galeria-imagenes {
             display: flex;
             flex-wrap: wrap;
@@ -13,83 +33,77 @@
         }
         .galeria-imagenes img {
             max-width: 100%;
-            height: auto;
+            height: 200px;
+            object-fit: cover;
             border-radius: 8px;
-        }
-        .imagen-principal {
-            width: 100%;
-            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="contenedor-noticia-completa" id="contenedorNoticia">
-        <!-- La noticia se cargará aquí dinámicamente -->
+    <div id="contenedor-noticia">
+        <div class="loading">Cargando noticia...</div>
     </div>
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const urlParams = new URLSearchParams(window.location.search);
         const noticiaId = urlParams.get('id');
-        
-        if (noticiaId) {
-            fetch('/back/api_noticia_completa.php?id=${noticiaId}')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        const contenedor = document.getElementById('contenedorNoticia');
-                        
-                        // Crear galería de imágenes
-                        let galeriaHTML = '';
-                        if (data.data.imagenes && data.data.imagenes.length > 0) {
-                            galeriaHTML = `
-                                <div class="imagen-principal">
-                                    <img src="${data.data.imagenes[0]}" alt="${data.data.titulo || 'Imagen principal'}">
-                                </div>
-                                <div class="galeria-imagenes">
-                                    ${data.data.imagenes.map((img, index) => `
-                                        <img src="${img}" alt="Imagen ${index + 1} de la noticia">
-                                    `).join('')}
-                                </div>
-                            `;
-                        }
-                        
-                        contenedor.innerHTML = `
-                            <h1>${data.data.titulo || ''}</h1>
-                            ${galeriaHTML}
-                            <div class="info-noticia"> 
-                                <span>${new Date(data.data.fecha_publicacion).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
-                            </div>
-                            <div class="contenido-noticia">${data.data.contenido}</div>
-                        `;
-                    } else {
-                        contenedor.innerHTML = '<p>Error al cargar la noticia.</p>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    contenedor.innerHTML = '<p>Error al cargar la noticia.</p>';
-                });
-        } else {
-            contenedor.innerHTML = '<p>Noticia no encontrada.</p>';
+        const contenedor = document.getElementById('contenedor-noticia');
+
+        if (!noticiaId) {
+            contenedor.innerHTML = '<div class="error">ID de noticia no proporcionado</div>';
+            return;
+        }
+
+        fetch(`/back/api_noticia_completa.php?id=${noticiaId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta de la red');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    renderNoticia(data.data);
+                } else {
+                    contenedor.innerHTML = `<div class="error">${data.error || 'Error al cargar la noticia'}</div>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                contenedor.innerHTML = `<div class="error">Error al cargar la noticia: ${error.message}</div>`;
+            });
+
+        function renderNoticia(noticia) {
+            let imagenesHTML = '';
+            
+            if (noticia.imagenes && noticia.imagenes.length > 0) {
+                imagenesHTML = `
+                    <div class="imagen-principal">
+                        <img src="${noticia.imagenes[0]}" alt="${noticia.titulo || 'Imagen principal'}">
+                    </div>
+                    <div class="galeria-imagenes">
+                        ${noticia.imagenes.map((img, index) => `
+                            <img src="${img}" alt="Imagen ${index + 1} de la noticia">
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            contenedor.innerHTML = `
+                <h1>${noticia.titulo || 'Sin título'}</h1>
+                ${imagenesHTML}
+                <div class="info-noticia">
+                    <span>${new Date(noticia.fecha_publicacion).toLocaleDateString('es-ES', { 
+                        day: 'numeric', 
+                        month: 'long', 
+                        year: 'numeric' 
+                    })}</span>
+                </div>
+                <div class="contenido-noticia">${noticia.contenido || 'Contenido no disponible'}</div>
+            `;
         }
     });
     </script>
 </body>
 </html>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Noticia completa cargada');
-    console.log('URL actual:', window.location.href);
-    console.log('ID de noticia:', new URLSearchParams(window.location.search).get('id'));
-    
-    // Prueba directa de la API
-    fetch(`/back/api_noticia_completa.php?id=${new URLSearchParams(window.location.search).get('id')}`)
-        .then(response => {
-            console.log('Status API:', response.status);
-            return response.json();
-        })
-        .then(data => console.log('Datos API:', data))
-        .catch(error => console.error('Error API:', error));
-});
-</script>

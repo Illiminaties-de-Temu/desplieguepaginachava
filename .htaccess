@@ -1,9 +1,14 @@
 <IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteBase /
-  RewriteRule ^_astro/.+\.(css|js)$ - [L]  # Permite acceso a assets
-  RewriteRule ^index\.html$ - [L]
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule . /index.html [L]
+    RewriteEngine On
+    RewriteBase /
+    
+    # Excepciones primero
+    RewriteRule ^_astro/.+\.(css|js|png|jpg|svg)$ - [L]  # Assets de Astro
+    RewriteRule ^back/.+\.php$ - [L]  # Permite acceso a APIs PHP
+    RewriteRule ^noticia_completa\.html$ - [L]  # Permite acceso directo a la página
+    
+    # Redirección para SPA (solo si no es un archivo/directorio existente)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /index.html [L]
 </IfModule>
