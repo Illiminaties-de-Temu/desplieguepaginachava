@@ -21,6 +21,6 @@ if (ini_get("session.use_cookies")) {
 session_destroy();
 
 // Redirigir con parámetro aleatorio para evitar caché
-header("Location: ../Iniciodesesion.php?logout=".uniqid());
+header("Location: ../iniciodesesion.php?logout=".uniqid());
 exit;
 ?>

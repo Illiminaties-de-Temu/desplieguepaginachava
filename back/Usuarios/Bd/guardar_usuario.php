@@ -4,7 +4,7 @@ session_start();
 
 // Verificar permisos
 if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master') {
-    header("Location: ../Login/Out.php");
+    header("Location: ../login/out.php");
     exit();
 }
 
@@ -88,5 +88,5 @@ if (!empty($errores)) {
 }
 
 // Redirigir de vuelta al formulario
-header("Location: ../Master/crearusuario.php");
+header("Location: ../master/crearusuario.php");
 exit();

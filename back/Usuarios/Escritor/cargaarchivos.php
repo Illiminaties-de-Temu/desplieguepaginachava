@@ -3,7 +3,7 @@ session_start();
 
 // Verificar permisos
 if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor') {
-    header("Location: ../Login/Out.php");
+    header("Location: ../login/out.php");
     exit();
 }
 
@@ -308,7 +308,7 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
                 </script>
             <?php endif; ?>
 
-            <form method="POST" id="createNewsForm" action="../Bd/guardar_noticia_escri.php" enctype="multipart/form-data">
+            <form method="POST" id="createNewsForm" action="../bd/guardar_noticia_escri.php" enctype="multipart/form-data">
                 <div class="form-section">
                     <h2>Información de la Noticia</h2>
                     

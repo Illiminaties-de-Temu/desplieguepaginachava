@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Validación básica
     if (empty($nombreusuario) || empty($contraseña)) {
-        header("Location: ../Iniciodesesion.php?error=3"); // Campos vacíos
+        header("Location: ../iniciodesesion.php?error=3"); // Campos vacíos
         exit();
     }
 
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     
     // Si llega aquí es porque falló el login
-    header("Location: ../Iniciodesesion.php?error=1");
+    header("Location: ../iniciodesesion.php?error=1");
     exit();
 }
 
@@ -59,13 +59,13 @@ function redirigirSegunTipoUsuario($tipoUsuario) {
     
     switch ($tipoUsuario) {
         case 'master':
-            header("Location: {$baseUrl}Master/panel.php");
+            header("Location: {$baseUrl}master/panel.php");
             break;
         case 'editor':
-            header("Location: {$baseUrl}Escritor/panel.php"); // Asumiendo que existe
+            header("Location: {$baseUrl}escritor/panel.php"); // Asumiendo que existe
             break;
         default:
-            header("Location: {$baseUrl}Iniciodesesion.php?error=2"); // Tipo desconocido
+            header("Location: {$baseUrl}iniciodesesion.php?error=2"); // Tipo desconocido
     }
 }
 ?>

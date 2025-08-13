@@ -3,7 +3,7 @@ session_start();
 
 // Verificar si el usuario está logueado y es master
 if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor') {
-    header("Location: ../Login/Out.php");
+    header("Location: ../login/out.php");
     exit();
 }
 
@@ -207,7 +207,7 @@ if (isset($_SESSION['mensaje_exito'])) {
                 </div>
                 <?php endif; ?>
                 
-                <form action="../Bd/cambiarcontraescri.php" method="POST" id="password-form">
+                <form action="../bd/cambiarcontraescri.php" method="POST" id="password-form">
                     
                     <!-- Contraseña actual -->
                     <div class="form-row">

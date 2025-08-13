@@ -7,7 +7,7 @@ require_once '../../config/config.php';
 // Verificar permisos
 if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master') {
     $_SESSION['errores'] = "No tienes permisos para realizar esta acción";
-    header("Location: ../Master/cargaarchivos.php");
+    header("Location: ../master/cargaarchivos.php");
     exit();
 }
 
@@ -15,7 +15,7 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
 if (!isset($_POST['titulo']) || !isset($_POST['contenido'])) {
     $_SESSION['errores'] = "Faltan campos requeridos";
     $_SESSION['datos_formulario'] = $_POST;
-    header("Location: ../Master/cargaarchivos.php");
+    header("Location: ../master/cargaarchivos.php");
     exit();
 }
 
@@ -103,7 +103,7 @@ if (isset($_FILES['imagen']) && is_array($_FILES['imagen']['name'])) {
             $extensionesPermitidas = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
             if (!in_array($extension, $extensionesPermitidas)) {
                 $_SESSION['errores'] = "Solo se permiten imágenes JPG, PNG, GIF o WEBP.";
-                header("Location: ../Master/cargaarchivos.php");
+                header("Location: ../master/cargaarchivos.php");
                 exit();
             }
 
@@ -115,7 +115,7 @@ if (isset($_FILES['imagen']) && is_array($_FILES['imagen']['name'])) {
             // Mover la imagen a la carpeta
             if (!move_uploaded_file($nombreTemporal, $rutaCompleta)) {
                 $_SESSION['errores'] = "Error al guardar la imagen $nombreOriginal.";
-                header("Location: ../Master/cargaarchivos.php");
+                header("Location: ../master/cargaarchivos.php");
                 exit();
             }
             
@@ -133,7 +133,7 @@ if (isset($_FILES['imagen']) && is_array($_FILES['imagen']['name'])) {
     $extensionesPermitidas = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
     if (!in_array($extension, $extensionesPermitidas)) {
         $_SESSION['errores'] = "Solo se permiten imágenes JPG, PNG, GIF o WEBP.";
-        header("Location: ../Master/cargaarchivos.php");
+        header("Location: ../master/cargaarchivos.php");
         exit();
     }
 
@@ -145,7 +145,7 @@ if (isset($_FILES['imagen']) && is_array($_FILES['imagen']['name'])) {
     // Mover la imagen a la carpeta
     if (!move_uploaded_file($nombreTemporal, $rutaCompleta)) {
         $_SESSION['errores'] = "Error al guardar la imagen.";
-        header("Location: ../Master/cargaarchivos.php");
+        header("Location: ../master/cargaarchivos.php");
         exit();
     }
     
@@ -155,7 +155,7 @@ if (isset($_FILES['imagen']) && is_array($_FILES['imagen']['name'])) {
 // Verificar que al menos haya una imagen
 if (empty($rutasImagenes)) {
     $_SESSION['errores'] = "Debes subir al menos una imagen.";
-    header("Location: ../Master/cargaarchivos.php");
+    header("Location: ../master/cargaarchivos.php");
     exit();
 }
 
@@ -195,7 +195,7 @@ try {
         
         // Mensaje de éxito
         $_SESSION['mensaje_exito'] = "Noticia creada correctamente" . ($destacada === 'si' ? " y marcada como destacada" : "") . ".";
-        header("Location: ../Master/cargaarchivos.php");
+        header("Location: ../master/cargaarchivos.php");
         purgarNoticiasAntiguas($pdo);
         exit();
     } else {
@@ -209,7 +209,7 @@ try {
             }
         }
         
-        header("Location: ../Master/cargaarchivos.php");
+        header("Location: ../master/cargaarchivos.php");
         purgarNoticiasAntiguas($pdo);
         exit();
     }
@@ -224,7 +224,7 @@ try {
         }
     }
     
-    header("Location: ../Master/cargaarchivos.php");
+    header("Location: ../master/cargaarchivos.php");
     purgarNoticiasAntiguas($pdo);
     exit();
 }

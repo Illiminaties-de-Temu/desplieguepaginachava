@@ -3,7 +3,7 @@ session_start();
 
 // Verificar si el usuario está logueado y es master
 if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor') {
-    header("Location: ../Login/Out.php");
+    header("Location: ../login/out.php");
     exit();
 }
 ?>
@@ -169,7 +169,7 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
             
             mensaje.innerHTML = '<div class="loading">Cargando noticias...</div>';
             
-            fetch('../Bd/leernoticias.php')
+            fetch('../bd/leernoticias.php')
                 .then(response => response.json())
                 .then(data => {
                     if (data.error) {
@@ -211,7 +211,7 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
     
             mensaje.innerHTML = '<div class="loading">Cargando noticia...</div>';
     
-            fetch(`../Bd/leernoticias.php?id=${id}`)
+            fetch(`../bd/leernoticias.php?id=${id}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.error) {
@@ -492,7 +492,7 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
             btnSubmit.disabled = true;
             btnSubmit.textContent = 'Guardando...';
             
-            fetch('../Bd/editarnoticiaescri.php', {
+            fetch('../bd/editarnoticiaescri.php', {
                 method: 'POST',
                 body: formData
             })

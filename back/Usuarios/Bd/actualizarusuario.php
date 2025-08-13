@@ -5,7 +5,7 @@ require_once '../../config/config.php';
 
 // Verificar permisos y método POST
 if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master' || $_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: ../../Login/Out.php");
+    header("Location: ../../login/out.php");
     exit();
 }
 
@@ -18,12 +18,12 @@ $confirmar_contrasena = $_POST['confirmar_contrasena'] ?? '';
 
 // Validaciones básicas
 if (empty($id_usuario) || empty($nombreusuario) || empty($tipousuario)) {
-    header("Location: ../Master/editarusuario.php?error=" . urlencode('Todos los campos son obligatorios'));
+    header("Location: ../master/editarusuario.php?error=" . urlencode('Todos los campos son obligatorios'));
     exit();
 }
 
 if (!empty($nueva_contrasena) && $nueva_contrasena !== $confirmar_contrasena) {
-    header("Location: ../Master/editarusuario.php?error=" . urlencode('Las contraseñas no coinciden'));
+    header("Location: ../master/editarusuario.php?error=" . urlencode('Las contraseñas no coinciden'));
     exit();
 }
 
@@ -34,14 +34,14 @@ try {
     $datos_antiguos = $stmt->fetch(PDO::FETCH_ASSOC);
     
     if (!$datos_antiguos) {
-        header("Location: ../Master/editarusuario.php?error=" . urlencode('Usuario no encontrado'));
+        header("Location: ../master/editarusuario.php?error=" . urlencode('Usuario no encontrado'));
         exit();
     }
     
     // Verificar usuarios protegidos
     $usuarios_protegidos = ['GECKCODEX', 'Comunicacion_social', $_SESSION['nombreusuario']];
     if (in_array($datos_antiguos['nombreusuario'], $usuarios_protegidos)) {
-        header("Location: ../Master/editarusuario.php?error=" . urlencode('No puedes editar este usuario protegido'));
+        header("Location: ../master/editarusuario.php?error=" . urlencode('No puedes editar este usuario protegido'));
         exit();
     }
     
@@ -50,7 +50,7 @@ try {
         $stmt = $pdo->prepare("SELECT COUNT(*) FROM usuarios WHERE nombreusuario = ? AND id != ?");
         $stmt->execute([$nombreusuario, $id_usuario]);
         if ($stmt->fetchColumn() > 0) {
-            header("Location: ../Master/editarusuario.php?error=" . urlencode('El nombre de usuario ya está en uso'));
+            header("Location: ../master/editarusuario.php?error=" . urlencode('El nombre de usuario ya está en uso'));
             exit();
         }
     }
@@ -90,10 +90,10 @@ try {
         ]);
     }
     
-    header("Location: ../Master/editarusuario.php?success=" . urlencode('Usuario actualizado correctamente'));
+    header("Location: ../master/editarusuario.php?success=" . urlencode('Usuario actualizado correctamente'));
     exit();
     
 } catch (PDOException $e) {
-    header("Location: ../Master/editarusuario.php?error=" . urlencode('Error al actualizar usuario: ' . $e->getMessage()));
+    header("Location: ../master/editarusuario.php?error=" . urlencode('Error al actualizar usuario: ' . $e->getMessage()));
     exit();
 }

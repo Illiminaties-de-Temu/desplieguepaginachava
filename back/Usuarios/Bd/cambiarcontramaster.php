@@ -6,7 +6,7 @@ require_once '../../config/config.php';
 
 // Verificar si el usuario está logueado
 if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master') {
-    header("Location: ../Iniciodesesion.php");
+    header("Location: ../iniciodesesion.php");
     exit();
 }
 
@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     
                     if ($resultado) {
                         $_SESSION['mensaje_exito'] = "Contraseña cambiada exitosamente";
-                        header("Location: ../Master/cambiarcontra.php?exito=1");
+                        header("Location: ../master/cambiarcontra.php?exito=1");
                         exit();
                     } else {
                         $errores[] = "Error al actualizar la contraseña";
@@ -106,13 +106,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Si hay errores, redirigir con mensaje de error
     if (!empty($errores)) {
         $_SESSION['errores'] = $errores;
-        header("Location: ../Master/cambiarcontra.php?error=1");
+        header("Location: ../master/cambiarcontra.php?error=1");
         exit();
     }
     
 } else {
     // Si no es POST, redirigir al formulario
-    header("Location: ../Master/cambiarcontra.php");
+    header("Location: ../master/cambiarcontra.php");
     exit();
 }
 ?>
