@@ -324,7 +324,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     // Añadir evento click para abrir noticia completa
                     slide.addEventListener('click', function() {
-                        window.location.href = `noticia_completa.html?id=${noticia.id}`;
+                        window.open(`noticia_completa.html?id=${noticia.id}`, '_blank');
                     });
                     
                     carrusel.appendChild(slide);

@@ -2,12 +2,13 @@
 header('Content-Type: application/json');
 require_once __DIR__ . '/config.php';
 
-if (!isset($_GET['id'])) {
+// Verificar si se proporcionó el ID
+if (!isset($_GET['id']) || empty($_GET['id'])) {
     echo json_encode(['success' => false, 'error' => 'ID de noticia no proporcionado']);
     exit;
 }
 
-$noticiaId = $_GET['id'];
+$noticiaId = intval($_GET['id']); // Convertir a entero por seguridad
 
 try {
     $stmt = $pdo->prepare("
@@ -15,8 +16,8 @@ try {
             id,
             Titulo,
             Contenido,
-            Imagenes,  // Campo con todas las imágenes
-            fecha,
+            Imagenes,
+            fecha
         FROM noticias
         WHERE id = :id
     ");
@@ -25,17 +26,32 @@ try {
     $noticia = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($noticia) {
-        // Procesar las imágenes
-        $imagenes = explode(',', $noticia['imagenes']);
-        $noticia['imagenes'] = array_map(function($img) {
-            return '/back/' . trim($img);
-        }, $imagenes);
+        // Procesar las imágenes si existen
+        $imagenes = !empty($noticia['imagenes']) ? explode(',', $noticia['imagenes']) : [];
         
-        echo json_encode(['success' => true, 'data' => $noticia]);
+        $noticia['imagenes'] = array_filter(array_map(function($img) {
+            $trimmed = trim($img);
+            return !empty($trimmed) ? '/back/' . $trimmed : null;
+        }, $imagenes));
+        
+        // Asegurar que el contenido tenga formato HTML seguro
+        $noticia['contenido'] = nl2br(htmlspecialchars($noticia['contenido']));
+        
+        echo json_encode([
+            'success' => true, 
+            'data' => $noticia
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     } else {
-        echo json_encode(['success' => false, 'error' => 'Noticia no encontrada']);
+        echo json_encode([
+            'success' => false, 
+            'error' => 'Noticia no encontrada'
+        ]);
     }
 } catch(PDOException $e) {
-    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+    error_log('Error en api_noticia_completa.php: ' . $e->getMessage());
+    echo json_encode([
+        'success' => false, 
+        'error' => 'Error al obtener la noticia'
+    ]);
 }
 ?>
