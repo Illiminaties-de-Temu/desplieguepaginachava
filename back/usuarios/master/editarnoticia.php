@@ -54,6 +54,106 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
         .remove-new-image:hover {
             background: #cc0000;
         }
+
+        /* Estilos para el checkbox de noticia destacada */
+        .highlight-section {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border: 2px solid #f39c12;
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .highlight-section::before {
+            content: '⭐';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.8em;
+            opacity: 0.3;
+            transition: all 0.3s ease;
+        }
+
+        .highlight-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(243, 156, 18, 0.2);
+            border-color: #e67e22;
+        }
+
+        .highlight-section:hover::before {
+            opacity: 0.6;
+            transform: rotate(360deg) scale(1.2);
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            position: relative;
+        }
+
+        .custom-checkbox {
+            position: relative;
+            cursor: pointer;
+            margin-top: 3px;
+        }
+
+        .custom-checkbox input[type="checkbox"] {
+            opacity: 0;
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-style {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f39c12;
+            border-radius: 4px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .custom-checkbox input[type="checkbox"]:checked + .checkbox-style {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            border-color: #d68910;
+            transform: scale(1.1);
+        }
+
+        .custom-checkbox input[type="checkbox"]:checked + .checkbox-style::after {
+            content: '✓';
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .checkbox-content {
+            flex: 1;
+        }
+
+        .checkbox-label {
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 8px !important;
+            display: block;
+            cursor: pointer;
+        }
+
+        .form-hint {
+            color: #7f8c8d !important;
+            font-size: 0.9em !important;
+            font-style: italic;
+            line-height: 1.4;
+            margin: 0 !important;
+        }
     </style>
 </head>
 <body>
