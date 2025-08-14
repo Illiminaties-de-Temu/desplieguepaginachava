@@ -43,55 +43,78 @@ function purgarNoticiasAntiguas($pdo) {
     }
 }
 
+// purga_noticias.php
+
 /**
  * Función para eliminar imágenes huérfanas (no asociadas a ninguna noticia)
  * @param PDO $pdo Conexión a la base de datos
- * @param string $directorioImagenes Ruta al directorio donde se almacenan las imágenes
  */
-function eliminarImagenesHuerfanas($pdo, $directorioImagenes = '../../contenido') {
-    // Obtener todas las imágenes referenciadas en la base de datos
-    $query = $pdo->query("SELECT Imagenes FROM noticias");
-    $imagenesBD = [];
-    
-    while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-        if (!empty($row['Imagenes'])) {
-            $imagenesNoticia = explode(',', $row['Imagenes']);
-            foreach ($imagenesNoticia as $img) {
-                $imagenesBD[] = basename($img); // Solo el nombre del archivo
+function eliminarImagenesHuerfanas($pdo) {
+    try {
+        // Directorio base donde se almacenan las imágenes
+        $directorioBase = '../../contenido/';
+        
+        // Obtener todas las imágenes referenciadas en la base de datos
+        $query = $pdo->query("SELECT Imagenes FROM noticias WHERE Imagenes IS NOT NULL AND Imagenes != ''");
+        $imagenesReferenciadas = [];
+        
+        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+            $imagenes = explode(',', $row['Imagenes']);
+            foreach ($imagenes as $imagen) {
+                $imagen = trim($imagen);
+                if (!empty($imagen)) {
+                    $imagenesReferenciadas[] = $imagen;
+                }
             }
         }
-    }
-    
-    // Obtener todas las imágenes físicas en el directorio
-    $imagenesFisicas = [];
-    if (is_dir($directorioImagenes)) {
-        $archivos = scandir($directorioImagenes);
-        foreach ($archivos as $archivo) {
-            if ($archivo !== '.' && $archivo !== '..' && is_file($directorioImagenes . $archivo)) {
-                $imagenesFisicas[] = $archivo;
+        
+        // Obtener todas las imágenes físicas en el directorio
+        $imagenesFisicas = [];
+        if (is_dir($directorioBase)) {
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($directorioBase, RecursiveDirectoryIterator::SKIP_DOTS),
+                RecursiveIteratorIterator::SELF_FIRST
+            );
+            
+            foreach ($iterator as $file) {
+                if ($file->isFile()) {
+                    $rutaRelativa = str_replace('../../', '', $file->getPathname());
+                    $imagenesFisicas[] = $rutaRelativa;
+                }
             }
         }
-    }
-    
-    // Encontrar imágenes huérfanas (presentes en el directorio pero no en la BD)
-    $imagenesHuerfanas = array_diff($imagenesFisicas, $imagenesBD);
-    
-    // Eliminar las imágenes huérfanas
-    $contador = 0;
-    foreach ($imagenesHuerfanas as $imagen) {
-        $rutaCompleta = $directorioImagenes . $imagen;
-        if (file_exists($rutaCompleta)) {
-            unlink($rutaCompleta);
-            $contador++;
+        
+        // Encontrar imágenes huérfanas (presentes en el directorio pero no en la BD)
+        $imagenesHuerfanas = array_diff($imagenesFisicas, $imagenesReferenciadas);
+        
+        // Eliminar las imágenes huérfanas
+        $contador = 0;
+        foreach ($imagenesHuerfanas as $imagen) {
+            $rutaCompleta = '../../' . $imagen;
+            if (file_exists($rutaCompleta)) {
+                if (unlink($rutaCompleta)) {
+                    $contador++;
+                    
+                    // Opcional: eliminar directorios vacíos
+                    $directorioImagen = dirname($rutaCompleta);
+                    if (count(scandir($directorioImagen)) == 2) { // Solo contiene . y ..
+                        rmdir($directorioImagen);
+                    }
+                }
+            }
         }
+        
+        if ($contador > 0) {
+            registrarBitacora($pdo, "Purga de imágenes", "Se eliminaron $contador imágenes huérfanas no asociadas a noticias");
+        }
+        
+        return $contador;
+    } catch (Exception $e) {
+        error_log("Error al purgar imágenes huérfanas: " . $e->getMessage());
+        return false;
     }
-    
-    if ($contador > 0) {
-        registrarBitacora($pdo, "Purga de imágenes", "Se eliminaron $contador imágenes huérfanas no asociadas a noticias");
-    }
-    
-    return $contador;
 }
+
 
 /**
  * Función auxiliar para registrar en bitácora
