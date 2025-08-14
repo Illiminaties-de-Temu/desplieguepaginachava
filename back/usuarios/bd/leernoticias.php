@@ -20,7 +20,7 @@ try {
     } 
     // Si no se especifica ID, devolver todas las noticias
     else {
-        $stmt = $pdo->prepare("SELECT id, Titulo, fecha FROM noticias ORDER BY fecha DESC, id DESC");
+        $stmt = $pdo->prepare("SELECT id, Titulo, fecha, Destacada FROM noticias ORDER BY fecha DESC, id DESC");
         $stmt->execute();
         $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
