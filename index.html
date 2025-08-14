@@ -303,41 +303,44 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Crear slides para cada noticia
                 data.data.forEach((noticia, index) => {
-                const slide = document.createElement('div');
-                slide.className = `noticia-slide ${index === 0 ? 'activa' : ''}`;
-                slide.style.backgroundImage = `url('${noticia.imagen}')`;
-                
-                // Asignar el ID como atributo data-* (forma más segura)
-                slide.dataset.noticiaId = noticia.id; // <-- Cambia esto
-                
-                // Contenido de la noticia (mantén tu HTML igual)
-                slide.innerHTML = `
-                    <div class="contenido-noticia">
-                        ${noticia.titulo ? `<h4>${noticia.titulo}</h4>` : ''}
-                        <p>${noticia.contenido}...</p>
-                        <div class="info-noticia">
-                            <span>${noticia.fecha}</span>
+                    const slide = document.createElement('div');
+                    slide.className = `noticia-slide ${index === 0 ? 'activa' : ''}`;
+                    slide.style.backgroundImage = `url('${noticia.imagen}')`;
+                    
+                    // 1. Asignar el ID como atributo personalizado (más robusto)
+                    slide.setAttribute('data-noticia-id', noticia.id);
+                    
+                    // 2. Contenido HTML (sin cambios)
+                    slide.innerHTML = `
+                        <div class="contenido-noticia">
+                            ${noticia.titulo ? `<h4>${noticia.titulo}</h4>` : ''}
+                            <p>${noticia.contenido}...</p>
+                            <div class="info-noticia">
+                                <span>${noticia.fecha}</span>
+                            </div>
+                            ${noticia.todas_imagenes && noticia.todas_imagenes.length > 1 ? 
+                                `<div class="contador-imagenes">+${noticia.todas_imagenes.length - 1} imágenes</div>` : ''}
                         </div>
-                        ${noticia.todas_imagenes && noticia.todas_imagenes.length > 1 ? 
-                            `<div class="contador-imagenes">+${noticia.todas_imagenes.length - 1} imágenes</div>` : ''}
-                    </div>
-                `;
-                
-                // Evento click modificado (FORMA CORRECTA)
-                slide.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    // Captura el ID del dataset del slide clickeado
-                    const idNoticia = e.currentTarget.dataset.noticiaId;
-                    window.location.href = `noticiacompleta.html?id=${idNoticia}`;
-                });
-                
-                carrusel.appendChild(slide);
-                // Ejecuta en consola:
-                document.querySelectorAll('.noticia-slide').forEach(slide => {
-                    console.log(slide.dataset.noticiaId);
-                });
-                console.log(data.data.map(noticia => noticia.id));
-
+                    `;
+                    
+                    // 3. Evento click MEJORADO (con verificación)
+                    slide.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation(); // Importante para evitar conflictos
+                        
+                        const idNoticia = this.getAttribute('data-noticia-id');
+                        
+                        // Verificación adicional
+                        if (!idNoticia || isNaN(idNoticia)) {
+                            console.error('ID de noticia no válido:', idNoticia);
+                            return;
+                        }
+                        
+                        console.log('Redirigiendo a noticia ID:', idNoticia); // Para depuración
+                        window.location.href = `noticiacompleta.html?id=${idNoticia}`;
+                    });
+                    
+                    carrusel.appendChild(slide);
                     // Crear punto indicador
                     const punto = document.createElement('div');
                     punto.className = `punto ${index === 0 ? 'activo' : ''}`;
