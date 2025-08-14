@@ -557,7 +557,7 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
             document.getElementById('contenido').value = '';
             document.getElementById('fecha').value = '';
             document.getElementById('imagenes_existentes').value = '';
-            document.getElementById('destacada').checked = false;
+            document.getElementById('destacada').checked = FALSE;
             
             // Limpiar información de la noticia
             document.getElementById('noticia_info').textContent = '';
