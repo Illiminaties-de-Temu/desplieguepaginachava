@@ -153,10 +153,10 @@ try {
         
         // Mensaje de éxito
         $_SESSION['mensaje_exito'] = "Noticia creada correctamente" . ($destacada === 'si' ? " y marcada como destacada" : "") . ".";
+        header("Location: ../escritor/cargaarchivos.php");
         purgarNoticiasAntiguas($pdo);
         eliminarImagenesHuerfanas($pdo);
         purgararchivosBitacora($pdo);
-        header("Location: ../escritor/cargaarchivos.php");
         exit();
     } else {
         $_SESSION['errores'] = "Error al guardar la noticia en la base de datos.";
