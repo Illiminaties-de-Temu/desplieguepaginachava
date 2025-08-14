@@ -4,6 +4,8 @@ session_start();
 // Configuración de la base de datos
 require_once '../../config/config.php';
 
+require_once 'purga_noticias.php';
+
 // Verificar permisos
 if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master') {
     $_SESSION['errores'] = "No tienes permisos para realizar esta acción";
@@ -17,50 +19,6 @@ if (!isset($_POST['titulo']) || !isset($_POST['contenido'])) {
     $_SESSION['datos_formulario'] = $_POST;
     header("Location: ../master/cargaarchivos.php");
     exit();
-}
-
-// Función para purgar noticias antiguas
-function purgarNoticiasAntiguas($pdo) {
-    // Contar el número total de noticias
-    $countQuery = $pdo->query("SELECT COUNT(*) as total FROM noticias");
-    $totalNoticias = $countQuery->fetch(PDO::FETCH_ASSOC)['total'];
-    
-    // Si hay más de 400 noticias, borrar las 100 más antiguas
-    if ($totalNoticias >= 400) {
-        // Obtener las 100 noticias más antiguas
-        $query = $pdo->query("SELECT id, Imagenes FROM noticias ORDER BY fecha ASC LIMIT 100");
-        $noticiasAntiguas = $query->fetchAll(PDO::FETCH_ASSOC);
-        
-        // Eliminar las imágenes asociadas
-        foreach ($noticiasAntiguas as $noticia) {
-            if (!empty($noticia['Imagenes'])) {
-                $imagenes = explode(',', $noticia['Imagenes']);
-                foreach ($imagenes as $imagen) {
-                    $rutaImagen = '../../' . $imagen; // Ajusta según tu estructura
-                    if (file_exists($rutaImagen)) {
-                        unlink($rutaImagen);
-                    }
-                }
-            }
-        }
-        
-        // Eliminar las noticias de la base de datos
-        $ids = array_column($noticiasAntiguas, 'id');
-        $placeholders = implode(',', array_fill(0, count($ids), '?'));
-        $deleteQuery = $pdo->prepare("DELETE FROM noticias WHERE id IN ($placeholders)");
-        $deleteQuery->execute($ids);
-        
-        // Registrar en bitácora
-        $accion = "Purga de noticias";
-        $descripcion = "Se eliminaron 100 noticias antiguas por política de retención";
-        $stmtbitacora = $pdo->prepare("INSERT INTO bitacora (usuario, accion, descripcion, fecha)
-                                      VALUES (?, ?, ?, NOW())");
-        $stmtbitacora->execute([
-            $_SESSION['nombreusuario'],
-            $accion,
-            $descripcion
-        ]);
-    }
 }
 
 // Recoger datos del formulario
@@ -196,7 +154,6 @@ try {
         // Mensaje de éxito
         $_SESSION['mensaje_exito'] = "Noticia creada correctamente" . ($destacada === 'si' ? " y marcada como destacada" : "") . ".";
         header("Location: ../master/cargaarchivos.php");
-        purgarNoticiasAntiguas($pdo);
         exit();
     } else {
         $_SESSION['errores'] = "Error al guardar la noticia en la base de datos.";
@@ -211,6 +168,8 @@ try {
         
         header("Location: ../master/cargaarchivos.php");
         purgarNoticiasAntiguas($pdo);
+        eliminarImagenesHuerfanas($pdo);
+        purgararchivosBitacora($pdo);
         exit();
     }
 } catch (PDOException $e) {
@@ -225,7 +184,6 @@ try {
     }
     
     header("Location: ../master/cargaarchivos.php");
-    purgarNoticiasAntiguas($pdo);
     exit();
 }
 ?>

@@ -4,6 +4,8 @@ session_start();
 // Configuración de la base de datos
 require_once '../../config/config.php';
 
+require_once 'purga_noticias.php';
+
 // Verificar permisos
 if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor') {
     $_SESSION['errores'] = "No tienes permisos para realizar esta acción";
@@ -165,6 +167,9 @@ try {
         }
         
         header("Location: ../escritor/cargaarchivos.php");
+        purgarNoticiasAntiguas($pdo);
+        eliminarImagenesHuerfanas($pdo);
+        purgararchivosBitacora($pdo);
         exit();
     }
 } catch (PDOException $e) {
