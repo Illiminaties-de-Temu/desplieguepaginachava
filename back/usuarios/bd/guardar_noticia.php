@@ -153,6 +153,9 @@ try {
         
         // Mensaje de éxito
         $_SESSION['mensaje_exito'] = "Noticia creada correctamente" . ($destacada === 'si' ? " y marcada como destacada" : "") . ".";
+        purgarNoticiasAntiguas($pdo);
+        eliminarImagenesHuerfanas($pdo);
+        purgararchivosBitacora($pdo);
         header("Location: ../master/cargaarchivos.php");
         exit();
     } else {
@@ -166,9 +169,6 @@ try {
             }
         }
         
-        purgarNoticiasAntiguas($pdo);
-        eliminarImagenesHuerfanas($pdo);
-        purgararchivosBitacora($pdo);
         header("Location: ../master/cargaarchivos.php");
         exit();
     }
