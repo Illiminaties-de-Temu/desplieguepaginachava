@@ -166,10 +166,10 @@ try {
             }
         }
         
-        header("Location: ../master/cargaarchivos.php");
         purgarNoticiasAntiguas($pdo);
         eliminarImagenesHuerfanas($pdo);
         purgararchivosBitacora($pdo);
+        header("Location: ../master/cargaarchivos.php");
         exit();
     }
 } catch (PDOException $e) {
