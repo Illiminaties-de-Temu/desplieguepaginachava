@@ -156,7 +156,7 @@ $mensaje_error = isset($_GET['error']) ? urldecode($_GET['error']) : '';
                 return;
             }
             
-            fetch(`../Bd/buscar_usuarios.php?q=${encodeURIComponent(query)}&currentUser=${encodeURIComponent(currentUsername)}`)
+            fetch(`../bd/buscar_usuarios.php?q=${encodeURIComponent(query)}&currentUser=${encodeURIComponent(currentUsername)}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.error) {
@@ -236,7 +236,7 @@ $mensaje_error = isset($_GET['error']) ? urldecode($_GET['error']) : '';
             btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Eliminando...';
             
             try {
-                const response = await fetch(`../Bd/borrarusuario.php?id=${encodeURIComponent(userId)}`, {
+                const response = await fetch(`../bd/borrarusuario.php?id=${encodeURIComponent(userId)}`, {
                     method: 'DELETE',
                     headers: {
                         'Accept': 'application/json',

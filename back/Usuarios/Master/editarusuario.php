@@ -3,7 +3,7 @@ session_start();
 
 // Verificar si el usuario está logueado y es master
 if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master') {
-    header("Location: ../Login/Out.php");
+    header("Location: ../login/out.php");
     exit();
 }
 
@@ -349,7 +349,7 @@ if (isset($_GET['id'])) {
                 return;
             }
             
-            fetch(`../Bd/buscar_usuarios.php?q=${encodeURIComponent(query)}${currentUserId ? '&exclude=' + currentUserId : ''}&currentUser=${encodeURIComponent(currentUsername)}`)
+            fetch(`../bd/buscar_usuarios.php?q=${encodeURIComponent(query)}${currentUserId ? '&exclude=' + currentUserId : ''}&currentUser=${encodeURIComponent(currentUsername)}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.error) {

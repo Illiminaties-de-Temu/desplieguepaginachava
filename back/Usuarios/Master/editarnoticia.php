@@ -3,7 +3,7 @@ session_start();
 
 // Verificar si el usuario está logueado y es master
 if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master') {
-    header("Location: ../Login/Out.php");
+    header("Location: ../login/out.php");
     exit();
 }
 ?>
@@ -169,7 +169,7 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
             
             mensaje.innerHTML = '<div class="loading">Cargando noticias...</div>';
             
-            fetch('../Bd/leernoticias.php')
+            fetch('../bd/leernoticias.php')
                 .then(response => response.json())
                 .then(data => {
                     if (data.error) {
@@ -211,7 +211,7 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
     
             mensaje.innerHTML = '<div class="loading">Cargando noticia...</div>';
     
-            fetch(`../Bd/leernoticias.php?id=${id}`)
+            fetch(`../bd/leernoticias.php?id=${id}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.error) {
@@ -293,7 +293,7 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
                 const imagenEliminada = imagenesActuales[index];
                 
                 // Eliminar físicamente del servidor usando file_helper
-                fetch('../Bd/eliminarimagen.php', {
+                fetch('../bd/eliminarimagen.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -492,7 +492,7 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
             btnSubmit.disabled = true;
             btnSubmit.textContent = 'Guardando...';
             
-            fetch('../Bd/editarnoticia.php', {
+            fetch('../bd/editarnoticia.php', {
                 method: 'POST',
                 body: formData
             })

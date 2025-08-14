@@ -3,7 +3,7 @@ session_start();
 
 // Verificar permisos
 if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master') {
-    header("Location: ../Login/Out.php");
+    header("Location: ../login/out.php");
     exit();
 }
 
@@ -63,7 +63,7 @@ $tipousuario = $datos_formulario['tipousuario'] ?? '';
                 </div>
             <?php endif; ?>
 
-            <form method="POST" id="createUserForm" action="../Bd/guardar_usuario.php">
+            <form method="POST" id="createUserForm" action="../bd/guardar_usuario.php">
                 <div class="form-section">
                     <h2>Información del Usuario</h2>
                     
@@ -190,7 +190,7 @@ $tipousuario = $datos_formulario['tipousuario'] ?? '';
             validation.className = 'validation-message validation-info';
             validation.style.display = 'block';
             
-            fetch('../Bd/verificar_usuario.php?username=' + encodeURIComponent(username))
+            fetch('../bd/verificar_usuario.php?username=' + encodeURIComponent(username))
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Error en la red');

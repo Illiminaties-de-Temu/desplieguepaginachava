@@ -3,12 +3,12 @@ session_start();
 
 // Verificar si el usuario está logueado y es master
 if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master') {
-    header("Location: ../Login/Out.php");
+    header("Location: ../login/out.php");
     exit();
 }
 
 // Incluir el script de leer noticias
-include_once '../Bd/obtenernoticias.php';
+include_once '../bd/obtenernoticias.php';
 
 // Inicializar variables
 $noticia_seleccionada = null;
@@ -238,7 +238,7 @@ $todas_noticias = obtenerTodasNoticias($pdo);
             document.getElementById('noticia_content').style.display = 'none';
 
             // Realizar petición AJAX
-            fetch('../Bd/obtenernoticias.php?id=' + id)
+            fetch('../bd/obtenernoticias.php?id=' + id)
                 .then(response => response.json())
                 .then(data => {
                     if (data.error) {
@@ -331,7 +331,7 @@ $todas_noticias = obtenerTodasNoticias($pdo);
             };
             
             // Enviar petición AJAX
-            fetch('../Bd/eliminarnoticia.php', {
+            fetch('../bd/eliminarnoticia.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
