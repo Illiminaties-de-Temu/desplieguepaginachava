@@ -324,9 +324,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     // Añadir evento click para abrir noticia completa
                     slide.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    window.location.href = `noticiacompleta.html?id=${noticia.id}`;
-                });
+                        e.preventDefault();
+                        const noticiaId = this.dataset.id; // Usamos el dataset que ya asignamos
+                        window.location.href = `noticiacompleta.html?id=${noticiaId}`;
+                      });
                     
                     carrusel.appendChild(slide);
                     
@@ -334,7 +335,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const punto = document.createElement('div');
                     punto.className = `punto ${index === 0 ? 'activo' : ''}`;
                     puntos.appendChild(punto);
-                });
+                  });
                 
                 // Inicializar funcionalidad del carrusel
                 inicializarCarrusel();
