@@ -8,7 +8,7 @@ session_start();
 require_once '../../config/config.php';
 
 // Verificar permisos
-if (!isset($_SESSION['nombreusuario']) || ($_SESSION['tipousuario'] !== 'master' && $_SESSION['tipousuario'] !== 'escritor')) {
+if (!isset($_SESSION['nombreusuario']) || ($_SESSION['tipousuario'] !== 'master' && $_SESSION['tipousuario'] !== 'editor')) {
     echo json_encode(['success' => false, 'message' => 'Acceso denegado']);
     exit();
 }
