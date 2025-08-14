@@ -109,6 +109,26 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
                         </div>
                     </div>
 
+                    <div class="form-row">
+                        <div class="form-group">
+                            <div class="highlight-section">
+                                <div class="checkbox-container">
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox" 
+                                            name="destacada" 
+                                            id="destacada"
+                                            value="si">
+                                        <span class="checkbox-style"></span>
+                                    </label>
+                                    <div class="checkbox-content">
+                                        <span class="checkbox-label">Destacar esta noticia</span>
+                                        <p class="form-hint">Las noticias destacadas aparecerán en posiciones privilegiadas.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-section">
                         <h2>Contenido</h2>
                         
