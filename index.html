@@ -307,6 +307,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const slide = document.createElement('div');
                     slide.className = `noticia-slide ${index === 0 ? 'activa' : ''}`;
                     slide.style.backgroundImage = `url('${noticia.imagen}')`;
+                    slide.dataset.id = noticia.id;
                     
                     // Contenido de la noticia
                     slide.innerHTML = `
