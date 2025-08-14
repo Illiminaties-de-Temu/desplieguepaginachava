@@ -338,13 +338,13 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
                                 <div class="file-upload-content">
                                     <div class="file-upload-text">Haz clic aquí para seleccionar imágenes</div>
                                     <div class="file-upload-hint">Puedes seleccionar múltiples archivos de imagen</div>
-                                </div>
-                                <input type="file" 
+                                    <input type="file" 
                                        name="imagen[]" 
                                        id="imagen" 
                                        multiple 
                                        accept="image/*" 
                                        required>
+                                </div>
                             </div>
                             <div id="imagePreviewContainer" class="image-preview-container"></div>
                         </div>
