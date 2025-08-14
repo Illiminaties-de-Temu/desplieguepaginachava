@@ -6,6 +6,9 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
     header("Location: ../login/out.php");
     exit();
 }
+
+
+$destacada = isset($_POST['destacada']) ? 'si' : 'no';
 ?>
 
 <!DOCTYPE html>
@@ -357,6 +360,8 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
             document.getElementById('titulo').value = noticia.Titulo;
             document.getElementById('contenido').value = noticia.Contenido;
             document.getElementById('fecha').value = noticia.fecha;
+            // Establecer estado del checkbox destacada
+            document.getElementById('destacada').checked = noticia.destacada === 'si';
             
             // Actualizar información de la noticia
             document.getElementById('noticia_info').textContent = 
@@ -641,12 +646,6 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
                 btnSubmit.textContent = textoOriginal;
             });
         });
-
-        /* Función para formatear fecha
-        function formatearFecha(fecha) {
-            const opciones = { year: 'numeric', month: '2-digit', day: '2-digit' };
-            return new Date(fecha).toLocaleDateString('es-ES', opciones);
-        }*/
 
         // Drag and drop para archivos
         const fileInputWrapper = document.querySelector('.file-input-wrapper');
