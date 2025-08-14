@@ -7,8 +7,6 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
     exit();
 }
 
-
-$destacada = isset($_POST['destacada']) ? 'si' : 'no';
 ?>
 
 <!DOCTYPE html>
