@@ -307,6 +307,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const slide = document.createElement('div');
                     slide.className = `noticia-slide ${index === 0 ? 'activa' : ''}`;
                     slide.style.backgroundImage = `url('${noticia.imagen}')`;
+                    slide.dataset.id = noticia.id;
                     
                     // Contenido de la noticia
                     slide.innerHTML = `
@@ -322,11 +323,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     `;
                     
                     // Añadir evento click para abrir noticia completa
-                    slide.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const noticiaId = this.dataset.id; // Usamos el dataset que ya asignamos
-                        window.location.href = `noticiacompleta.html?id=${noticiaId}`;
-                      });
+                    carrusel.addEventListener('click', function(e) {
+                      const slide = e.target.closest('.noticia-slide');
+                      if (slide) {
+                          e.preventDefault();
+                          const noticiaId = slide.dataset.id;
+                          window.location.href = `noticiacompleta.html?id=${noticiaId}`;
+                      }
+                  });
+
                     
                     carrusel.appendChild(slide);
                     
