@@ -124,7 +124,7 @@ function registrarBitacora($pdo, $accion, $descripcion) {
         session_start();
     }
     
-    $usuario = isset($_SESSION['nombreusuario']) ? $_SESSION['nombreusuario'] : 'Sistema';
+    $usuario = 'Sistema';
     
     $stmt = $pdo->prepare("INSERT INTO bitacora (usuario, accion, descripcion, fecha)
                           VALUES (?, ?, ?, NOW())");
