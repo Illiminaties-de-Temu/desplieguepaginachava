@@ -93,10 +93,13 @@
         }
 
         // Obtener los datos de la noticia
-        fetch(`/back/api_noticia_completa.php?id=${noticiaId}`)
+        console.log('ID recibido en URL:', noticiaId); // Para depuración
+
+        // Fetch para validar mejor:
+        fetch(`/back/api_noticia_completa.php?id=${encodeURIComponent(noticiaId)}`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Error al cargar la noticia');
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 return response.json();
             })
