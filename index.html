@@ -332,6 +332,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 
                 carrusel.appendChild(slide);
+                // Ejecuta en consola:
+                document.querySelectorAll('.noticia-slide').forEach(slide => {
+                    console.log(slide.dataset.noticiaId);
+                });
+                console.log(data.data.map(noticia => noticia.id));
 
                     // Crear punto indicador
                     const punto = document.createElement('div');
