@@ -8,7 +8,7 @@ session_start();
 require_once '../../config/config.php';
 
 // Verificar permisos
-if (!isset($_SESSION['nombreusuario']) || ($_SESSION['tipousuario'] !== 'master')) {
+if (!isset($_SESSION['nombreusuario']) || ($_SESSION['tipousuario'] !== 'master' && $_SESSION['tipousuario'] !== 'escritor')) {
     echo json_encode(['success' => false, 'message' => 'Acceso denegado']);
     exit();
 }
@@ -46,6 +46,7 @@ try {
         $contenido = $_POST['contenido'] ?? '';
         $fecha = $_POST['fecha'] ?? date('Y-m-d');
         $imagenesExistentes = $_POST['imagenes_existentes'] ?? '';
+        $destacada = isset($_POST['destacada']) ? 'si' : 'no'; // Nuevo campo
 
         // Validar campos obligatorios
         if (empty($id) || empty($contenido) || empty($fecha)) {
@@ -57,16 +58,17 @@ try {
             ? implode(',', array_filter(array_merge(explode(',', $imagenesExistentes), $rutasNuevasImagenes)))
             : $imagenesExistentes;
 
-        // Consulta SQL optimizada
+        // Consulta SQL optimizada con el nuevo campo
         $sql = "UPDATE noticias SET 
                 Contenido = ?,
                 fecha = ?,
                 Imagenes = ?,
-                Titulo = COALESCE(?, Titulo)
+                Titulo = COALESCE(?, Titulo),
+                Destacada = ?
                 WHERE id = ?";
 
         $stmt = $pdo->prepare($sql);
-        $resultado = $stmt->execute([$contenido, $fecha, $imagenesFinal, $titulo, $id]);
+        $resultado = $stmt->execute([$contenido, $fecha, $imagenesFinal, $titulo, $destacada, $id]);
 
         if (!$resultado) {
             throw new Exception('Error al actualizar en la base de datos');
@@ -78,14 +80,15 @@ try {
         $stmtBitacora->execute([
             $_SESSION['nombreusuario'],
             'Edición de noticia',
-            'Noticia ID ' . $id . ' actualizada'
+            'Noticia ID ' . $id . ' actualizada' . ($destacada === 'si' ? ' (DESTACADA)' : '')
         ]);
 
         // Respuesta exitosa
         echo json_encode([
             'success' => true,
             'message' => 'Noticia actualizada',
-            'nuevas_imagenes' => $rutasNuevasImagenes
+            'nuevas_imagenes' => $rutasNuevasImagenes,
+            'destacada' => $destacada
         ]);
 
     } else {
