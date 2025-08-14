@@ -359,7 +359,7 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
             document.getElementById('contenido').value = noticia.Contenido;
             document.getElementById('fecha').value = noticia.fecha;
             // Establecer estado del checkbox destacada
-            document.getElementById('destacada').checked = noticia.destacada === 'si';
+            document.getElementById('destacada').checked = noticia.Destacada === 'si';
             
             // Actualizar información de la noticia
             document.getElementById('noticia_info').textContent = 
