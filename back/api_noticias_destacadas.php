@@ -38,7 +38,7 @@ try {
             FROM noticias
             WHERE destacada = 'si' OR destacada = 1
             ORDER BY fecha DESC
-            LIMIT 6";
+            LIMIT 10";
 
     $stmt = $pdo->prepare($sql);
     
@@ -81,7 +81,7 @@ try {
         $contenidoBreve = implode(' ', 
             array_slice(
                 preg_split('/\s+/', strip_tags($noticia['contenido'])), 
-                0, 10
+                0, 6
             )
         );
 
