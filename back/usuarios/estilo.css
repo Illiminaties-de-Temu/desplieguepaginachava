@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Gotham', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #f0f4f8 0%, rgba(248, 249, 250, 0.8) 100%);
+    background: linear-gradient(135deg, #f0f4f8 0%, #f0f4f8 100%);
     min-height: 100vh;
     padding: 20px;
 }
@@ -14,7 +14,7 @@ body {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.95);
+    background: #ffffff;
     border-radius: 15px;
     box-shadow: 0 20px 40px rgba(0, 26, 51, 0.15);
     overflow: hidden;
@@ -49,8 +49,8 @@ body {
     position: absolute;
     top: 20px;
     left: 30px;
-    background: #ff0015;
-    color: #ffffff;
+    background: #f8d7da;
+    color: #721c24;
     padding: 10px 20px;
     border: 1px solid #f5c6cb;
     border-radius: 25px;
