@@ -4,6 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Noticia Completa</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2em;
+        }
+        .error {
+            color: #d32f2f;
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2em;
+        }
+        .imagen-principal {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .imagen-principal img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .galeria-imagenes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .galeria-imagenes img {
+            max-width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .galeria-imagenes img:hover {
+            transform: scale(1.03);
+        }
+        .fecha-noticia {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        .contenido-noticia {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <div id="contenedor-noticia">
@@ -66,15 +121,23 @@
             
             // Procesar imágenes si existen
             if (noticia.imagenes && noticia.imagenes.length > 0) {
-                
+                // Imagen principal
                 imagenesHTML += `
-                    <div class="galeria-imagenes">
-                        ${noticia.imagenes.map((img, index) => `
-                            <img src="${img}" alt="Imagen ${index + 1} de la noticia">
-                        `).join('')}
+                    <div class="imagen-principal">
+                        <img src="${noticia.imagenes[0]}" alt="${noticia.titulo || 'Imagen principal'}">
                     </div>
                 `;
                 
+                // Galería (si hay más de una imagen)
+                if (noticia.imagenes.length > 1) {
+                    imagenesHTML += `
+                        <div class="galeria-imagenes">
+                            ${noticia.imagenes.map((img, index) => `
+                                <img src="${img}" alt="Imagen ${index + 1} de la noticia">
+                            `).join('')}
+                        </div>
+                    `;
+                }
             }
 
             // Construir el HTML completo
@@ -91,50 +154,5 @@
         }
     });
     </script>
-    <footer>
-    <!-- Efectos de fondo -->
-    <div class="particles-background" id="particles"></div>
-    
-    <!-- FIGURAS GEOMÉTRICAS DECORATIVAS -->
-    <div class="geometric-shapes">
-      <!-- Esquina superior izquierda -->
-      <div class="shape circle" style="width: 40px; height: 40px; top: 40%; left: 95%; animation-delay: 0s;"></div>
-      <div class="shape triangle" style="top: 10%; left: 19%; animation-delay: 3s;"></div>
-      
-      <!-- Esquina superior derecha -->
-      <div class="shape circle" style="width: 25px; height: 25px; top: 20%; right: 20%; animation-delay: 4s;"></div>
-      
-      <!-- Esquina inferior izquierda -->
-      <div class="shape triangle" style="bottom: 15%; top: 10%; left: 0%; animation-delay: 2s;"></div>
-      <div class="shape circle" style="width: 35px; height: 35px; bottom: 8%; left: 25%; animation-delay: 5s;"></div>
-      
-      <!-- Algunas figuras en los bordes laterales -->
-      <div class="shape circle" style="width: 20px; height: 20px; top: 50%; left: 3%; animation-delay: 6s;"></div>
-    </div>
-    
-    <!-- Efectos visuales -->
-    <div class="waves"></div>
-    <div class="glow-effect"></div>
-    
-    <!-- Contenido del footer -->
-    <div class="footer-container">
-      <!-- Redes sociales -->
-      <div class="footer-social">
-        <ul class="social-icons">
-          <li><a href="https://www.facebook.com/ChavaCalderonMX/" target="_blank"><img src="/facebook.png" alt="facebook chava calderon"></a></li>
-          <li><a href="https://www.instagram.com/schavacalderon_/?hl=es" target="_blank"><img src="/logotipo-de-instagram.png" alt="instagram chava calderon"></a></li>
-          <li><a href="https://www.tiktok.com/@chava.calderon90" target="_blank"><img src="/tik-tok.png" alt="tik tok chava calderon"></a></li>
-        </ul>
-      </div>
-      
-      <!-- Información legal y créditos -->
-      <div class="footer-bottom">
-        <p>&copy; 2025 Chava Calderón. Todos los derechos reservados</p>
-        <p>Desarrollado por <a href="https://geckcodex.online/" target="_blank">GECK Codex</a></p>
-      </div>
-    </div>
-  </footer>
-  
 </body>
-
 </html>
