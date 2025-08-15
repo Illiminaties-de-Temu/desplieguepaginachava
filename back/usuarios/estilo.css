@@ -23,7 +23,7 @@
 
 body {
     font-family: 'Gotham', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #d2d3d6 0%, rgb(192, 195, 206) 100%);
+    background: linear-gradient(#ffffff);
     min-height: 100vh;
     padding: 20px;
 }
@@ -53,10 +53,10 @@ body {
 
 .user-info {
     position: absolute;
-    top: 20px;
+    top: 30px;
     right: 30px;
     background: rgba(255,255,255,0.1);
-    padding: 10px 20px;
+    padding: 5px 10px;
     border-radius: 25px;
     backdrop-filter: blur(10px);
 }
