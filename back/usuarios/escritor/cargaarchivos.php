@@ -148,6 +148,62 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
             z-index: 3;
         }
 
+        /* Botones para agregar más imágenes */
+        .image-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .add-more-btn {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .add-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.3);
+            background: linear-gradient(135deg, #229954 0%, #27ae60 100%);
+        }
+
+        .image-counter {
+            background: #ecf0f1;
+            padding: 8px 15px;
+            border-radius: 20px;
+            color: #2c3e50;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .clear-all-btn {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .clear-all-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
         /* Estilos para el checkbox de noticia destacada */
         .highlight-section {
             background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
@@ -274,6 +330,11 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
                 flex-direction: column;
                 gap: 10px;
             }
+
+            .image-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
         }
     </style>
 </head>
@@ -303,12 +364,12 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
                     // Limpiar el formulario después de mostrar el mensaje de éxito
                     setTimeout(() => {
                         document.getElementById('createNewsForm').reset();
-                        clearImagePreviews();
+                        clearAllImages();
                     }, 100);
                 </script>
             <?php endif; ?>
 
-            <form method="POST" id="createNewsForm" action="../bd/guardar_noticia_escri.php" enctype="multipart/form-data">
+            <form method="POST" id="createNewsForm" action="../bd/guardar_noticia.php" enctype="multipart/form-data">
                 <div class="form-section">
                     <h2>Información de la Noticia</h2>
                     
@@ -318,8 +379,7 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
                             <input type="text" 
                                    name="titulo" 
                                    id="titulo" 
-                                   value="<?php echo htmlspecialchars($titulo ?? ''); ?>" 
-                                   >
+                                   value="<?php echo htmlspecialchars($titulo ?? ''); ?>" >
                         </div>
                     </div>
                     
@@ -347,7 +407,27 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
                                     <div class="file-upload-hint">Puedes seleccionar múltiples archivos de imagen</div>
                                 </div>
                             </div>
+                            
+                            <!-- Contenedor para mostrar imágenes seleccionadas -->
                             <div id="imagePreviewContainer" class="image-preview-container"></div>
+                            
+                            <!-- Botones de acción para las imágenes -->
+                            <div class="image-actions" id="imageActions" style="display: none;">
+                                <button type="button" class="add-more-btn" onclick="addMoreImages()">
+                                    ➕ Agregar más imágenes
+                                </button>
+                                <div class="image-counter" id="imageCounter">0 imágenes seleccionadas</div>
+                                <button type="button" class="clear-all-btn" onclick="clearAllImages()">
+                                    🗑️ Limpiar todo
+                                </button>
+                            </div>
+                            
+                            <!-- Input oculto para agregar más imágenes -->
+                            <input type="file" 
+                                   id="additionalImages" 
+                                   multiple 
+                                   accept="image/*" 
+                                   style="display: none;">
                         </div>
                     </div>
                     
@@ -373,7 +453,7 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
                 </div>
 
                 <div class="buttons">
-                    <button type="reset" class="btn btn-secondary" onclick="clearImagePreviews()">Limpiar Formulario</button>
+                    <button type="reset" class="btn btn-secondary" onclick="clearAllImages()">Limpiar Formulario</button>
                     <button type="submit" class="btn btn-primary">Crear Noticia</button>
                 </div>
             </form>
@@ -383,11 +463,45 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
     <script>
         let selectedFiles = [];
 
+        // Manejar la selección inicial de imágenes
         document.getElementById('imagen').addEventListener('change', function(e) {
             const files = Array.from(e.target.files);
             selectedFiles = files;
             displayImagePreviews();
+            updateImageCounter();
+            toggleImageActions();
         });
+
+        // Manejar la adición de más imágenes
+        document.getElementById('additionalImages').addEventListener('change', function(e) {
+            const newFiles = Array.from(e.target.files);
+            
+            // Agregar los nuevos archivos al array existente
+            newFiles.forEach(file => {
+                // Verificar que no sea un duplicado (opcional)
+                const isDuplicate = selectedFiles.some(existingFile => 
+                    existingFile.name === file.name && 
+                    existingFile.size === file.size &&
+                    existingFile.lastModified === file.lastModified
+                );
+                
+                if (!isDuplicate) {
+                    selectedFiles.push(file);
+                }
+            });
+            
+            // Actualizar el input principal con todos los archivos
+            updateMainFileInput();
+            displayImagePreviews();
+            updateImageCounter();
+            
+            // Limpiar el input auxiliar
+            this.value = '';
+        });
+
+        function addMoreImages() {
+            document.getElementById('additionalImages').click();
+        }
 
         function displayImagePreviews() {
             const container = document.getElementById('imagePreviewContainer');
@@ -404,11 +518,13 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
                         img.src = e.target.result;
                         img.className = 'image-preview';
                         img.alt = 'Vista previa';
+                        img.title = file.name; // Mostrar nombre del archivo al hacer hover
                         
                         const removeBtn = document.createElement('button');
                         removeBtn.innerHTML = '×';
                         removeBtn.className = 'remove-image';
                         removeBtn.type = 'button';
+                        removeBtn.title = 'Eliminar imagen';
                         removeBtn.onclick = function() {
                             removeImage(index);
                         };
@@ -424,11 +540,13 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
 
         function removeImage(index) {
             selectedFiles.splice(index, 1);
-            updateFileInput();
+            updateMainFileInput();
             displayImagePreviews();
+            updateImageCounter();
+            toggleImageActions();
         }
 
-        function updateFileInput() {
+        function updateMainFileInput() {
             const fileInput = document.getElementById('imagen');
             const dt = new DataTransfer();
             
@@ -438,7 +556,7 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
             
             fileInput.files = dt.files;
             
-            // Si no hay archivos, hacer que el campo sea requerido nuevamente
+            // Manejar el atributo required
             if (selectedFiles.length === 0) {
                 fileInput.setAttribute('required', 'required');
             } else {
@@ -446,19 +564,52 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
             }
         }
 
-        function clearImagePreviews() {
+        function updateImageCounter() {
+            const counter = document.getElementById('imageCounter');
+            const count = selectedFiles.length;
+            counter.textContent = `${count} imagen${count !== 1 ? 'es' : ''} seleccionada${count !== 1 ? 's' : ''}`;
+        }
+
+        function toggleImageActions() {
+            const actions = document.getElementById('imageActions');
+            if (selectedFiles.length > 0) {
+                actions.style.display = 'flex';
+            } else {
+                actions.style.display = 'none';
+            }
+        }
+
+        function clearAllImages() {
             selectedFiles = [];
             document.getElementById('imagePreviewContainer').innerHTML = '';
             const fileInput = document.getElementById('imagen');
             fileInput.value = '';
             fileInput.setAttribute('required', 'required');
+            document.getElementById('additionalImages').value = '';
+            updateImageCounter();
+            toggleImageActions();
         }
 
         // Manejar el botón de reset del formulario
         document.getElementById('createNewsForm').addEventListener('reset', function() {
             setTimeout(() => {
-                clearImagePreviews();
+                clearAllImages();
             }, 10);
+        });
+
+        // Inicializar contador y acciones al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            updateImageCounter();
+            toggleImageActions();
+        });
+
+        // Prevenir el envío del formulario si no hay imágenes seleccionadas
+        document.getElementById('createNewsForm').addEventListener('submit', function(e) {
+            if (selectedFiles.length === 0) {
+                e.preventDefault();
+                alert('Por favor, selecciona al menos una imagen antes de crear la noticia.');
+                return false;
+            }
         });
     </script>
 </body>
