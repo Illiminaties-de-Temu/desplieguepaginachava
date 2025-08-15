@@ -33,344 +33,349 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
     <title>Crear Noticia - Panel Master</title>
     <link rel="stylesheet" href="../estilo.css">
     <style>
-        .image-preview-container {
-            margin-top: 10px;
-            display: flex;
-            flex-wrap: wrap;
+    /* Fuente Gotham */
+    @import url('https://fonts.cdnfonts.com/css/gotham');
+    * {
+        font-family: 'Gotham', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .image-preview-container {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .image-preview-item {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .image-preview {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border: 2px solid #e0e0e0; /* Gris suave */
+        border-radius: 5px;
+    }
+    
+    .remove-image {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #e74c3c; /* Rojo paleta */
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        font-size: 12px;
+        line-height: 1;
+    }
+    
+    .remove-image:hover {
+        background: #cc0000;
+    }
+
+    /* Estilos para el campo de imágenes múltiples */
+    .file-upload-section {
+        border: 2px dashed #1d4ed8; /* Azul paleta */
+        border-radius: 12px;
+        padding: 20px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .file-upload-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(29, 78, 216, 0.1), transparent);
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+        opacity: 0;
+    }
+
+    .file-upload-section:hover {
+        border-color: #083057;
+        background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(29, 78, 216, 0.15);
+    }
+
+    .file-upload-section:hover::before {
+        opacity: 1;
+        animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+        0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+
+    .file-upload-content {
+        text-align: center;
+        position: relative;
+        z-index: 2;
+    }
+
+    .file-upload-icon {
+        font-size: 3em;
+        color: #1d4ed8;
+        margin-bottom: 15px;
+        display: block;
+    }
+
+    .file-upload-text {
+        color: #2a3441;
+        font-weight: 600;
+        font-size: 1.1em;
+        margin-bottom: 8px;
+    }
+
+    .file-upload-hint {
+        color: #7f8c8d;
+        font-size: 0.9em;
+        font-style: italic;
+    }
+
+    input[type="file"] {
+        position: absolute;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        z-index: 3;
+    }
+
+    /* Botones para agregar más imágenes */
+    .image-actions {
+        margin-top: 25px;
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 20px;
+        background: #ffffff;
+        border-radius: 15px;
+        border: 1px solid #e0e0e0;
+    }
+
+    .add-more-btn {
+        background: linear-gradient(135deg, #1d4ed8 0%, #083057 100%);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 700;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 50px;
+        box-shadow: 0 4px 15px rgba(29, 78, 216, 0.2);
+    }
+
+    .add-more-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(29, 78, 216, 0.4);
+        background: linear-gradient(135deg, #083057 0%, #1d4ed8 100%);
+    }
+
+    .add-more-btn:active {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(29, 78, 216, 0.3);
+    }
+
+    .image-counter {
+        background: linear-gradient(135deg, #1d4ed8 0%, #083057 100%);
+        color: white;
+        padding: 12px 25px;
+        border-radius: 25px;
+        font-size: 16px;
+        font-weight: 700;
+        box-shadow: 0 4px 15px rgba(29, 78, 216, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        min-height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Estilos para el checkbox de noticia destacada */
+    .highlight-section {
+        background: linear-gradient(135deg, #e3f2fd 0%, #f0f4f8 100%);
+        border: 2px solid #1d4ed8;
+        border-radius: 12px;
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .highlight-section::before {
+        content: '⭐';
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 1.8em;
+        opacity: 0.3;
+        transition: all 0.3s ease;
+    }
+
+    .highlight-section:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(29, 78, 216, 0.2);
+        border-color: #083057;
+    }
+
+    .highlight-section:hover::before {
+        opacity: 0.6;
+        transform: rotate(360deg) scale(1.2);
+    }
+
+    .checkbox-container {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        position: relative;
+    }
+
+    .custom-checkbox {
+        position: relative;
+        cursor: pointer;
+        margin-top: 3px;
+    }
+
+    .custom-checkbox input[type="checkbox"] {
+        opacity: 0;
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+
+    .checkbox-style {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #1d4ed8;
+        border-radius: 4px;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .custom-checkbox input[type="checkbox"]:checked + .checkbox-style {
+        background: linear-gradient(135deg, #1d4ed8 0%, #083057 100%);
+        border-color: #083057;
+        transform: scale(1.1);
+    }
+
+    .custom-checkbox input[type="checkbox"]:checked + .checkbox-style::after {
+        content: '✓';
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .checkbox-content {
+        flex: 1;
+    }
+
+    .checkbox-label {
+        color: #2a3441;
+        font-weight: 600;
+        font-size: 1.1em;
+        margin-bottom: 8px !important;
+        display: block;
+        cursor: pointer;
+    }
+
+    .form-hint {
+        color: #7f8c8d !important;
+        font-size: 0.9em !important;
+        font-style: italic;
+        line-height: 1.4;
+        margin: 0 !important;
+    }
+
+    /* Ajustes para mantener la coherencia con los estilos existentes */
+    .form-group label[for="imagen"] {
+        margin-bottom: 15px;
+        font-size: 1.1em;
+        color: #2a3441;
+        font-weight: 600;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .file-upload-section {
+            padding: 15px;
+        }
+        
+        .file-upload-icon {
+            font-size: 2.5em;
+        }
+        
+        .highlight-section {
+            padding: 15px;
+        }
+        
+        .checkbox-container {
+            flex-direction: column;
             gap: 10px;
         }
-        
-        .image-preview-item {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .image-preview {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-        }
-        
-        .remove-image {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #ff4444;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-            font-size: 12px;
-            line-height: 1;
-        }
-        
-        .remove-image:hover {
-            background: #cc0000;
-        }
 
-        /* Estilos para el campo de imágenes múltiples */
-        .file-upload-section {
-            border: 2px dashed #3498db;
-            border-radius: 12px;
-            padding: 20px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .file-upload-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(52, 152, 219, 0.1), transparent);
-            transform: rotate(45deg);
-            transition: all 0.3s ease;
-            opacity: 0;
-        }
-
-        .file-upload-section:hover {
-            border-color: #2980b9;
-            background: linear-gradient(135deg, #ffffff 0%, #f1f3f4 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.15);
-        }
-
-        .file-upload-section:hover::before {
-            opacity: 1;
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-        }
-
-        .file-upload-content {
-            text-align: center;
-            position: relative;
-            z-index: 2;
-        }
-
-        .file-upload-icon {
-            font-size: 3em;
-            color: #3498db;
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        .file-upload-text {
-            color: #2c3e50;
-            font-weight: 600;
-            font-size: 1.1em;
-            margin-bottom: 8px;
-        }
-
-        .file-upload-hint {
-            color: #7f8c8d;
-            font-size: 0.9em;
-            font-style: italic;
-        }
-
-        input[type="file"] {
-            position: absolute;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-            z-index: 3;
-        }
-
-        /* Botones para agregar más imágenes */
         .image-actions {
-            margin-top: 25px;
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            flex-wrap: wrap;
-            justify-content: center;
-            padding: 20px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 15px;
-            border: 1px solid #dee2e6;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 12px;
+            padding: 15px;
         }
 
         .add-more-btn {
-            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            min-height: 50px;
-            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.2);
-        }
-
-        .add-more-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
-            background: linear-gradient(135deg, #229954 0%, #27ae60 100%);
-        }
-
-        .add-more-btn:active {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+            padding: 18px 25px;
+            font-size: 18px;
+            justify-content: center;
+            min-height: 55px;
         }
 
         .image-counter {
-            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-            color: white;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 700;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            min-height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-size: 18px;
+            padding: 15px 20px;
+            text-align: center;
+            min-height: 55px;
         }
+    }
 
-
-
-        /* Estilos para el checkbox de noticia destacada */
-        .highlight-section {
-            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-            border: 2px solid #f39c12;
-            border-radius: 12px;
-            padding: 20px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .highlight-section::before {
-            content: '⭐';
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 1.8em;
-            opacity: 0.3;
-            transition: all 0.3s ease;
-        }
-
-        .highlight-section:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(243, 156, 18, 0.2);
-            border-color: #e67e22;
-        }
-
-        .highlight-section:hover::before {
-            opacity: 0.6;
-            transform: rotate(360deg) scale(1.2);
-        }
-
-        .checkbox-container {
-            display: flex;
-            align-items: flex-start;
+    @media (max-width: 480px) {
+        .add-more-btn {
             gap: 15px;
-            position: relative;
+            padding: 20px;
+            font-size: 20px;
+            min-height: 60px;
         }
 
-        .custom-checkbox {
-            position: relative;
-            cursor: pointer;
-            margin-top: 3px;
+        .image-counter {
+            font-size: 16px;
+            padding: 18px;
+            min-height: 60px;
         }
+    }
+</style>
 
-        .custom-checkbox input[type="checkbox"] {
-            opacity: 0;
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-
-        .checkbox-style {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #f39c12;
-            border-radius: 4px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .custom-checkbox input[type="checkbox"]:checked + .checkbox-style {
-            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-            border-color: #d68910;
-            transform: scale(1.1);
-        }
-
-        .custom-checkbox input[type="checkbox"]:checked + .checkbox-style::after {
-            content: '✓';
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .checkbox-content {
-            flex: 1;
-        }
-
-        .checkbox-label {
-            color: #2c3e50;
-            font-weight: 600;
-            font-size: 1.1em;
-            margin-bottom: 8px !important;
-            display: block;
-            cursor: pointer;
-        }
-
-        .form-hint {
-            color: #7f8c8d !important;
-            font-size: 0.9em !important;
-            font-style: italic;
-            line-height: 1.4;
-            margin: 0 !important;
-        }
-
-        /* Ajustes para mantener la coherencia con los estilos existentes */
-        .form-group label[for="imagen"] {
-            margin-bottom: 15px;
-            font-size: 1.1em;
-            color: #2c3e50;
-            font-weight: 600;
-        }
-
-            /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .file-upload-section {
-                padding: 15px;
-            }
-            
-            .file-upload-icon {
-                font-size: 2.5em;
-            }
-            
-            .highlight-section {
-                padding: 15px;
-            }
-            
-            .checkbox-container {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .image-actions {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 12px;
-                padding: 15px;
-            }
-
-            .add-more-btn {
-                padding: 18px 25px;
-                font-size: 18px;
-                justify-content: center;
-                min-height: 55px;
-            }
-
-            .image-counter {
-                font-size: 18px;
-                padding: 15px 20px;
-                text-align: center;
-                min-height: 55px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .add-more-btn {
-                gap: 15px;
-                padding: 20px;
-                font-size: 20px;
-                min-height: 60px;
-            }
-
-            .image-counter {
-                font-size: 16px;
-                padding: 18px;
-                min-height: 60px;
-            }
-        }
-    </style>
 </head>
 <body>
     <div class="container">
