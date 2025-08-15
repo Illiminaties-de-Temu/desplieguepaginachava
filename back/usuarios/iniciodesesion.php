@@ -13,30 +13,22 @@
     <title>Iniciar Sesión</title>
     <link rel="stylesheet" href="estilo.css">
     <style>
-        /* Fuente gótica */
-        @import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap');
-        
-        /* Estilos específicos para el login gótico */
+        /* Estilos específicos para el login */
         .login-wrapper {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            background: #021037 url('https://example.com/gothic-bg.jpg') no-repeat center/cover;
-            font-family: 'UnifrakturMaguntia', cursive;
         }
         
         .login-container {
-            background: rgba(2, 16, 55, 0.8);
+            background: white;
             border-radius: 15px;
-            box-shadow: 0 0 20px rgba(29, 78, 216, 0.5), 
-                        inset 0 0 10px rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             padding: 40px;
             width: 100%;
             max-width: 400px;
-            border: 1px solid #1d4ed8;
-            backdrop-filter: blur(5px);
         }
         
         .login-header {
@@ -45,12 +37,10 @@
         }
         
         .login-header h2 {
-            color: #1d4ed8;
+            color: #2c3e50;
             font-size: 2em;
             margin-bottom: 10px;
-            text-shadow: 0 0 10px rgba(29, 78, 216, 0.7);
-            letter-spacing: 2px;
-            -webkit-text-stroke: 0.5px white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
         
         .login-form {
@@ -66,35 +56,32 @@
         
         .form-group input {
             padding: 15px;
-            border: 2px solid #1d4ed8;
+            border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 16px;
             transition: all 0.3s ease;
-            background: rgba(0, 0, 0, 0.3);
-            color: white;
-            font-family: Arial, sans-serif; /* Mejor legibilidad en inputs */
+            background: #f8f9fa;
         }
         
         .form-group input:focus {
             outline: none;
-            border-color: #8B0000;
-            background: rgba(0, 0, 0, 0.5);
-            box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.3);
+            border-color: #3498db;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
         }
         
         .error-message {
-            background: rgba(139, 0, 0, 0.3);
-            color: #ffcccc;
-            border: 1px solid #8B0000;
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 20px;
             text-align: center;
-            text-shadow: 0 0 5px black;
         }
         
         .login-button {
-            background: linear-gradient(135deg, #1d4ed8, #8B0000);
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
             color: white;
             padding: 15px 30px;
             border: none;
@@ -105,19 +92,15 @@
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
-            text-shadow: 0 1px 3px black;
-            letter-spacing: 1px;
-            box-shadow: 0 0 15px rgba(29, 78, 216, 0.5);
         }
         
         .login-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 0 25px rgba(29, 78, 216, 0.8);
-            background: linear-gradient(135deg, #1a43b5, #6d0000);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
         }
         
         .login-button:disabled {
-            background: #2a3441 !important;
+            background-color: #cccccc !important;
             cursor: not-allowed;
             opacity: 0.65;
             transform: none;
@@ -130,14 +113,13 @@
         }
         
         .spinner {
-            border: 4px solid rgba(2, 16, 55, 0.8);
-            border-top: 4px solid #8B0000;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
             border-radius: 50%;
             width: 40px;
             height: 40px;
             animation: spin 1s linear infinite;
             margin: 0 auto 10px;
-            box-shadow: 0 0 10px rgba(139, 0, 0, 0.5);
         }
         
         @keyframes spin {
@@ -146,16 +128,14 @@
         }
         
         .loader p {
-            color: #1d4ed8;
+            color: #34495e;
             font-weight: 600;
-            text-shadow: 0 0 5px black;
         }
         
         @media (max-width: 768px) {
             .login-container {
                 padding: 30px 20px;
                 margin: 10px;
-                background: rgba(2, 16, 55, 0.9);
             }
             
             .login-header h2 {
