@@ -38,7 +38,7 @@ try {
             FROM noticias
             WHERE destacada = 'si' OR destacada = 1
             ORDER BY fecha DESC
-            LIMIT 10";
+            LIMIT 6";
 
     $stmt = $pdo->prepare($sql);
     
