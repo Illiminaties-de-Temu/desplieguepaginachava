@@ -126,23 +126,15 @@
             
             // Procesar imágenes si existen
             if (noticia.imagenes && noticia.imagenes.length > 0) {
-                // Imagen principal
+                
                 imagenesHTML += `
-                    <div class="imagen-principal">
-                        <img src="${noticia.imagenes[0]}" alt="${noticia.titulo || 'Imagen principal'}">
+                    <div class="galeria-imagenes">
+                        ${noticia.imagenes.map((img, index) => `
+                            <img src="${img}" alt="Imagen ${index + 1} de la noticia">
+                        `).join('')}
                     </div>
                 `;
                 
-                // Galería (si hay más de una imagen)
-                if (noticia.imagenes.length > 1) {
-                    imagenesHTML += `
-                        <div class="galeria-imagenes">
-                            ${noticia.imagenes.map((img, index) => `
-                                <img src="${img}" alt="Imagen ${index + 1} de la noticia">
-                            `).join('')}
-                        </div>
-                    `;
-                }
             }
 
             // Construir el HTML completo
