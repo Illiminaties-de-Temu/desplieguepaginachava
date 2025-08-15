@@ -7,6 +7,7 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
     exit();
 }
 
+
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +17,7 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración</title>
     <link rel="stylesheet" href="../estilo.css">
-    
+
 </head>
 <body>
     <div class="container">
