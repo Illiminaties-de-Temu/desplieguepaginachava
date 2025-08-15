@@ -62,7 +62,7 @@ body {
 }
 
 .logout-btn {
-    position: relative;
+    position: absolute;
     top: 20px;
     left: 30px;
     background: var(--color-rojo);
