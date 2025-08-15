@@ -44,7 +44,6 @@ body {
     gap: 10px;
     text-align: center;
     position: relative;
-    display: flex;
 }
 
 .header h1 {
@@ -54,7 +53,7 @@ body {
 }
 
 .user-info {
-    position: relative;
+    position: absolute;
     top: 30px;
     right: 30px;
     background: rgba(255,255,255,0.1);
