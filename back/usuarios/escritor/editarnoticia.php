@@ -763,6 +763,9 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
             const container = document.getElementById('main_images_container');
             const emptyState = document.getElementById('empty_state');
             
+            // Limpiar completamente el contenedor
+            container.innerHTML = '<div class="empty-state" id="empty_state"><div class="empty-state-icon">📷</div><div>No hay imágenes para mostrar</div></div>';
+            
             if (allImages.length === 0) {
                 emptyState.style.display = 'block';
                 container.classList.remove('has-images');
@@ -771,7 +774,7 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
             
             emptyState.style.display = 'none';
             container.classList.add('has-images');
-            
+                    
             // Limpiar contenedor excepto el estado vacío
             const existingItems = container.querySelectorAll('.image-preview-item');
             existingItems.forEach(item => item.remove());
@@ -1107,8 +1110,8 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
             // Limpiar inputs de archivos
             document.getElementById('nuevas_imagenes_input').value = '';
             
-            // Actualizar vista
-            updateAllImages();
+            // Forzar actualización de la vista
+            displayAllImages();
             
             // Resetear selector y ocultar formulario
             document.getElementById('selector_noticia').value = '';
@@ -1172,9 +1175,34 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
                 if (data.success) {
                     showTempMessage('Noticia actualizada correctamente', 'success');
                     
-                    setTimeout(() => {
-                        limpiarFormulario();
-                    }, 1500);
+                    // Liberar URLs de objetos antes de limpiar
+                    selectedNewFiles.forEach(fileData => {
+                        if (fileData.url) {
+                            URL.revokeObjectURL(fileData.url);
+                        }
+                    });
+                    
+                    // Limpiar completamente el formulario
+                    document.getElementById('id_noticia').value = '';
+                    document.getElementById('titulo').value = '';
+                    document.getElementById('contenido').value = '';
+                    document.getElementById('fecha').value = '';
+                    document.getElementById('imagenes_existentes').value = '';
+                    document.getElementById('orden_imagenes').value = '';
+                    document.getElementById('destacada').checked = false;
+                    document.getElementById('noticia_info').textContent = '';
+                    
+                    // Limpiar todas las imágenes
+                    imagenesActuales = [];
+                    selectedNewFiles = [];
+                    allImages = [];
+                    document.getElementById('nuevas_imagenes_input').value = '';
+                    
+                    // Forzar actualización de la vista
+                    displayAllImages();
+                    
+                    // Resetear selector
+                    document.getElementById('selector_noticia').value = '';
                     
                     window.scrollTo(0, 0);
                 } else {
