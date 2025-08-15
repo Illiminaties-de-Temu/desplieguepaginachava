@@ -52,7 +52,7 @@ body {
 }
 
 .user-info {
-    position: absolute;
+    position: relative;
     top: 30px;
     right: 30px;
     background: rgba(255,255,255,0.1);
@@ -62,7 +62,7 @@ body {
 }
 
 .logout-btn {
-    position: absolute;
+    position: relative;
     top: 20px;
     left: 30px;
     background: var(--color-rojo);
