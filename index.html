@@ -286,7 +286,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Cargar noticias destacadas desde la API
     fetch('/back/api_noticias_destacadas.php')
         .then(response => {
             if (!response.ok) throw new Error('Error en la red');
@@ -294,48 +293,30 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             if (data.success && data.data.length > 0) {
-                console.log('Datos recibidos:', data.data); // Debug: ver los datos completos
-                
                 const carrusel = document.getElementById('carruselNoticias');
                 const puntos = document.getElementById('puntosCarrusel');
                 
-                // Limpiar contenedores
                 carrusel.innerHTML = '';
                 puntos.innerHTML = '';
                 
-                // Crear slides para cada noticia
                 data.data.forEach((noticia, index) => {
-                    // Debug: verificar el ID de cada noticia
-                    console.log(`Noticia ${index}:`, {
-                        id: noticia.id,
-                        titulo: noticia.titulo,
-                        tipo_id: typeof noticia.id
-                    });
-                    
                     const slide = document.createElement('div');
                     slide.className = `noticia-slide ${index === 0 ? 'activa' : ''}`;
                     slide.style.backgroundImage = `url('${noticia.imagen}')`;
                     
-                    // CRÍTICO: Configurar estilos iniciales para evitar solapamientos
                     if (index === 0) {
-                        // Primer slide visible
                         slide.style.zIndex = '10';
                         slide.style.opacity = '1';
                         slide.style.pointerEvents = 'auto';
                     } else {
-                        // Otros slides ocultos
                         slide.style.zIndex = '1';
                         slide.style.opacity = '0';
                         slide.style.pointerEvents = 'none';
                     }
                     
-                    // NO forzar position absolute - dejar que CSS maneje esto
-                    
-                    // Convertir ID a string para asegurar consistencia
                     const noticiaId = String(noticia.id);
                     slide.setAttribute('data-noticia-id', noticiaId);
                     
-                    // Contenido HTML
                     slide.innerHTML = `
                         <div class="contenido-noticia">
                             ${noticia.titulo ? `<h4>${noticia.titulo}</h4>` : ''}
@@ -348,164 +329,39 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                     `;
                     
-                    // Evento click ULTRA-MEJORADO para evitar solapamientos
                     slide.addEventListener('click', function(e) {
-                        // Prevenir comportamiento por defecto
                         e.preventDefault();
                         e.stopPropagation();
-                        e.stopImmediatePropagation();
                         
-                        // VERIFICAR que este slide es el visible/activo
-                        const esSlideActivo = this.classList.contains('activa');
-                        const estaVisible = window.getComputedStyle(this).display !== 'none';
-                        const tienePointerEvents = window.getComputedStyle(this).pointerEvents !== 'none';
-                        
-                        console.log('🖱️  Click detectado:', {
-                            elemento: this,
-                            esActivo: esSlideActivo,
-                            estaVisible: estaVisible,
-                            tienePointerEvents: tienePointerEvents,
-                            zIndex: window.getComputedStyle(this).zIndex
-                        });
-                        
-                        // SOLO proceder si el slide está realmente activo y visible
-                        if (!esSlideActivo || !estaVisible || !tienePointerEvents) {
-                            console.warn('🚫 Click ignorado - slide no está activo/visible');
-                            return;
-                        }
+                        if (!this.classList.contains('activa')) return;
                         
                         const idNoticia = this.getAttribute('data-noticia-id');
-                        
-                        console.log('✅ Click válido en slide activo:', {
-                            idFromAttribute: idNoticia,
-                            noticiaOriginal: noticia.id,
-                            index: index,
-                            slideActivo: esSlideActivo
-                        });
-                        
-                        // Verificación del ID
                         if (!idNoticia || idNoticia === 'undefined' || idNoticia === 'null') {
-                            console.error('ID de noticia no válido:', idNoticia);
-                            alert(`Error: ID de noticia no válido (${idNoticia})`);
+                            alert('Error: ID de noticia no válido');
                             return;
                         }
                         
-                        // Deshabilitar temporalmente todos los clicks para evitar doble-click
-                        const todosLosSlides = document.querySelectorAll('.noticia-slide');
-                        todosLosSlides.forEach(s => s.style.pointerEvents = 'none');
-                        
-                        // Construir URL con timestamp para evitar cache
-                        const timestamp = Date.now();
-                        const url = `noticiacompleta.html?id=${encodeURIComponent(idNoticia)}&t=${timestamp}`;
-                        
-                        console.log('🚀 Redirigiendo a:', url);
-                        
-                        // Redirección inmediata
+                        const url = `noticiacompleta.html?id=${encodeURIComponent(idNoticia)}&t=${Date.now()}`;
                         window.location.href = url;
-                    });
-                    
-                    // Evento de mouse MEJORADO para debug visual
-                    slide.addEventListener('mouseenter', function(e) {
-                        const esSlideActivo = this.classList.contains('activa');
-                        const idNoticia = this.getAttribute('data-noticia-id');
-                        
-                        // Solo mostrar cursor pointer si es el slide activo
-                        if (esSlideActivo) {
-                            console.log('🖱️  Mouse sobre noticia activa ID:', idNoticia);
-                            this.style.cursor = 'pointer';
-                        } else {
-                            console.log('👻 Mouse sobre noticia INACTIVA ID:', idNoticia);
-                            this.style.cursor = 'default';
-                        }
                     });
                     
                     carrusel.appendChild(slide);
                     
-                    // Crear punto indicador con el mismo ID para consistencia
                     const punto = document.createElement('div');
                     punto.className = `punto ${index === 0 ? 'activo' : ''}`;
                     punto.setAttribute('data-slide-index', index);
                     puntos.appendChild(punto);
                 });
                 
-                // Verificar que todos los slides tienen IDs únicos
-                verificarIdsUnicos();
-                
-                // Inicializar funcionalidad del carrusel
                 inicializarCarrusel();
-                
-                // NUEVO: Verificador periódico de integridad de IDs
-                verificarIntegridadPeriodica();
             } else {
                 mostrarError('No hay noticias destacadas disponibles');
             }
         })
         .catch(error => {
-            console.error('Error:', error);
             mostrarError('Error al cargar las noticias');
         });
     
-    // Función para verificar IDs únicos
-    function verificarIdsUnicos() {
-        const slides = document.querySelectorAll('.noticia-slide[data-noticia-id]');
-        const ids = [];
-        const duplicados = [];
-        
-        slides.forEach((slide, index) => {
-            const id = slide.getAttribute('data-noticia-id');
-            if (ids.includes(id)) {
-                duplicados.push({index, id});
-            } else {
-                ids.push(id);
-            }
-        });
-        
-        console.log('IDs encontrados:', ids);
-        if (duplicados.length > 0) {
-            console.warn('IDs duplicados encontrados:', duplicados);
-        }
-        
-        return { ids, duplicados };
-    }
-    
-    // NUEVA: Función para verificar integridad periódica
-    function verificarIntegridadPeriodica() {
-        // Guardar IDs originales al inicio
-        const slides = document.querySelectorAll('.noticia-slide[data-noticia-id]');
-        const idsOriginales = Array.from(slides).map((slide, index) => ({
-            index,
-            id: slide.getAttribute('data-noticia-id'),
-            element: slide
-        }));
-        
-        console.log('🔒 IDs originales guardados:', idsOriginales.map(item => ({index: item.index, id: item.id})));
-        
-        // Verificar cada 2 segundos que los IDs no cambien
-        setInterval(() => {
-            let cambiosDetectados = false;
-            
-            idsOriginales.forEach((original) => {
-                const idActual = original.element.getAttribute('data-noticia-id');
-                if (idActual !== original.id) {
-                    console.error(`🚨 CAMBIO DE ID DETECTADO en slide ${original.index}:`, {
-                        original: original.id,
-                        actual: idActual
-                    });
-                    
-                    // Restaurar ID original
-                    original.element.setAttribute('data-noticia-id', original.id);
-                    console.log(`✅ ID restaurado para slide ${original.index}: ${original.id}`);
-                    cambiosDetectados = true;
-                }
-            });
-            
-            if (cambiosDetectados) {
-                console.log('🔧 Verificación de integridad completada - IDs restaurados');
-            }
-        }, 2000);
-    }
-    
-    // Función para mostrar errores
     function mostrarError(mensaje) {
         const carrusel = document.getElementById('carruselNoticias');
         carrusel.innerHTML = `
@@ -521,7 +377,6 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     }
     
-    // Función para manejar el carrusel (CORREGIDA)
     function inicializarCarrusel() {
         const slides = document.querySelectorAll('.noticia-slide');
         const puntos = document.querySelectorAll('.punto');
@@ -529,125 +384,59 @@ document.addEventListener('DOMContentLoaded', function() {
         const btnSiguiente = document.getElementById('botonSiguiente');
         let slideActual = 0;
         
-        // IMPORTANTE: Crear array inmutable con los IDs originales para preservar la asociación
-        const slidesData = Array.from(slides).map((slide, index) => ({
-            element: slide,
-            originalId: slide.getAttribute('data-noticia-id'),
-            index: index
-        }));
-        
-        console.log('Slides data preservados:', slidesData.map(s => ({index: s.index, id: s.originalId})));
+        // Asegurar que los controles estén sobre el carrusel
+        if (btnAnterior) btnAnterior.style.zIndex = '1000';
+        if (btnSiguiente) btnSiguiente.style.zIndex = '1000';
+        if (puntos) puntos.parentElement.style.zIndex = '1000';
         
         function mostrarSlide(index) {
-            // Validar índice
-            if (index < 0 || index >= slides.length) {
-                console.warn('Índice de slide inválido:', index);
-                return;
-            }
+            if (index < 0 || index >= slides.length) return;
             
-            // CRÍTICO: Ocultar TODOS los slides primero y resetear z-index
             slides.forEach((slide, i) => {
                 slide.classList.remove('activa');
-                // NO usar display:none - usar solo opacity y pointer-events
-                slide.style.zIndex = '1';     // Resetear z-index
-                slide.style.opacity = '0';    // Asegurar invisibilidad
-                slide.style.pointerEvents = 'none'; // Deshabilitar clicks
+                slide.style.opacity = '0';
+                slide.style.pointerEvents = 'none';
+                slide.style.zIndex = '1';
                 
                 if (puntos[i]) {
                     puntos[i].classList.remove('activo');
                 }
             });
             
-            // Pequeño delay para asegurar que el DOM se actualice
-            setTimeout(() => {
-                // Activar SOLO el slide correcto
-                const slideActivo = slides[index];
-                slideActivo.classList.add('activa');
-                // NO tocar display - usar solo opacity y z-index
-                slideActivo.style.zIndex = '10';      // Traer al frente
-                slideActivo.style.opacity = '1';      // Hacer visible
-                slideActivo.style.pointerEvents = 'auto'; // Habilitar clicks
-                
-                if (puntos[index]) {
-                    puntos[index].classList.add('activo');
-                }
-                
-                slideActual = index;
-                
-                // Debug del slide actual
-                const idActual = slideActivo.getAttribute('data-noticia-id');
-                const idOriginal = slidesData[index].originalId;
-                
-                console.log(`✅ Slide ${index} activado correctamente`, {
-                    idActual: idActual,
-                    idOriginal: idOriginal,
-                    elemento: slideActivo,
-                    coinciden: idActual === idOriginal
-                });
-                
-                // Verificar que NO hay otros slides visibles
-                const slidesVisibles = document.querySelectorAll('.noticia-slide.activa');
-                if (slidesVisibles.length > 1) {
-                    console.error('🚨 MÚLTIPLES SLIDES ACTIVOS DETECTADOS:', slidesVisibles.length);
-                    // Forzar que solo uno esté activo
-                    slidesVisibles.forEach((s, i) => {
-                        if (i !== 0) { // Mantener solo el primero
-                            s.classList.remove('activa');
-                            s.style.opacity = '0';
-                            s.style.pointerEvents = 'none';
-                        }
-                    });
-                }
-            }, 50);
+            slides[index].classList.add('activa');
+            slides[index].style.opacity = '1';
+            slides[index].style.pointerEvents = 'auto';
+            slides[index].style.zIndex = '10';
+            
+            if (puntos[index]) {
+                puntos[index].classList.add('activo');
+            }
+            
+            slideActual = index;
         }
         
-        // Eventos de los botones de navegación (MEJORADOS)
         if (btnAnterior && btnSiguiente) {
             btnAnterior.addEventListener('click', (e) => {
                 e.preventDefault();
-                e.stopPropagation();
-                
-                console.log('🔙 Botón anterior clickeado. Slide actual:', slideActual);
-                const nuevoIndex = (slideActual - 1 + slides.length) % slides.length;
-                console.log('🔙 Cambiando a slide:', nuevoIndex);
-                
-                mostrarSlide(nuevoIndex);
+                mostrarSlide((slideActual - 1 + slides.length) % slides.length);
             });
             
             btnSiguiente.addEventListener('click', (e) => {
                 e.preventDefault();
-                e.stopPropagation();
-                
-                console.log('▶️  Botón siguiente clickeado. Slide actual:', slideActual);
-                const nuevoIndex = (slideActual + 1) % slides.length;
-                console.log('▶️  Cambiando a slide:', nuevoIndex);
-                
-                mostrarSlide(nuevoIndex);
+                mostrarSlide((slideActual + 1) % slides.length);
             });
         }
         
-        // Evento click en puntos indicadores (MEJORADO)
         puntos.forEach((punto, index) => {
             punto.addEventListener('click', (e) => {
                 e.preventDefault();
-                e.stopPropagation();
-                
-                console.log(`🎯 Punto ${index} clickeado`);
                 mostrarSlide(index);
             });
         });
         
-        // Cambio automático (MEJORADO con más debugging)
-        let intervaloCarrusel = setInterval(() => {
-            console.log('⏰ Cambio automático activado. Slide actual:', slideActual);
-            const nuevoIndex = (slideActual + 1) % slides.length;
-            console.log('⏰ Cambiando automáticamente a slide:', nuevoIndex);
-            
-            mostrarSlide(nuevoIndex);
+        setInterval(() => {
+            mostrarSlide((slideActual + 1) % slides.length);
         }, 5000);
-        
-      
-        
     }
 });
 </script>
