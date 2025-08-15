@@ -6,7 +6,7 @@
     <title>Noticia Completa</title>
 
     <!-- Hojas de estilo externas -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.css" 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.css" 
         integrity="sha512-xWIcG98IArXxegzS8Vo9iYMKuPgbXOG8O1mlHrj4MmNFxsBDltGxHJGg4JK80MVEmLRpdbWtphhm+S6Wx9o73g==" 
         crossorigin="anonymous" referrerpolicy="no-referrer">
   
@@ -14,46 +14,101 @@
   <link rel="stylesheet" href="/_astro/index.-G2uvBIl.css">
   <link rel="stylesheet" href="/_astro/about.CJdYp1i6.css">
   
-  <!-- Estilos personalizados -->
-  <style>
-    @import "https://fonts.googleapis.com/css2?family=Gothic+A1&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap";
+<!-- Estilos personalizados -->
+<style>
+  @import "https://fonts.googleapis.com/css2?family=Gothic+A1&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap";
+  
+  :root {
+    --azul-primario: #05184a;
+    --azul-secundario: #1d4ed8;
+    --azul-claro: #60a5fa;
+    --azul-muy-claro: #dbeafe;
+    --azul-oscuro: #1e293b;
+    --azul-marino: #0f172a;
+    --azul-cielo: #0ea5e9;
+    --blanco: #ffffff;
+    --gris-claro: #f8fafc;
+    --gris-medio: #64748b;
+    --gris-fuerte: rgb(66, 72, 82);
+    --azul-gradiente: linear-gradient(135deg, #0a1840 0%, #051c40 100%);
+    --azul-fondo-imagenes: linear-gradient(
+      to right,
+      rgba(5, 26, 82, 0.689) 100%,
+      rgba(2, 16, 55, 0.05) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    --azul-fondo: linear-gradient(135deg, #0a1128 0%, #001f54 50%, #034078 100%);
+    --titulo-gradiante: linear-gradient(135deg, #1d4ed8, #05184a);
+  }
+  
+  /* Reset básico */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Gothic A1', 'Nunito', 'Poppins', sans-serif;
+  }
+  
+  html {
+    overflow-x: hidden;
+  }
+
+  /* Estilos para la noticia */
+  #contenedor-noticia {
+    padding: 20px;
+    background-color: var(--gris-claro);
+    color: var(--gris-fuerte);
+    max-width: 900px;
+    margin: auto;
+    border-radius: 12px;
+  }
+
+  #contenedor-noticia h1 {
+    background: var(--titulo-gradiante);
     
-    :root {
-      /* Variables de color */
-      --azul-primario: #05184a;
-      --azul-secundario: #1d4ed8;
-      --azul-claro: #60a5fa;
-      --azul-muy-claro: #dbeafe;
-      --azul-oscuro: #1e293b;
-      --azul-marino: #0f172a;
-      --azul-cielo: #0ea5e9;
-      --blanco: #ffffff;
-      --gris-claro: #f8fafc;
-      --gris-medio: #64748b;
-      --gris-fuerte: rgb(66, 72, 82);
-      --azul-gradiente: linear-gradient(135deg, #0a1840 0%, #051c40 100%);
-      --azul-fondo-imagenes: linear-gradient(
-        to right,
-        rgba(5, 26, 82, 0.689) 100%,
-        rgba(2, 16, 55, 0.05) 50%,
-        rgba(255, 255, 255, 0) 100%
-      );
-      --azul-fondo: linear-gradient(135deg, #0a1128 0%, #001f54 50%, #034078 100%);
-      --titulo-gradiante: linear-gradient(135deg, #1d4ed8, #05184a);
-    }
-    
-    /* Reset básico */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;
-    }
-    
-    html {
-      overflow-x: hidden;
-    }
-  </style>    
+    -webkit-text-fill-color: transparent;
+    font-size: 2rem;
+    margin-bottom: 15px;
+    font-weight: 700;
+  }
+
+  .fecha-noticia {
+    font-size: 0.9rem;
+    color: var(--gris-medio);
+    margin-bottom: 20px;
+  }
+
+  .contenido-noticia {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--azul-oscuro);
+  }
+
+  .galeria-imagenes {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .galeria-imagenes img {
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+
+  .loading, .error {
+    text-align: center;
+    padding: 20px;
+    font-weight: bold;
+    color: var(--azul-secundario);
+  }
+
+  .error {
+    color: red;
+  }
+</style>
+     
 </head>
 <body>
 
