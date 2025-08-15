@@ -64,14 +64,60 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
         background: rgba(29, 78, 216, 0.1);
     }
 
+    /* ESTILOS EXISTENTES CON NUEVA PALETA */
+    .image-preview {
+        border: 2px solid rgba(29, 78, 216, 0.3);
+    }
+
+    .remove-image {
+        background: #e74c3c;
+    }
+
+    .file-upload-section {
+        border: 2px dashed #1d4ed8;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+
+    .file-upload-section:hover {
+        border-color: #083057;
+    }
+
+    .file-upload-icon {
+        color: #1d4ed8;
+    }
+
+    .add-more-btn {
+        background: linear-gradient(135deg, #1d4ed8 0%, #083057 100%);
+    }
+
+    .image-counter {
+        background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+    }
+
+    .highlight-section {
+        background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+        border: 2px solid #f39c12;
+    }
+
+    .checkbox-style {
+        border: 2px solid #f39c12;
+    }
+
+    .custom-checkbox input[type="checkbox"]:checked + .checkbox-style {
+        background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+    }
+
+    /* MANTENIENDO TODAS LAS CLASES ORIGINALES */
     .alert-danger {
         background: #f8d7da;
         color: #721c24;
+        border-left-color: #dc3545;
     }
 
     .alert-success {
         background: #d4edda;
         color: #155724;
+        border-left-color: #28a745;
     }
 
     .btn-primary {
@@ -84,41 +130,36 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
         color: white;
     }
 
-    .file-upload-section {
-        border-color: #1d4ed8;
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    }
-
+    /* CONSERVANDO TODAS LAS ANIMACIONES Y EFECTOS */
+    .file-upload-section::before,
+    .highlight-section::before,
+    .custom-checkbox input[type="checkbox"]:checked + .checkbox-style,
+    .add-more-btn:hover,
     .file-upload-section:hover {
-        border-color: #083057;
+        /* Todas las transiciones y animaciones se mantienen igual */
+        transition: all 0.3s ease;
     }
 
-    .add-more-btn {
-        background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
-        color: white;
+    @keyframes shimmer {
+        0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
     }
 
-    .image-counter {
-        background: linear-gradient(135deg, #1d4ed8 0%, #083057 100%);
-        color: white;
+    /* RESPONSIVE - CONSERVADO COMPLETO */
+    @media (max-width: 768px) {
+        .file-upload-section,
+        .highlight-section,
+        .image-actions {
+            padding: 15px;
+        }
     }
 
-    .highlight-section {
-        background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-        border-color: #f39c12;
-    }
-
-    .checkbox-style {
-        border-color: #f39c12;
-    }
-
-    .custom-checkbox input[type="checkbox"]:checked + .checkbox-style {
-        background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-    }
-
-    .remove-image {
-        background: #e74c3c;
-        color: white;
+    @media (max-width: 480px) {
+        .add-more-btn,
+        .image-counter {
+            padding: 18px;
+            font-size: 16px;
+        }
     }
 </style>
 </head>
