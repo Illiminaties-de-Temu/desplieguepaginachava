@@ -38,6 +38,7 @@ body {
 }
 
 .header {
+    display: flex;
     background: linear-gradient(#1d4ed8);
     color: var(--color-blanco);
     padding: 30px;
