@@ -14,46 +14,269 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Noticia - Panel Master</title>
+    <title>Editar Noticia - Panel Escritor</title>
     <link rel="stylesheet" href="../estilo.css">
     <style>
-        .new-image-preview-container {
-            margin-top: 10px;
+        /* Estilos base para vista previa de imágenes */
+        .image-preview-container {
+            margin-top: 15px;
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 15px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            border: 2px dashed #dee2e6;
+            transition: all 0.3s ease;
+            min-height: 140px;
+            position: relative;
         }
         
-        .new-image-preview-item {
+        .image-preview-container.drag-over {
+            border-color: #3498db;
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3f8ff 100%);
+            transform: scale(1.01);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.2);
+        }
+
+        .image-preview-container.has-images {
+            border-style: solid;
+            border-color: #28a745;
+            background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+        }
+        
+        .image-preview-item {
             position: relative;
             display: inline-block;
+            cursor: grab;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            background: white;
         }
         
-        .new-image-preview {
-            width: 100px;
-            height: 100px;
+        .image-preview-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .image-preview-item.dragging {
+            opacity: 0.6;
+            transform: rotate(5deg) scale(0.95);
+            cursor: grabbing;
+            z-index: 1000;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .image-preview-item.drag-over {
+            transform: translateX(10px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(52, 152, 219, 0.4);
+        }
+        
+        .image-preview {
+            width: 120px;
+            height: 120px;
             object-fit: cover;
-            border: 2px solid #ddd;
-            border-radius: 5px;
+            border: 3px solid #fff;
+            border-radius: 8px;
+            transition: all 0.3s ease;
         }
         
-        .remove-new-image {
+        .image-preview-item:hover .image-preview {
+            border-color: #3498db;
+        }
+        
+        .remove-image {
             position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #ff4444;
+            top: -8px;
+            right: -8px;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
             color: white;
             border: none;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
+            width: 30px;
+            height: 30px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 16px;
+            font-weight: bold;
             line-height: 1;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
-        .remove-new-image:hover {
-            background: #cc0000;
+        .remove-image:hover {
+            background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+            transform: scale(1.2);
+            box-shadow: 0 6px 18px rgba(231, 76, 60, 0.6);
+        }
+
+        .image-index {
+            position: absolute;
+            bottom: -8px;
+            left: -8px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+        }
+
+        .image-type-indicator {
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .image-type-current {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .image-type-new {
+            background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+        }
+
+        /* Estilos para sección de carga de archivos */
+        .file-upload-section {
+            border: 2px dashed #3498db;
+            border-radius: 12px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .file-upload-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(52, 152, 219, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+
+        .file-upload-section:hover {
+            border-color: #2980b9;
+            background: linear-gradient(135deg, #ffffff 0%, #f1f3f4 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.15);
+        }
+
+        .file-upload-section:hover::before {
+            opacity: 1;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .file-upload-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .file-upload-icon {
+            font-size: 3em;
+            color: #3498db;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .file-upload-text {
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+
+        .file-upload-hint {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            font-style: italic;
+        }
+
+        .hidden-file-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            z-index: 3;
+        }
+
+        /* Acciones de imagen */
+        .image-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            border: 1px solid #dee2e6;
+        }
+
+        .image-counter {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Estado vacío */
+        .empty-state {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #7f8c8d;
+            font-style: italic;
+            font-size: 1.1em;
+            pointer-events: none;
+        }
+
+        .empty-state-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+            opacity: 0.5;
         }
 
         /* Estilos para el checkbox de noticia destacada */
@@ -155,6 +378,60 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
             line-height: 1.4;
             margin: 0 !important;
         }
+
+        /* Mensaje temporal */
+        .temp-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            z-index: 10000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .temp-message.success {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+        }
+
+        .temp-message.error {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .image-preview-container {
+                gap: 10px;
+                padding: 15px;
+            }
+            
+            .image-preview {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .image-actions {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .file-upload-section {
+                padding: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -191,6 +468,7 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
                 <form id="form_editar_noticia" enctype="multipart/form-data">
                     <input type="hidden" name="id" id="id_noticia" value="">
                     <input type="hidden" name="imagenes_existentes" id="imagenes_existentes" value="">
+                    <input type="hidden" name="orden_imagenes" id="orden_imagenes" value="">
                     
                     <div class="form-section">
                         <h2>Información General</h2>
@@ -205,7 +483,7 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
                         <div class="form-row">
                             <div class="form-group full-width">
                                 <label for="titulo">Título:</label>
-                                <input type="text" name="titulo" id="titulo" >
+                                <input type="text" name="titulo" id="titulo" required>
                             </div>
                         </div>
                     </div>
@@ -242,22 +520,39 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
                     </div>
 
                     <div class="form-section image-section">
-                        <h2>Imágenes</h2>
-                        
-                        <div id="imagenes_actuales">
-                            <!-- Las imágenes actuales se cargarán aquí -->
-                        </div>
+                        <h2>Gestión de Imágenes</h2>
                         
                         <div class="form-row">
                             <div class="form-group full-width">
-                                <label for="nuevas_imagenes">Agregar nuevas imágenes:</label>
-                                <div class="file-input-wrapper">
-                                    <input type="file" name="nuevas_imagenes[]" id="nuevas_imagenes" multiple accept="image/*">
-                                    <span class="file-input-display">
-                                        Seleccionar archivos de imagen o arrastra aquí
-                                    </span>
+                                <label for="imagenes">Imágenes de la noticia (arrastra para reordenar):</label>
+                                
+                                <!-- Contenedor principal de imágenes -->
+                                <div id="main_images_container" class="image-preview-container">
+                                    <div class="empty-state" id="empty_state">
+                                        <div class="empty-state-icon">📷</div>
+                                        <div>No hay imágenes para mostrar</div>
+                                    </div>
                                 </div>
-                                <div id="newImagePreviewContainer" class="new-image-preview-container"></div>
+                                
+                                <!-- Sección para agregar nuevas imágenes -->
+                                <div class="file-upload-section" onclick="document.getElementById('nuevas_imagenes_input').click()">
+                                    <input type="file" 
+                                           name="nuevas_imagenes[]" 
+                                           id="nuevas_imagenes_input" 
+                                           class="hidden-file-input"
+                                           multiple 
+                                           accept="image/*">
+                                    <div class="file-upload-content">
+                                        <div class="file-upload-icon">📁</div>
+                                        <div class="file-upload-text">Seleccionar nuevas imágenes</div>
+                                        <div class="file-upload-hint">Haz clic para seleccionar archivos o arrastra aquí</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Contador de imágenes -->
+                                <div class="image-actions" id="image_counter_section">
+                                    <div class="image-counter" id="image_counter">0 imágenes</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -277,11 +572,50 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
         let noticiaActual = null;
         let imagenesActuales = [];
         let selectedNewFiles = [];
+        let draggedElement = null;
+        let draggedIndex = -1;
+        let allImages = []; // Array combinado de todas las imágenes
 
         // Cargar lista de noticias al cargar la página
         document.addEventListener('DOMContentLoaded', function() {
             cargarListaNoticias();
+            setupEventListeners();
         });
+
+        // Configurar event listeners
+        function setupEventListeners() {
+            // Event listener para nuevas imágenes
+            document.getElementById('nuevas_imagenes_input').addEventListener('change', function(e) {
+                const files = Array.from(e.target.files);
+                addNewFiles(files);
+            });
+
+            // Event listener para el selector de noticias
+            document.getElementById('selector_noticia').addEventListener('change', function() {
+                const idNoticia = this.value;
+                if (idNoticia) {
+                    cargarNoticia(idNoticia);
+                } else {
+                    ocultarFormulario();
+                }
+            });
+
+            // Event listener para el botón limpiar
+            document.getElementById('btn_limpiar').addEventListener('click', function() {
+                if (confirm('¿Está seguro de que desea limpiar el formulario? Se perderán los cambios no guardados.')) {
+                    limpiarFormulario();
+                }
+            });
+
+            // Event listener para el envío del formulario
+            document.getElementById('form_editar_noticia').addEventListener('submit', function(e) {
+                e.preventDefault();
+                enviarFormulario();
+            });
+
+            // Configurar drag and drop para archivos en la sección de upload
+            setupFileDropZone();
+        }
 
         // Función para cargar la lista de noticias
         function cargarListaNoticias() {
@@ -316,16 +650,6 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
                 });
         }
 
-        // Event listener para el selector de noticias - Cambio automático
-        document.getElementById('selector_noticia').addEventListener('change', function() {
-            const idNoticia = this.value;
-            if (idNoticia) {
-                cargarNoticia(idNoticia);
-            } else {
-                ocultarFormulario();
-            }
-        });
-
         // Función para cargar una noticia específica
         function cargarNoticia(id) {
             const mensaje = document.getElementById('mensaje_carga');
@@ -358,7 +682,6 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
             document.getElementById('titulo').value = noticia.Titulo;
             document.getElementById('contenido').value = noticia.Contenido;
             document.getElementById('fecha').value = noticia.fecha;
-            // Establecer estado del checkbox destacada
             document.getElementById('destacada').checked = noticia.Destacada === 'si';
             
             // Actualizar información de la noticia
@@ -368,217 +691,452 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
             // Cargar imágenes actuales
             cargarImagenesActuales(noticia.Imagenes);
             
-            // Limpiar vista previa de nuevas imágenes
-            clearNewImagePreviews();
+            // Limpiar nuevas imágenes
+            selectedNewFiles = [];
+            updateAllImages();
         }
 
         // Función para cargar las imágenes actuales
         function cargarImagenesActuales(imagenes) {
-            const container = document.getElementById('imagenes_actuales');
-            
             if (!imagenes || imagenes.trim() === '') {
-                container.innerHTML = '<p>No hay imágenes asociadas a esta noticia.</p>';
                 imagenesActuales = [];
-                actualizarImagenesExistentes();
-                return;
+            } else {
+                imagenesActuales = imagenes.split(',')
+                    .map(img => img.trim())
+                    .filter(img => img !== '')
+                    .map(img => ({
+                        src: img,
+                        type: 'current',
+                        id: 'current_' + Math.random().toString(36).substr(2, 9)
+                    }));
             }
             
-            imagenesActuales = imagenes.split(',').map(img => img.trim()).filter(img => img !== '');
-            let html = '<h3>Imágenes actuales:</h3><div class="current-images">';
-            
-            imagenesActuales.forEach((imagen, index) => {
-                const rutaImagen = imagen.startsWith('contenido/') ? `../../${imagen}` : `../../contenido/${imagen}`;
-                
-                html += `
-                    <div class="image-item" id="imagen_${index}">
-                        <img src="${rutaImagen}" alt="Imagen ${index + 1}" onerror="this.style.display='none'">
-                        <div class="image-actions">
-                            <button type="button" class="btn-small btn-danger" onclick="eliminarImagen(${index})">×</button>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            html += '</div>';
-            container.innerHTML = html;
+            updateAllImages();
             actualizarImagenesExistentes();
         }
 
-        // Función para actualizar el campo oculto de imágenes existentes
-        function actualizarImagenesExistentes() {
-            document.getElementById('imagenes_existentes').value = imagenesActuales.join(',');
-        }
-
-        // Función para eliminar una imagen
-        function eliminarImagen(index) {
-            if (confirm('¿Está seguro de que desea eliminar esta imagen?')) {
-                // Obtener la ruta de la imagen a eliminar
-                const imagenEliminada = imagenesActuales[index];
-                
-                // Eliminar físicamente del servidor usando file_helper
-                fetch('../bd/eliminarimagen.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        rutaImagen: imagenEliminada
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        console.log('Imagen eliminada físicamente:', data.message);
-                    } else {
-                        console.warn('Advertencia al eliminar imagen física:', data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error al eliminar imagen física:', error);
-                });
-                
-                // Eliminar la imagen del array
-                imagenesActuales.splice(index, 1);
-                
-                // Actualizar la vista
-                document.getElementById(`imagen_${index}`).remove();
-                
-                // Actualizar el campo oculto
-                actualizarImagenesExistentes();
-                
-                // Recargar la vista de imágenes para actualizar los índices
-                cargarImagenesActuales(imagenesActuales.join(','));
-                
-                // Mostrar mensaje de confirmación
-                mostrarMensaje('Imagen eliminada del servidor y de la noticia.', 'success');
-            }
-        }
-
-        // Event listener para el input de nuevas imágenes
-        document.getElementById('nuevas_imagenes').addEventListener('change', function(e) {
-            const files = Array.from(e.target.files);
-            selectedNewFiles = files;
-            displayNewImagePreviews();
+        // Función para agregar nuevos archivos
+        function addNewFiles(files) {
+            const newFileObjects = [];
             
-            const display = document.querySelector('.file-input-display');
-            if (files.length > 0) {
-                display.textContent = `${files.length} archivo(s) seleccionado(s)`;
-                display.style.background = '#e8f5e8';
-                display.style.color = '#27ae60';
-            } else {
-                display.textContent = 'Seleccionar archivos de imagen o arrastra aquí';
-                display.style.background = '#f8f9fa';
-                display.style.color = '#3498db';
-            }
-        });
-
-        // Función para mostrar vista previa de nuevas imágenes
-        function displayNewImagePreviews() {
-            const container = document.getElementById('newImagePreviewContainer');
-            container.innerHTML = '';
-
-            selectedNewFiles.forEach((file, index) => {
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const previewItem = document.createElement('div');
-                        previewItem.className = 'new-image-preview-item';
-                        
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.className = 'new-image-preview';
-                        img.alt = 'Vista previa';
-                        
-                        const removeBtn = document.createElement('button');
-                        removeBtn.innerHTML = '×';
-                        removeBtn.className = 'remove-new-image';
-                        removeBtn.type = 'button';
-                        removeBtn.onclick = function() {
-                            removeNewImage(index);
-                        };
-                        
-                        previewItem.appendChild(img);
-                        previewItem.appendChild(removeBtn);
-                        container.appendChild(previewItem);
+            files.forEach(file => {
+                const isDuplicate = selectedNewFiles.some(existingFile => 
+                    existingFile.name === file.name && 
+                    existingFile.size === file.size &&
+                    existingFile.lastModified === file.lastModified
+                );
+                
+                if (!isDuplicate) {
+                    const newFileObj = {
+                        file: file,
+                        type: 'new',
+                        id: 'new_' + Math.random().toString(36).substr(2, 9)
                     };
-                    reader.readAsDataURL(file);
+                    selectedNewFiles.push(newFileObj);
+                    newFileObjects.push(newFileObj);
+                }
+            });
+            
+            // Agregar nuevos archivos al final del array principal
+            allImages = allImages.concat(newFileObjects);
+            
+            displayAllImages();
+            updateImageCounter();
+            updateContainerState();
+            updateFileInput();
+        }
+
+        // Función para actualizar todas las imágenes (combinar actuales y nuevas)
+        function updateAllImages() {
+            // Solo recombinar si allImages está vacío o si es la primera carga
+            if (allImages.length === 0) {
+                allImages = [...imagenesActuales, ...selectedNewFiles];
+            }
+            
+            displayAllImages();
+            updateImageCounter();
+            updateContainerState();
+        }
+
+        // Función para mostrar todas las imágenes
+        function displayAllImages() {
+            const container = document.getElementById('main_images_container');
+            const emptyState = document.getElementById('empty_state');
+            
+            // Limpiar completamente el contenedor
+            container.innerHTML = '<div class="empty-state" id="empty_state"><div class="empty-state-icon">📷</div><div>No hay imágenes para mostrar</div></div>';
+            
+            if (allImages.length === 0) {
+                emptyState.style.display = 'block';
+                container.classList.remove('has-images');
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            container.classList.add('has-images');
+                    
+            // Limpiar contenedor excepto el estado vacío
+            const existingItems = container.querySelectorAll('.image-preview-item');
+            existingItems.forEach(item => item.remove());
+            
+            allImages.forEach((imageData, index) => {
+                const previewItem = document.createElement('div');
+                previewItem.className = 'image-preview-item';
+                previewItem.draggable = true;
+                previewItem.dataset.imageId = imageData.id;
+                previewItem.dataset.imageType = imageData.type;
+                previewItem.dataset.index = index;
+                
+                let imageSrc = '';
+                if (imageData.type === 'current') {
+                    const rutaImagen = imageData.src.startsWith('contenido/') ? `../../${imageData.src}` : `../../contenido/${imageData.src}`;
+                    imageSrc = rutaImagen;
+                } else {
+                    // Para nuevas imágenes, crear URL temporal y guardarla en fileData
+                    imageData.url = URL.createObjectURL(imageData.file);
+                    imageSrc = imageData.url;
+                }
+                
+                previewItem.innerHTML = `
+                    <img src="${imageSrc}" 
+                         alt="Imagen ${index + 1}" 
+                         class="image-preview"
+                         onerror="this.style.display='none'">
+                    <button type="button" 
+                            class="remove-image" 
+                            onclick="removeImage('${imageData.id}')"
+                            title="Eliminar imagen">×</button>
+                    <div class="image-index">${index + 1}</div>
+                    <div class="image-type-indicator ${imageData.type === 'current' ? 'image-type-current' : 'image-type-new'}"
+                         title="${imageData.type === 'current' ? 'Imagen actual' : 'Nueva imagen'}">
+                        ${imageData.type === 'current' ? '🖼️' : '🆕'}
+                    </div>
+                `;
+                
+                setupDragAndDrop(previewItem);
+                container.appendChild(previewItem);
+            });
+        }
+
+        // Configurar drag and drop para las imágenes (CORREGIDO)
+        function setupDragAndDrop(element) {
+            element.addEventListener('dragstart', function(e) {
+                draggedElement = this;
+                draggedIndex = parseInt(this.dataset.index);
+                this.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/plain', draggedIndex.toString());
+                console.log('Drag start - Index:', draggedIndex);
+            });
+
+            element.addEventListener('dragend', function(e) {
+                this.classList.remove('dragging');
+                
+                // Limpiar todos los indicadores de drag-over
+                document.querySelectorAll('.image-preview-item').forEach(item => {
+                    item.classList.remove('drag-over');
+                });
+                document.getElementById('main_images_container').classList.remove('drag-over');
+                
+                draggedElement = null;
+                draggedIndex = -1;
+            });
+
+            element.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                
+                if (this !== draggedElement && draggedElement) {
+                    this.classList.add('drag-over');
+                }
+            });
+
+            element.addEventListener('dragleave', function(e) {
+                this.classList.remove('drag-over');
+            });
+
+            element.addEventListener('drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                this.classList.remove('drag-over');
+                
+                if (this !== draggedElement && draggedElement) {
+                    const targetIndex = parseInt(this.dataset.index);
+                    const originalIndex = draggedIndex;
+                    
+                    console.log('Drop - From:', originalIndex, 'To:', targetIndex);
+                    
+                    // Verificar que los índices sean válidos
+                    if (originalIndex >= 0 && targetIndex >= 0 && originalIndex !== targetIndex) {
+                        // Crear una copia del array para manipular
+                        const newImages = [...allImages];
+                        
+                        // Remover elemento de la posición original
+                        const draggedImage = newImages.splice(originalIndex, 1)[0];
+                        
+                        // Insertar en la nueva posición
+                        newImages.splice(targetIndex, 0, draggedImage);
+                        
+                        // Actualizar el array principal
+                        allImages = newImages;
+                        
+                        // Actualizar arrays individuales
+                        updateIndividualArrays();
+                        
+                        // Mostrar imágenes actualizadas
+                        displayAllImages();
+                        
+                        // Actualizar campos ocultos
+                        actualizarImagenesExistentes();
+                        actualizarOrdenImagenes();
+                        
+                        showTempMessage('Orden de imágenes actualizado', 'success');
+                        console.log('Reorder completed');
+                    }
                 }
             });
         }
 
-        // Función para eliminar una nueva imagen de la vista previa
-        function removeNewImage(index) {
-            selectedNewFiles.splice(index, 1);
-            updateNewFileInput();
-            displayNewImagePreviews();
+        // Función para actualizar arrays individuales después del reordenamiento
+        function updateIndividualArrays() {
+            // Limpiar arrays individuales
+            imagenesActuales = [];
+            selectedNewFiles = [];
+            
+            // Redistribuir elementos según su tipo
+            allImages.forEach(image => {
+                if (image.type === 'current') {
+                    imagenesActuales.push(image);
+                } else if (image.type === 'new') {
+                    selectedNewFiles.push(image);
+                }
+            });
         }
 
-        // Función para actualizar el input de archivos con las nuevas imágenes
-        function updateNewFileInput() {
-            const fileInput = document.getElementById('nuevas_imagenes');
-            const dt = new DataTransfer();
+        // Configurar zona de drop para archivos
+        function setupFileDropZone() {
+            const container = document.getElementById('main_images_container');
+            const uploadSection = document.querySelector('.file-upload-section');
             
-            selectedNewFiles.forEach(file => {
-                dt.items.add(file);
+            [container, uploadSection].forEach(zone => {
+                zone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Solo activar drag-over si no estamos arrastrando una imagen interna
+                    if (!draggedElement) {
+                        this.classList.add('drag-over');
+                    }
+                });
+                
+                zone.addEventListener('dragleave', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (!this.contains(e.relatedTarget) && !draggedElement) {
+                        this.classList.remove('drag-over');
+                    }
+                });
+                
+                zone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.classList.remove('drag-over');
+                    
+                    // Solo procesar archivos si no estamos reorganizando imágenes internas
+                    if (!draggedElement && e.dataTransfer.files.length > 0) {
+                        const files = Array.from(e.dataTransfer.files);
+                        const imageFiles = files.filter(file => file.type.startsWith('image/'));
+                        
+                        if (imageFiles.length > 0) {
+                            addNewFiles(imageFiles);
+                            showTempMessage(`${imageFiles.length} imagen${imageFiles.length !== 1 ? 'es' : ''} agregada${imageFiles.length !== 1 ? 's' : ''}`, 'success');
+                        }
+                    }
+                });
             });
-            
-            fileInput.files = dt.files;
-            
-            // Actualizar display
-            const display = document.querySelector('.file-input-display');
-            if (selectedNewFiles.length > 0) {
-                display.textContent = `${selectedNewFiles.length} archivo(s) seleccionado(s)`;
-                display.style.background = '#e8f5e8';
-                display.style.color = '#27ae60';
-            } else {
-                display.textContent = 'Seleccionar archivos de imagen o arrastra aquí';
-                display.style.background = '#f8f9fa';
-                display.style.color = '#3498db';
+        }
+
+        // Función para eliminar una imagen
+        function removeImage(imageId) {
+            if (confirm('¿Está seguro de que desea eliminar esta imagen?')) {
+                const imageIndex = allImages.findIndex(img => img.id === imageId);
+                
+                if (imageIndex !== -1) {
+                    const imageData = allImages[imageIndex];
+                    
+                    // Liberar URL de objeto si existe
+                    if (imageData.url) {
+                        URL.revokeObjectURL(imageData.url);
+                    }
+                    
+                    // Si es una imagen actual, eliminar del servidor
+                    if (imageData.type === 'current') {
+                        fetch('../bd/eliminarimagen.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                rutaImagen: imageData.src
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                console.log('Imagen eliminada físicamente:', data.message);
+                            } else {
+                                console.warn('Advertencia al eliminar imagen física:', data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error al eliminar imagen física:', error);
+                        });
+                        
+                        // Eliminar de imagenesActuales
+                        const currentIndex = imagenesActuales.findIndex(img => img.id === imageId);
+                        if (currentIndex !== -1) {
+                            imagenesActuales.splice(currentIndex, 1);
+                        }
+                    } else {
+                        // Si es una imagen nueva, eliminar de selectedNewFiles
+                        const newIndex = selectedNewFiles.findIndex(img => img.id === imageId);
+                        if (newIndex !== -1) {
+                            // Liberar URL de objeto si existe
+                            if (selectedNewFiles[newIndex].url) {
+                                URL.revokeObjectURL(selectedNewFiles[newIndex].url);
+                            }
+                            selectedNewFiles.splice(newIndex, 1);
+                        }
+                    }
+                    
+                    // Eliminar del array principal
+                    allImages.splice(imageIndex, 1);
+                    
+                    // Actualizar vista
+                    displayAllImages();
+                    updateImageCounter();
+                    updateContainerState();
+                    actualizarImagenesExistentes();
+                    actualizarOrdenImagenes();
+                    updateFileInput();
+                    showTempMessage('Imagen eliminada correctamente', 'success');
+                }
             }
         }
 
-        // Función para limpiar vista previa de nuevas imágenes
-        function clearNewImagePreviews() {
-            selectedNewFiles = [];
-            document.getElementById('newImagePreviewContainer').innerHTML = '';
-            const fileInput = document.getElementById('nuevas_imagenes');
-            fileInput.value = '';
-            const display = document.querySelector('.file-input-display');
-            display.textContent = 'Seleccionar archivos de imagen o arrastra aquí';
-            display.style.background = '#f8f9fa';
-            display.style.color = '#3498db';
+        // Función para actualizar el input de archivos
+        function updateFileInput() {
+            const fileInput = document.getElementById('nuevas_imagenes_input');
+            const dt = new DataTransfer();
+            
+            selectedNewFiles.forEach(fileData => {
+                dt.items.add(fileData.file);
+            });
+            
+            fileInput.files = dt.files;
+        }
+
+        // Función para actualizar el contador de imágenes
+        function updateImageCounter() {
+            const counter = document.getElementById('image_counter');
+            const totalImages = allImages.length;
+            const currentImages = imagenesActuales.length;
+            const newImages = selectedNewFiles.length;
+            
+            if (totalImages === 0) {
+                counter.innerHTML = 'Sin imágenes';
+            } else {
+                counter.innerHTML = `
+                    <div>${totalImages} imagen${totalImages !== 1 ? 'es' : ''} total${totalImages !== 1 ? 'es' : ''}</div>
+                    <div style="font-size: 0.8em; opacity: 0.8;">
+                        ${currentImages} actual${currentImages !== 1 ? 'es' : ''} • ${newImages} nueva${newImages !== 1 ? 's' : ''}
+                    </div>
+                `;
+            }
+        }
+
+        // Función para actualizar estado del contenedor
+        function updateContainerState() {
+            const container = document.getElementById('main_images_container');
+            if (allImages.length > 0) {
+                container.classList.add('has-images');
+            } else {
+                container.classList.remove('has-images');
+            }
+        }
+
+        // Función para actualizar el campo oculto de imágenes existentes
+        function actualizarImagenesExistentes() {
+            const imagenesActualesString = imagenesActuales
+                .filter(img => img !== null)
+                .map(img => img.src)
+                .join(',');
+            document.getElementById('imagenes_existentes').value = imagenesActualesString;
+        }
+
+        // Función para actualizar el orden de imágenes
+        function actualizarOrdenImagenes() {
+            const ordenIds = allImages.map(img => img.id);
+            document.getElementById('orden_imagenes').value = ordenIds.join(',');
         }
 
         // Función para limpiar completamente el formulario
         function limpiarFormulario() {
+            // Liberar URLs de objetos para imágenes nuevas
+            selectedNewFiles.forEach(fileData => {
+                if (fileData.url) {
+                    URL.revokeObjectURL(fileData.url);
+                }
+            });
+
             // Limpiar campos del formulario
             document.getElementById('id_noticia').value = '';
             document.getElementById('titulo').value = '';
             document.getElementById('contenido').value = '';
             document.getElementById('fecha').value = '';
             document.getElementById('imagenes_existentes').value = '';
+            document.getElementById('orden_imagenes').value = '';
             document.getElementById('destacada').checked = false;
             
             // Limpiar información de la noticia
             document.getElementById('noticia_info').textContent = '';
             
-            // Limpiar imágenes actuales
-            document.getElementById('imagenes_actuales').innerHTML = '';
+            // Limpiar todas las imágenes
             imagenesActuales = [];
+            selectedNewFiles = [];
+            allImages = [];
             
-            // Limpiar vista previa de nuevas imágenes
-            clearNewImagePreviews();
+            // Limpiar inputs de archivos
+            document.getElementById('nuevas_imagenes_input').value = '';
+            
+            // Forzar actualización de la vista
+            displayAllImages();
             
             // Resetear selector y ocultar formulario
             document.getElementById('selector_noticia').value = '';
             ocultarFormulario();
             
-            // Mostrar mensaje de confirmación
-            mostrarMensaje('Formulario limpiado correctamente', 'success');
+            showTempMessage('Formulario limpiado correctamente', 'success');
         }
 
-        // Función para mostrar mensajes
-        function mostrarMensaje(mensaje, tipo = 'success') {
+        // Función para mostrar mensajes temporales
+        function showTempMessage(mensaje, tipo = 'success') {
+            // Remover mensajes existentes
+            const existingMessages = document.querySelectorAll('.temp-message');
+            existingMessages.forEach(msg => msg.remove());
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `temp-message ${tipo}`;
+            messageDiv.textContent = mensaje;
+            
+            document.body.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 4000);
+            
+            // También actualizar el mensaje principal
             const mensajeDiv = document.getElementById('mensaje_carga');
             mensajeDiv.innerHTML = `<div class="${tipo}">${mensaje}</div>`;
             setTimeout(() => mensajeDiv.innerHTML = '', 5000);
@@ -592,26 +1150,18 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
         // Función para ocultar el formulario
         function ocultarFormulario() {
             document.getElementById('formulario_edicion').classList.add('form-hidden');
-            clearNewImagePreviews();
         }
 
-        // Event listener para el botón limpiar formulario
-        document.getElementById('btn_limpiar').addEventListener('click', function() {
-            if (confirm('¿Está seguro de que desea limpiar el formulario? Se perderán los cambios no guardados.')) {
-                limpiarFormulario();
-            }
-        });
-
-        // Event listener para el envío del formulario
-        document.getElementById('form_editar_noticia').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const btnSubmit = this.querySelector('button[type="submit"]');
+        // Función para enviar el formulario
+        function enviarFormulario() {
+            const formData = new FormData(document.getElementById('form_editar_noticia'));
+            const btnSubmit = document.querySelector('button[type="submit"]');
             const textoOriginal = btnSubmit.textContent;
             
-            // Guardar la posición actual del scroll
-            const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+            // Agregar archivos de nuevas imágenes al FormData
+            selectedNewFiles.forEach((fileData, index) => {
+                formData.append(`nuevas_imagenes[${index}]`, fileData.file);
+            });
             
             btnSubmit.disabled = true;
             btnSubmit.textContent = 'Guardando...';
@@ -623,51 +1173,49 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    mostrarMensaje('Noticia actualizada correctamente', 'success');
+                    showTempMessage('Noticia actualizada correctamente', 'success');
                     
-                    // Limpiar completamente el formulario después del éxito
-                    setTimeout(() => {
-                        limpiarFormulario();
-                    }, 1500);
+                    // Liberar URLs de objetos antes de limpiar
+                    selectedNewFiles.forEach(fileData => {
+                        if (fileData.url) {
+                            URL.revokeObjectURL(fileData.url);
+                        }
+                    });
                     
-                    // Volver al inicio de la página inmediatamente
+                    // Limpiar completamente el formulario
+                    document.getElementById('id_noticia').value = '';
+                    document.getElementById('titulo').value = '';
+                    document.getElementById('contenido').value = '';
+                    document.getElementById('fecha').value = '';
+                    document.getElementById('imagenes_existentes').value = '';
+                    document.getElementById('orden_imagenes').value = '';
+                    document.getElementById('destacada').checked = false;
+                    document.getElementById('noticia_info').textContent = '';
+                    
+                    // Limpiar todas las imágenes
+                    imagenesActuales = [];
+                    selectedNewFiles = [];
+                    allImages = [];
+                    document.getElementById('nuevas_imagenes_input').value = '';
+                    
+                    // Forzar actualización de la vista
+                    displayAllImages();
+                    
+                    // Resetear selector
+                    document.getElementById('selector_noticia').value = '';
+                    
                     window.scrollTo(0, 0);
                 } else {
-                    mostrarMensaje(`Error: ${data.message}`, 'error');
+                    showTempMessage(`Error: ${data.message}`, 'error');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                mostrarMensaje('Error al actualizar la noticia', 'error');
+                showTempMessage('Error al actualizar la noticia', 'error');
             })
             .finally(() => {
                 btnSubmit.disabled = false;
                 btnSubmit.textContent = textoOriginal;
-            });
-        });
-
-        // Drag and drop para archivos
-        const fileInputWrapper = document.querySelector('.file-input-wrapper');
-        
-        if (fileInputWrapper) {
-            fileInputWrapper.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                this.style.background = '#e3f2fd';
-            });
-            
-            fileInputWrapper.addEventListener('dragleave', function(e) {
-                e.preventDefault();
-                this.style.background = '#f8f9fa';
-            });
-            
-            fileInputWrapper.addEventListener('drop', function(e) {
-                e.preventDefault();
-                this.style.background = '#f8f9fa';
-                
-                const files = Array.from(e.dataTransfer.files);
-                selectedNewFiles = files;
-                updateNewFileInput();
-                displayNewImagePreviews();
             });
         }
     </script>
