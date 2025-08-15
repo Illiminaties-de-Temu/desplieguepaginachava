@@ -13,25 +13,25 @@
     <title>Iniciar Sesión</title>
     <link rel="stylesheet" href="estilo.css">
     <style>
-    /* Estilos específicos para el login */
+    /* Estilos específicos para el login con colores directos */
     .login-wrapper {
         min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 20px;
-        background-color: var(--gris-claro);
+        background-color: #f0f4f8; /* Gris claro de fondo */
         font-family: 'Gotham', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
     .login-container {
-        background: var(--blanco-cristal);
+        background: rgba(255, 255, 255, 0.95); /* Blanco cristal */
         border-radius: 15px;
-        box-shadow: var(--sombra-profunda);
+        box-shadow: 0 20px 40px rgba(0, 26, 51, 0.15); /* Sombra profunda */
         padding: 40px;
         width: 100%;
         max-width: 400px;
-        border: 1px solid rgba(0,212,255,.2);
+        border: 1px solid rgba(0, 212, 255, 0.2); /* Borde azul cristal */
         backdrop-filter: blur(10px);
     }
     
@@ -41,7 +41,7 @@
     }
     
     .login-header h2 {
-        color: var(--azul-profundo);
+        color: #001a33; /* Azul profundo */
         font-size: 2em;
         margin-bottom: 10px;
         text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
@@ -61,7 +61,7 @@
     
     .form-group input {
         padding: 15px;
-        border: 2px solid var(--azul-cristal);
+        border: 2px solid rgba(0, 212, 255, 0.1); /* Azul cristal */
         border-radius: 8px;
         font-size: 16px;
         transition: all 0.3s ease;
@@ -70,8 +70,8 @@
     
     .form-group input:focus {
         outline: none;
-        border-color: var(--azul-neon);
-        background: var(--blanco-puro);
+        border-color: #0091ff; /* Azul neon */
+        background: #ffffff; /* Blanco puro */
         box-shadow: 0 0 0 3px rgba(0, 145, 255, 0.1);
     }
     
@@ -86,8 +86,8 @@
     }
     
     .login-button {
-        background: linear-gradient(135deg, var(--azul-neon) 0%, var(--azul-electrico) 100%);
-        color: var(--blanco-puro);
+        background: linear-gradient(135deg, #0091ff 0%, #083057 100%); /* Azul neon a azul eléctrico */
+        color: #ffffff; /* Blanco puro */
         padding: 15px 30px;
         border: none;
         border-radius: 8px;
@@ -97,7 +97,7 @@
         transition: all 0.3s ease;
         text-decoration: none;
         display: inline-block;
-        box-shadow: var(--sombra-neon);
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); /* Sombra neon */
     }
     
     .login-button:hover {
@@ -106,7 +106,7 @@
     }
     
     .login-button:disabled {
-        background: var(--gris-plasma) !important;
+        background: #404854 !important; /* Gris plasma */
         cursor: not-allowed;
         opacity: 0.65;
         transform: none;
@@ -119,8 +119,8 @@
     }
     
     .spinner {
-        border: 4px solid var(--gris-plasma);
-        border-top: 4px solid var(--azul-neon);
+        border: 4px solid #404854; /* Gris plasma */
+        border-top: 4px solid #0091ff; /* Azul neon */
         border-radius: 50%;
         width: 40px;
         height: 40px;
@@ -134,7 +134,7 @@
     }
     
     .loader p {
-        color: var(--azul-electrico);
+        color: #083057; /* Azul eléctrico */
         font-weight: 600;
     }
     
