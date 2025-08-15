@@ -14,7 +14,7 @@ function purgarNoticiasAntiguas($pdo) {
     $totalNoticias = $countQuery->fetch(PDO::FETCH_ASSOC)['total'];
     
     // Si hay más de 300 noticias, borrar las 100 más antiguas
-    if ($totalNoticias >= 250) {
+    if ($totalNoticias >= 200) {
         // Obtener las 100 noticias más antiguas
         $query = $pdo->query("SELECT id, Imagenes FROM noticias ORDER BY fecha ASC LIMIT 100");
         $noticiasAntiguas = $query->fetchAll(PDO::FETCH_ASSOC);
