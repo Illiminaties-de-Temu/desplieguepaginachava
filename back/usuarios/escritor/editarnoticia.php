@@ -789,8 +789,9 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
                     const rutaImagen = imageData.src.startsWith('contenido/') ? `../../${imageData.src}` : `../../contenido/${imageData.src}`;
                     imageSrc = rutaImagen;
                 } else {
-                    // Para nuevas imágenes, crear URL temporal
-                    imageSrc = URL.createObjectURL(imageData.file);
+                    // Para nuevas imágenes, crear URL temporal y guardarla en fileData
+                    imageData.url = URL.createObjectURL(imageData.file);
+                    imageSrc = imageData.url;
                 }
                 
                 previewItem.innerHTML = `
@@ -961,6 +962,11 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
                 if (imageIndex !== -1) {
                     const imageData = allImages[imageIndex];
                     
+                    // Liberar URL de objeto si existe
+                    if (imageData.url) {
+                        URL.revokeObjectURL(imageData.url);
+                    }
+                    
                     // Si es una imagen actual, eliminar del servidor
                     if (imageData.type === 'current') {
                         fetch('../bd/eliminarimagen.php', {
@@ -993,6 +999,10 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
                         // Si es una imagen nueva, eliminar de selectedNewFiles
                         const newIndex = selectedNewFiles.findIndex(img => img.id === imageId);
                         if (newIndex !== -1) {
+                            // Liberar URL de objeto si existe
+                            if (selectedNewFiles[newIndex].url) {
+                                URL.revokeObjectURL(selectedNewFiles[newIndex].url);
+                            }
                             selectedNewFiles.splice(newIndex, 1);
                         }
                     }
@@ -1070,12 +1080,12 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
 
         // Función para limpiar completamente el formulario
         function limpiarFormulario() {
-    // Liberar URLs de objetos para imágenes nuevas
-    selectedNewFiles.forEach(fileData => {
-        if (fileData.url) {
-            URL.revokeObjectURL(fileData.url);
-        }
-    });
+            // Liberar URLs de objetos para imágenes nuevas
+            selectedNewFiles.forEach(fileData => {
+                if (fileData.url) {
+                    URL.revokeObjectURL(fileData.url);
+                }
+            });
 
             // Limpiar campos del formulario
             document.getElementById('id_noticia').value = '';
