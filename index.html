@@ -319,24 +319,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     // CRÍTICO: Configurar estilos iniciales para evitar solapamientos
                     if (index === 0) {
                         // Primer slide visible
-                        slide.style.display = 'block';
                         slide.style.zIndex = '10';
                         slide.style.opacity = '1';
                         slide.style.pointerEvents = 'auto';
                     } else {
                         // Otros slides ocultos
-                        slide.style.display = 'none';
                         slide.style.zIndex = '1';
                         slide.style.opacity = '0';
                         slide.style.pointerEvents = 'none';
                     }
                     
-                    // Estilos adicionales para posicionamiento
-                    slide.style.position = 'absolute';
-                    slide.style.top = '0';
-                    slide.style.left = '0';
-                    slide.style.width = '100%';
-                    slide.style.height = '100%';
+                    // NO forzar position absolute - dejar que CSS maneje esto
                     
                     // Convertir ID a string para asegurar consistencia
                     const noticiaId = String(noticia.id);
@@ -556,7 +549,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // CRÍTICO: Ocultar TODOS los slides primero y resetear z-index
             slides.forEach((slide, i) => {
                 slide.classList.remove('activa');
-                slide.style.display = 'none'; // Forzar ocultación
+                // NO usar display:none - usar solo opacity y pointer-events
                 slide.style.zIndex = '1';     // Resetear z-index
                 slide.style.opacity = '0';    // Asegurar invisibilidad
                 slide.style.pointerEvents = 'none'; // Deshabilitar clicks
@@ -571,7 +564,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Activar SOLO el slide correcto
                 const slideActivo = slides[index];
                 slideActivo.classList.add('activa');
-                slideActivo.style.display = 'block'; // Mostrar explícitamente
+                // NO tocar display - usar solo opacity y z-index
                 slideActivo.style.zIndex = '10';      // Traer al frente
                 slideActivo.style.opacity = '1';      // Hacer visible
                 slideActivo.style.pointerEvents = 'auto'; // Habilitar clicks
@@ -601,7 +594,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     slidesVisibles.forEach((s, i) => {
                         if (i !== 0) { // Mantener solo el primero
                             s.classList.remove('activa');
-                            s.style.display = 'none';
+                            s.style.opacity = '0';
                             s.style.pointerEvents = 'none';
                         }
                     });
