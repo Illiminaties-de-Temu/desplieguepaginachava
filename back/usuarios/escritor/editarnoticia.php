@@ -717,6 +717,8 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
 
         // Función para agregar nuevos archivos
         function addNewFiles(files) {
+            const newFileObjects = [];
+            
             files.forEach(file => {
                 const isDuplicate = selectedNewFiles.some(existingFile => 
                     existingFile.name === file.name && 
@@ -725,22 +727,31 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
                 );
                 
                 if (!isDuplicate) {
-                    selectedNewFiles.push({
+                    const newFileObj = {
                         file: file,
                         type: 'new',
                         id: 'new_' + Math.random().toString(36).substr(2, 9)
-                    });
+                    };
+                    selectedNewFiles.push(newFileObj);
+                    newFileObjects.push(newFileObj);
                 }
             });
             
-            updateAllImages();
+            // Agregar nuevos archivos al final del array principal
+            allImages = allImages.concat(newFileObjects);
+            
+            displayAllImages();
+            updateImageCounter();
+            updateContainerState();
             updateFileInput();
         }
 
         // Función para actualizar todas las imágenes (combinar actuales y nuevas)
         function updateAllImages() {
-            // Combinar imágenes actuales y nuevas
-            allImages = [...imagenesActuales, ...selectedNewFiles];
+            // Solo recombinar si allImages está vacío o si es la primera carga
+            if (allImages.length === 0) {
+                allImages = [...imagenesActuales, ...selectedNewFiles];
+            }
             
             displayAllImages();
             updateImageCounter();
@@ -810,26 +821,28 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
                 draggedIndex = parseInt(this.dataset.index);
                 this.classList.add('dragging');
                 e.dataTransfer.effectAllowed = 'move';
-                e.dataTransfer.setData('text/html', ''); // Solo placeholder, no usaremos esto
+                e.dataTransfer.setData('text/plain', draggedIndex.toString());
+                console.log('Drag start - Index:', draggedIndex);
             });
 
             element.addEventListener('dragend', function(e) {
                 this.classList.remove('dragging');
-                draggedElement = null;
-                draggedIndex = -1;
                 
                 // Limpiar todos los indicadores de drag-over
                 document.querySelectorAll('.image-preview-item').forEach(item => {
                     item.classList.remove('drag-over');
                 });
                 document.getElementById('main_images_container').classList.remove('drag-over');
+                
+                draggedElement = null;
+                draggedIndex = -1;
             });
 
             element.addEventListener('dragover', function(e) {
                 e.preventDefault();
                 e.dataTransfer.dropEffect = 'move';
                 
-                if (this !== draggedElement) {
+                if (this !== draggedElement && draggedElement) {
                     this.classList.add('drag-over');
                 }
             });
@@ -840,23 +853,60 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
 
             element.addEventListener('drop', function(e) {
                 e.preventDefault();
+                e.stopPropagation();
+                
+                this.classList.remove('drag-over');
                 
                 if (this !== draggedElement && draggedElement) {
                     const targetIndex = parseInt(this.dataset.index);
+                    const originalIndex = draggedIndex;
                     
-                    // Remover elemento arrastrado de su posición actual
-                    const draggedImage = allImages.splice(draggedIndex, 1)[0];
+                    console.log('Drop - From:', originalIndex, 'To:', targetIndex);
                     
-                    // Insertar en la nueva posición
-                    allImages.splice(targetIndex, 0, draggedImage);
-                    
-                    // Actualizar vista sin duplicar
-                    updateAllImages();
-                    actualizarOrdenImagenes();
-                    showTempMessage('Orden de imágenes actualizado', 'success');
+                    // Verificar que los índices sean válidos
+                    if (originalIndex >= 0 && targetIndex >= 0 && originalIndex !== targetIndex) {
+                        // Crear una copia del array para manipular
+                        const newImages = [...allImages];
+                        
+                        // Remover elemento de la posición original
+                        const draggedImage = newImages.splice(originalIndex, 1)[0];
+                        
+                        // Insertar en la nueva posición
+                        newImages.splice(targetIndex, 0, draggedImage);
+                        
+                        // Actualizar el array principal
+                        allImages = newImages;
+                        
+                        // Actualizar arrays individuales
+                        updateIndividualArrays();
+                        
+                        // Mostrar imágenes actualizadas
+                        displayAllImages();
+                        
+                        // Actualizar campos ocultos
+                        actualizarImagenesExistentes();
+                        actualizarOrdenImagenes();
+                        
+                        showTempMessage('Orden de imágenes actualizado', 'success');
+                        console.log('Reorder completed');
+                    }
                 }
-                
-                this.classList.remove('drag-over');
+            });
+        }
+
+        // Función para actualizar arrays individuales después del reordenamiento
+        function updateIndividualArrays() {
+            // Limpiar arrays individuales
+            imagenesActuales = [];
+            selectedNewFiles = [];
+            
+            // Redistribuir elementos según su tipo
+            allImages.forEach(image => {
+                if (image.type === 'current') {
+                    imagenesActuales.push(image);
+                } else if (image.type === 'new') {
+                    selectedNewFiles.push(image);
+                }
             });
         }
 
@@ -947,7 +997,13 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
                         }
                     }
                     
-                    updateAllImages();
+                    // Eliminar del array principal
+                    allImages.splice(imageIndex, 1);
+                    
+                    // Actualizar vista
+                    displayAllImages();
+                    updateImageCounter();
+                    updateContainerState();
                     actualizarImagenesExistentes();
                     actualizarOrdenImagenes();
                     updateFileInput();
