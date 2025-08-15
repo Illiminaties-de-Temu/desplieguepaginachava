@@ -21,7 +21,9 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'master')
     <div class="container">
         <div class="header">
             <a href="../login/out.php" class="logout-btn">Cerrar Sesión</a>
+            <br>
             <h1>Panel de Administración</h1>
+            <br>
             <div class="user-info">
                 Usuario: <?php echo htmlspecialchars($_SESSION['nombreusuario']); ?> | 
                 Tipo: <?php echo htmlspecialchars($_SESSION['tipousuario']); ?>
