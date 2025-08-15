@@ -1070,6 +1070,13 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
 
         // Función para limpiar completamente el formulario
         function limpiarFormulario() {
+    // Liberar URLs de objetos para imágenes nuevas
+    selectedNewFiles.forEach(fileData => {
+        if (fileData.url) {
+            URL.revokeObjectURL(fileData.url);
+        }
+    });
+
             // Limpiar campos del formulario
             document.getElementById('id_noticia').value = '';
             document.getElementById('titulo').value = '';
