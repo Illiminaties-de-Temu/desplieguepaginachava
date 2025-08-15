@@ -205,33 +205,7 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
             justify-content: center;
         }
 
-        .clear-all-btn {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            min-height: 50px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.2);
-        }
 
-        .clear-all-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
-            background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
-        }
-
-        .clear-all-btn:active {
-            transform: translateY(0);
-            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
-        }
 
         /* Estilos para el checkbox de noticia destacada */
         .highlight-section {
@@ -380,13 +354,6 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
                 text-align: center;
                 min-height: 55px;
             }
-
-            .clear-all-btn {
-                padding: 15px 20px;
-                font-size: 16px;
-                justify-content: center;
-                min-height: 55px;
-            }
         }
 
         @media (max-width: 480px) {
@@ -400,13 +367,6 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
             .image-counter {
                 font-size: 16px;
                 padding: 18px;
-                min-height: 60px;
-            }
-
-            .clear-all-btn {
-                gap: 10px;
-                padding: 18px;
-                font-size: 18px;
                 min-height: 60px;
             }
         }
@@ -491,9 +451,6 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
                                     ➕ Agregar más imágenes
                                 </button>
                                 <div class="image-counter" id="imageCounter">0 imágenes seleccionadas</div>
-                                <button type="button" class="clear-all-btn" onclick="clearAllImages()">
-                                    🗑️ Limpiar todo
-                                </button>
                             </div>
                             
                             <!-- Input oculto para agregar más imágenes -->
