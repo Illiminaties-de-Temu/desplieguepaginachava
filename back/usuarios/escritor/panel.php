@@ -70,7 +70,7 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
     .nav-category h3 {
         color: #1d4ed8;
     }
-</style>
+    </style>
 </head>
 <body>
     <div class="container">
