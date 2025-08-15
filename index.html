@@ -294,6 +294,8 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             if (data.success && data.data.length > 0) {
+                console.log('Datos recibidos:', data.data); // Debug: ver los datos completos
+                
                 const carrusel = document.getElementById('carruselNoticias');
                 const puntos = document.getElementById('puntosCarrusel');
                 
@@ -303,49 +305,88 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Crear slides para cada noticia
                 data.data.forEach((noticia, index) => {
+                    // Debug: verificar el ID de cada noticia
+                    console.log(`Noticia ${index}:`, {
+                        id: noticia.id,
+                        titulo: noticia.titulo,
+                        tipo_id: typeof noticia.id
+                    });
+                    
                     const slide = document.createElement('div');
                     slide.className = `noticia-slide ${index === 0 ? 'activa' : ''}`;
                     slide.style.backgroundImage = `url('${noticia.imagen}')`;
                     
-                    // 1. Asignar el ID como atributo personalizado (más robusto)
-                    slide.setAttribute('data-noticia-id', noticia.id);
+                    // Convertir ID a string para asegurar consistencia
+                    const noticiaId = String(noticia.id);
+                    slide.setAttribute('data-noticia-id', noticiaId);
                     
-                    // 2. Contenido HTML (sin cambios)
+                    // Contenido HTML
                     slide.innerHTML = `
                         <div class="contenido-noticia">
                             ${noticia.titulo ? `<h4>${noticia.titulo}</h4>` : ''}
                             <p>${noticia.contenido}...</p>
                             <div class="info-noticia">
                                 <span>${noticia.fecha}</span>
+                                <span class="debug-id" style="color: #ff0; font-size: 12px;">ID: ${noticiaId}</span>
                             </div>
                             ${noticia.todas_imagenes && noticia.todas_imagenes.length > 1 ? 
                                 `<div class="contador-imagenes">+${noticia.todas_imagenes.length - 1} imágenes</div>` : ''}
                         </div>
                     `;
                     
-                    // 3. Evento click MEJORADO (con verificación)
+                    // Evento click mejorado con más verificaciones
                     slide.addEventListener('click', function(e) {
+                        // Prevenir comportamiento por defecto
                         e.preventDefault();
-                        e.stopPropagation(); // Importante para evitar conflictos
+                        e.stopPropagation();
+                        e.stopImmediatePropagation();
                         
                         const idNoticia = this.getAttribute('data-noticia-id');
                         
-                        // Verificación adicional
-                        if (!idNoticia || isNaN(idNoticia)) {
+                        console.log('Click detectado en slide:', {
+                            elemento: this,
+                            idFromAttribute: idNoticia,
+                            noticiaOriginal: noticia.id,
+                            index: index
+                        });
+                        
+                        // Verificación del ID
+                        if (!idNoticia || idNoticia === 'undefined' || idNoticia === 'null') {
                             console.error('ID de noticia no válido:', idNoticia);
+                            alert(`Error: ID de noticia no válido (${idNoticia})`);
                             return;
                         }
                         
-                        console.log('Redirigiendo a noticia ID:', idNoticia); // Para depuración
-                        window.location.href = `noticiacompleta.html?id=${idNoticia}`;
+                        // Construir URL con timestamp para evitar cache
+                        const timestamp = Date.now();
+                        const url = `noticiacompleta.html?id=${encodeURIComponent(idNoticia)}&t=${timestamp}`;
+                        
+                        console.log('Redirigiendo a:', url);
+                        
+                        // Usar setTimeout para asegurar que el evento se procese completamente
+                        setTimeout(() => {
+                            window.location.href = url;
+                        }, 100);
+                    });
+                    
+                    // Agregar evento de mouse para debug visual
+                    slide.addEventListener('mouseenter', function() {
+                        const idNoticia = this.getAttribute('data-noticia-id');
+                        console.log('Mouse sobre noticia ID:', idNoticia);
+                        this.style.cursor = 'pointer';
                     });
                     
                     carrusel.appendChild(slide);
-                    // Crear punto indicador
+                    
+                    // Crear punto indicador con el mismo ID para consistencia
                     const punto = document.createElement('div');
                     punto.className = `punto ${index === 0 ? 'activo' : ''}`;
+                    punto.setAttribute('data-slide-index', index);
                     puntos.appendChild(punto);
-                  });
+                });
+                
+                // Verificar que todos los slides tienen IDs únicos
+                verificarIdsUnicos();
                 
                 // Inicializar funcionalidad del carrusel
                 inicializarCarrusel();
@@ -357,6 +398,27 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error:', error);
             mostrarError('Error al cargar las noticias');
         });
+    
+    // Función para verificar IDs únicos
+    function verificarIdsUnicos() {
+        const slides = document.querySelectorAll('.noticia-slide[data-noticia-id]');
+        const ids = [];
+        const duplicados = [];
+        
+        slides.forEach((slide, index) => {
+            const id = slide.getAttribute('data-noticia-id');
+            if (ids.includes(id)) {
+                duplicados.push({index, id});
+            } else {
+                ids.push(id);
+            }
+        });
+        
+        console.log('IDs encontrados:', ids);
+        if (duplicados.length > 0) {
+            console.warn('IDs duplicados encontrados:', duplicados);
+        }
+    }
     
     // Función para mostrar errores
     function mostrarError(mensaje) {
@@ -374,7 +436,7 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     }
     
-    // Función para manejar el carrusel (manteniendo tu funcionalidad existente)
+    // Función para manejar el carrusel (mejorada)
     function inicializarCarrusel() {
         const slides = document.querySelectorAll('.noticia-slide');
         const puntos = document.querySelectorAll('.punto');
@@ -383,6 +445,12 @@ document.addEventListener('DOMContentLoaded', function() {
         let slideActual = 0;
         
         function mostrarSlide(index) {
+            // Validar índice
+            if (index < 0 || index >= slides.length) {
+                console.warn('Índice de slide inválido:', index);
+                return;
+            }
+            
             slides.forEach((slide, i) => {
                 slide.classList.toggle('activa', i === index);
                 if (puntos[i]) {
@@ -390,25 +458,61 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
             slideActual = index;
+            
+            // Debug del slide actual
+            const slideActivo = slides[index];
+            if (slideActivo) {
+                const id = slideActivo.getAttribute('data-noticia-id');
+                console.log(`Slide activo: ${index}, ID: ${id}`);
+            }
         }
         
+        // Eventos de los botones de navegación
         if (btnAnterior && btnSiguiente) {
-            btnAnterior.addEventListener('click', () => {
+            btnAnterior.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 const nuevoIndex = (slideActual - 1 + slides.length) % slides.length;
                 mostrarSlide(nuevoIndex);
             });
             
-            btnSiguiente.addEventListener('click', () => {
+            btnSiguiente.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 const nuevoIndex = (slideActual + 1) % slides.length;
                 mostrarSlide(nuevoIndex);
             });
         }
         
-        // Cambio automático cada 5 segundos
-        setInterval(() => {
+        // Evento click en puntos indicadores
+        puntos.forEach((punto, index) => {
+            punto.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                mostrarSlide(index);
+            });
+        });
+        
+        // Cambio automático cada 7 segundos (pausar en hover)
+        let intervaloCarrusel = setInterval(() => {
             const nuevoIndex = (slideActual + 1) % slides.length;
             mostrarSlide(nuevoIndex);
         }, 7000);
+        
+        // Pausar carrusel automático cuando el mouse está sobre el carrusel
+        const carrusel = document.getElementById('carruselNoticias');
+        if (carrusel) {
+            carrusel.addEventListener('mouseenter', () => {
+                clearInterval(intervaloCarrusel);
+            });
+            
+            carrusel.addEventListener('mouseleave', () => {
+                intervaloCarrusel = setInterval(() => {
+                    const nuevoIndex = (slideActual + 1) % slides.length;
+                    mostrarSlide(nuevoIndex);
+                }, 7000);
+            });
+        }
     }
 });
 </script>
