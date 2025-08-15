@@ -18,42 +18,226 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
     <link rel="stylesheet" href="../estilo.css">
     <style>
         .new-image-preview-container {
-            margin-top: 10px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
+            margin-top: 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            padding: 15px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            border: 2px dashed #dee2e6;
+            transition: all 0.3s ease;
         }
         
         .new-image-preview-item {
             position: relative;
-            display: inline-block;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-radius: 8px;
+            padding: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: grab;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .new-image-preview-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            border-color: #3498db;
+        }
+
+        .new-image-preview-item.dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+            cursor: grabbing;
+            z-index: 1000;
+        }
+
+        .new-image-preview-item.drag-over {
+            border-color: #27ae60;
+            background: #e8f5e8;
+            transform: scale(1.05);
         }
         
         .new-image-preview {
-            width: 100px;
-            height: 100px;
+            width: 100%;
+            height: 120px;
             object-fit: cover;
-            border: 2px solid #ddd;
-            border-radius: 5px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+        
+        .image-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+
+        .image-order {
+            background: #3498db;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 10px;
+        }
+
+        .image-name {
+            flex: 1;
+            margin-left: 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         
         .remove-new-image {
             position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #ff4444;
+            top: 5px;
+            right: 5px;
+            background: #e74c3c;
             color: white;
             border: none;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             cursor: pointer;
             font-size: 12px;
             line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
         }
         
         .remove-new-image:hover {
-            background: #cc0000;
+            background: #c0392b;
+            transform: scale(1.1);
+        }
+
+        /* Estilos para el área de carga de archivos mejorada */
+        .file-upload-section {
+            border: 2px dashed #3498db;
+            border-radius: 12px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .file-upload-section:hover {
+            border-color: #2980b9;
+            background: linear-gradient(135deg, #ffffff 0%, #f1f3f4 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.15);
+        }
+
+        .file-upload-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .file-upload-text {
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+
+        .file-upload-hint {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            font-style: italic;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            z-index: 3;
+        }
+
+        /* Botones para agregar más imágenes */
+        .image-actions {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            border: 1px solid #dee2e6;
+        }
+
+        .add-more-btn {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 50px;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.2);
+        }
+
+        .add-more-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
+            background: linear-gradient(135deg, #229954 0%, #27ae60 100%);
+        }
+
+        .image-counter {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .drag-instructions {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
         }
 
         /* Estilos para el checkbox de noticia destacada */
@@ -155,6 +339,59 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
             line-height: 1.4;
             margin: 0 !important;
         }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .new-image-preview-container {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 10px;
+                padding: 10px;
+            }
+            
+            .new-image-preview {
+                height: 100px;
+            }
+
+            .image-actions {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+                padding: 15px;
+            }
+
+            .add-more-btn {
+                padding: 18px 25px;
+                font-size: 18px;
+                justify-content: center;
+                min-height: 55px;
+            }
+
+            .image-counter {
+                font-size: 18px;
+                padding: 15px 20px;
+                text-align: center;
+                min-height: 55px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .new-image-preview-container {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+            
+            .add-more-btn {
+                gap: 15px;
+                padding: 20px;
+                font-size: 20px;
+                min-height: 60px;
+            }
+
+            .image-counter {
+                font-size: 16px;
+                padding: 18px;
+                min-height: 60px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -251,13 +488,37 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
                         <div class="form-row">
                             <div class="form-group full-width">
                                 <label for="nuevas_imagenes">Agregar nuevas imágenes:</label>
-                                <div class="file-input-wrapper">
+                                
+                                <!-- Sección inicial de carga -->
+                                <div class="file-upload-section" id="initialUploadSection">
                                     <input type="file" name="nuevas_imagenes[]" id="nuevas_imagenes" multiple accept="image/*">
-                                    <span class="file-input-display">
-                                        Seleccionar archivos de imagen o arrastra aquí
-                                    </span>
+                                    <div class="file-upload-content">
+                                        <div class="file-upload-text">Haz clic aquí para seleccionar imágenes</div>
+                                        <div class="file-upload-hint">Puedes seleccionar múltiples archivos de imagen</div>
+                                    </div>
                                 </div>
-                                <div id="newImagePreviewContainer" class="new-image-preview-container"></div>
+                                
+                                <!-- Área de vista previa con funciones de arrastrar -->
+                                <div id="newImagePreviewContainer" class="new-image-preview-container" style="display: none;">
+                                    <div class="drag-instructions">
+                                        📋 Arrastra las imágenes para cambiar su orden
+                                    </div>
+                                </div>
+                                
+                                <!-- Botones de acción para las imágenes -->
+                                <div class="image-actions" id="imageActions" style="display: none;">
+                                    <button type="button" class="add-more-btn" onclick="addMoreImages()">
+                                        ➕ Agregar más imágenes
+                                    </button>
+                                    <div class="image-counter" id="imageCounter">0 imágenes seleccionadas</div>
+                                </div>
+                                
+                                <!-- Input oculto para agregar más imágenes -->
+                                <input type="file" 
+                                       id="additionalImages" 
+                                       multiple 
+                                       accept="image/*" 
+                                       style="display: none;">
                             </div>
                         </div>
                     </div>
@@ -459,23 +720,63 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
             const files = Array.from(e.target.files);
             selectedNewFiles = files;
             displayNewImagePreviews();
-            
-            const display = document.querySelector('.file-input-display');
-            if (files.length > 0) {
-                display.textContent = `${files.length} archivo(s) seleccionado(s)`;
-                display.style.background = '#e8f5e8';
-                display.style.color = '#27ae60';
-            } else {
-                display.textContent = 'Seleccionar archivos de imagen o arrastra aquí';
-                display.style.background = '#f8f9fa';
-                display.style.color = '#3498db';
-            }
+            updateImageCounter();
+            toggleImageActions();
         });
 
-        // Función para mostrar vista previa de nuevas imágenes
+        // Manejar la adición de más imágenes
+        document.getElementById('additionalImages').addEventListener('change', function(e) {
+            const newFiles = Array.from(e.target.files);
+            
+            // Agregar los nuevos archivos al array existente
+            newFiles.forEach(file => {
+                // Verificar que no sea un duplicado (opcional)
+                const isDuplicate = selectedNewFiles.some(existingFile => 
+                    existingFile.name === file.name && 
+                    existingFile.size === file.size &&
+                    existingFile.lastModified === file.lastModified
+                );
+                
+                if (!isDuplicate) {
+                    selectedNewFiles.push(file);
+                }
+            });
+            
+            // Actualizar el input principal con todos los archivos
+            updateMainFileInput();
+            displayNewImagePreviews();
+            updateImageCounter();
+            
+            // Limpiar el input auxiliar
+            this.value = '';
+        });
+
+        function addMoreImages() {
+            document.getElementById('additionalImages').click();
+        }
+
+        // Función para mostrar vista previa de nuevas imágenes con drag & drop
         function displayNewImagePreviews() {
             const container = document.getElementById('newImagePreviewContainer');
+            
+            if (selectedNewFiles.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+
+            container.style.display = 'block';
+            
+            // Limpiar contenido anterior pero mantener las instrucciones
+            const dragInstructions = container.querySelector('.drag-instructions');
             container.innerHTML = '';
+            if (dragInstructions) {
+                container.appendChild(dragInstructions);
+            } else {
+                const instructions = document.createElement('div');
+                instructions.className = 'drag-instructions';
+                instructions.innerHTML = '📋 Arrastra las imágenes para cambiar su orden';
+                container.appendChild(instructions);
+            }
 
             selectedNewFiles.forEach((file, index) => {
                 if (file.type.startsWith('image/')) {
@@ -483,20 +784,48 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
                     reader.onload = function(e) {
                         const previewItem = document.createElement('div');
                         previewItem.className = 'new-image-preview-item';
+                        previewItem.draggable = true;
+                        previewItem.dataset.index = index;
                         
                         const img = document.createElement('img');
                         img.src = e.target.result;
                         img.className = 'new-image-preview';
                         img.alt = 'Vista previa';
                         
+                        const imageInfo = document.createElement('div');
+                        imageInfo.className = 'image-info';
+                        
+                        const orderBadge = document.createElement('div');
+                        orderBadge.className = 'image-order';
+                        orderBadge.textContent = index + 1;
+                        
+                        const imageName = document.createElement('div');
+                        imageName.className = 'image-name';
+                        imageName.textContent = file.name;
+                        imageName.title = file.name;
+                        
+                        imageInfo.appendChild(orderBadge);
+                        imageInfo.appendChild(imageName);
+                        
                         const removeBtn = document.createElement('button');
                         removeBtn.innerHTML = '×';
                         removeBtn.className = 'remove-new-image';
                         removeBtn.type = 'button';
-                        removeBtn.onclick = function() {
+                        removeBtn.title = 'Eliminar imagen';
+                        removeBtn.onclick = function(e) {
+                            e.stopPropagation();
                             removeNewImage(index);
                         };
                         
+                        // Eventos de drag & drop
+                        previewItem.addEventListener('dragstart', handleDragStart);
+                        previewItem.addEventListener('dragover', handleDragOver);
+                        previewItem.addEventListener('drop', handleDrop);
+                        previewItem.addEventListener('dragend', handleDragEnd);
+                        previewItem.addEventListener('dragenter', handleDragEnter);
+                        previewItem.addEventListener('dragleave', handleDragLeave);
+                        
+                        previewItem.appendChild(imageInfo);
                         previewItem.appendChild(img);
                         previewItem.appendChild(removeBtn);
                         container.appendChild(previewItem);
@@ -506,15 +835,80 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
             });
         }
 
+        // Variables para el drag & drop
+        let draggedElement = null;
+        let draggedIndex = null;
+
+        function handleDragStart(e) {
+            draggedElement = this;
+            draggedIndex = parseInt(this.dataset.index);
+            this.classList.add('dragging');
+            
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.outerHTML);
+        }
+
+        function handleDragOver(e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            e.dataTransfer.dropEffect = 'move';
+            return false;
+        }
+
+        function handleDragEnter(e) {
+            if (this !== draggedElement) {
+                this.classList.add('drag-over');
+            }
+        }
+
+        function handleDragLeave(e) {
+            this.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            }
+
+            if (draggedElement !== this) {
+                const targetIndex = parseInt(this.dataset.index);
+                
+                // Reordenar el array de archivos
+                const draggedFile = selectedNewFiles[draggedIndex];
+                selectedNewFiles.splice(draggedIndex, 1);
+                selectedNewFiles.splice(targetIndex, 0, draggedFile);
+                
+                // Actualizar el input y la vista previa
+                updateMainFileInput();
+                displayNewImagePreviews();
+            }
+
+            this.classList.remove('drag-over');
+            return false;
+        }
+
+        function handleDragEnd(e) {
+            this.classList.remove('dragging');
+            
+            // Limpiar todos los estados de drag-over
+            const items = document.querySelectorAll('.new-image-preview-item');
+            items.forEach(item => {
+                item.classList.remove('drag-over', 'dragging');
+            });
+        }
+
         // Función para eliminar una nueva imagen de la vista previa
         function removeNewImage(index) {
             selectedNewFiles.splice(index, 1);
-            updateNewFileInput();
+            updateMainFileInput();
             displayNewImagePreviews();
+            updateImageCounter();
+            toggleImageActions();
         }
 
         // Función para actualizar el input de archivos con las nuevas imágenes
-        function updateNewFileInput() {
+        function updateMainFileInput() {
             const fileInput = document.getElementById('nuevas_imagenes');
             const dt = new DataTransfer();
             
@@ -523,30 +917,40 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
             });
             
             fileInput.files = dt.files;
+        }
+
+        function updateImageCounter() {
+            const counter = document.getElementById('imageCounter');
+            const count = selectedNewFiles.length;
+            counter.textContent = `${count} imagen${count !== 1 ? 'es' : ''} seleccionada${count !== 1 ? 's' : ''}`;
+        }
+
+        function toggleImageActions() {
+            const actions = document.getElementById('imageActions');
+            const initialUpload = document.getElementById('initialUploadSection');
             
-            // Actualizar display
-            const display = document.querySelector('.file-input-display');
             if (selectedNewFiles.length > 0) {
-                display.textContent = `${selectedNewFiles.length} archivo(s) seleccionado(s)`;
-                display.style.background = '#e8f5e8';
-                display.style.color = '#27ae60';
+                actions.style.display = 'flex';
+                initialUpload.style.display = 'none';
             } else {
-                display.textContent = 'Seleccionar archivos de imagen o arrastra aquí';
-                display.style.background = '#f8f9fa';
-                display.style.color = '#3498db';
+                actions.style.display = 'none';
+                initialUpload.style.display = 'block';
             }
         }
 
         // Función para limpiar vista previa de nuevas imágenes
         function clearNewImagePreviews() {
             selectedNewFiles = [];
-            document.getElementById('newImagePreviewContainer').innerHTML = '';
+            const container = document.getElementById('newImagePreviewContainer');
+            container.innerHTML = '';
+            container.style.display = 'none';
+            
             const fileInput = document.getElementById('nuevas_imagenes');
             fileInput.value = '';
-            const display = document.querySelector('.file-input-display');
-            display.textContent = 'Seleccionar archivos de imagen o arrastra aquí';
-            display.style.background = '#f8f9fa';
-            display.style.color = '#3498db';
+            
+            document.getElementById('additionalImages').value = '';
+            updateImageCounter();
+            toggleImageActions();
         }
 
         // Función para limpiar completamente el formulario
@@ -646,30 +1050,54 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
             });
         });
 
-        // Drag and drop para archivos
-        const fileInputWrapper = document.querySelector('.file-input-wrapper');
+        // Drag and drop para la zona de carga inicial
+        const initialUploadSection = document.getElementById('initialUploadSection');
         
-        if (fileInputWrapper) {
-            fileInputWrapper.addEventListener('dragover', function(e) {
+        if (initialUploadSection) {
+            initialUploadSection.addEventListener('dragover', function(e) {
                 e.preventDefault();
-                this.style.background = '#e3f2fd';
+                this.style.background = 'linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%)';
+                this.style.borderColor = '#2196f3';
             });
             
-            fileInputWrapper.addEventListener('dragleave', function(e) {
+            initialUploadSection.addEventListener('dragleave', function(e) {
                 e.preventDefault();
-                this.style.background = '#f8f9fa';
+                this.style.background = 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)';
+                this.style.borderColor = '#3498db';
             });
             
-            fileInputWrapper.addEventListener('drop', function(e) {
+            initialUploadSection.addEventListener('drop', function(e) {
                 e.preventDefault();
-                this.style.background = '#f8f9fa';
+                this.style.background = 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)';
+                this.style.borderColor = '#3498db';
                 
                 const files = Array.from(e.dataTransfer.files);
-                selectedNewFiles = files;
-                updateNewFileInput();
+                selectedNewFiles = files.filter(file => file.type.startsWith('image/'));
+                updateMainFileInput();
                 displayNewImagePreviews();
+                updateImageCounter();
+                toggleImageActions();
             });
         }
+
+        // Inicializar contador y acciones al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            updateImageCounter();
+            toggleImageActions();
+        });
+
+        // Prevenir el envío del formulario si hay cambios sin guardar
+        document.getElementById('form_editar_noticia').addEventListener('submit', function(e) {
+            const hasImages = selectedNewFiles.length > 0 || imagenesActuales.length > 0;
+            
+            if (!hasImages) {
+                const confirmSubmit = confirm('Esta noticia no tiene imágenes asociadas. ¿Está seguro de que desea continuar?');
+                if (!confirmSubmit) {
+                    e.preventDefault();
+                    return false;
+                }
+            }
+        });
     </script>
 </body>
 </html>
