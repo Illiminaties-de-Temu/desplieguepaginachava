@@ -41,8 +41,10 @@ body {
     background: linear-gradient(#1d4ed8);
     color: var(--color-blanco);
     padding: 30px;
+    gap: 10px;
     text-align: center;
     position: relative;
+    display: flex;
 }
 
 .header h1 {
