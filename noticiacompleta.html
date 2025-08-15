@@ -4,9 +4,180 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Noticia Completa</title>
-        
+
+    <!-- Hojas de estilo externas -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.css" 
+        integrity="sha512-xWIcG98IArXxegzS8Vo9iYMKuPgbXOG8O1mlHrj4MmNFxsBDltGxHJGg4JK80MVEmLRpdbWtphhm+S6Wx9o73g==" 
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+  
+  <!-- Estilos de Astro -->
+  <link rel="stylesheet" href="/_astro/index.-G2uvBIl.css">
+  <link rel="stylesheet" href="/_astro/about.CJdYp1i6.css">
+  
+  <!-- Estilos personalizados -->
+  <style>
+    @import "https://fonts.googleapis.com/css2?family=Gothic+A1&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap";
+    
+    :root {
+      /* Variables de color */
+      --azul-primario: #05184a;
+      --azul-secundario: #1d4ed8;
+      --azul-claro: #60a5fa;
+      --azul-muy-claro: #dbeafe;
+      --azul-oscuro: #1e293b;
+      --azul-marino: #0f172a;
+      --azul-cielo: #0ea5e9;
+      --blanco: #ffffff;
+      --gris-claro: #f8fafc;
+      --gris-medio: #64748b;
+      --gris-fuerte: rgb(66, 72, 82);
+      --azul-gradiente: linear-gradient(135deg, #0a1840 0%, #051c40 100%);
+      --azul-fondo-imagenes: linear-gradient(
+        to right,
+        rgba(5, 26, 82, 0.689) 100%,
+        rgba(2, 16, 55, 0.05) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      --azul-fondo: linear-gradient(135deg, #0a1128 0%, #001f54 50%, #034078 100%);
+      --titulo-gradiante: linear-gradient(135deg, #1d4ed8, #05184a);
+    }
+    
+    /* Reset básico */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;
+    }
+    
+    html {
+      overflow-x: hidden;
+    }
+  </style>    
 </head>
 <body>
+
+    <!-- ==================== -->
+  <!-- HEADER Y NAVEGACIÓN  -->
+  <!-- ==================== -->
+  <header>
+    <nav class="navbar">
+      <!-- Botón hamburguesa (solo móvil) -->
+      <button class="hamburger-btn" id="hamburger-btn">
+        <i class="fas fa-bars"></i>
+      </button>
+      
+      <!-- Logo -->
+      <div class="logo">
+        <img src="/logo_chava.png" alt="Logo">
+      </div>
+      
+      <!-- Menú desktop -->
+      <ul class="menu">
+        <li><a href="/">Inicio</a></li>
+        <!--<li><a href="/events">Próximos Eventos</a></li>-->
+        <li><a href="/about">Sobre mí</a></li>
+        <!-- <li><a href="/team">Equipo</a></li>-->
+        <li><a href="/contact">Contacto</a></li>
+        <li><a href="/gallery">Galería</a></li>
+      </ul>
+      
+      <!-- Redes sociales desktop -->
+      <ul class="social-icons">
+        <li><a href="https://www.facebook.com/ChavaCalderonMX/" target="_blank"><img src="/facebook.png" alt="facebook chava calderon"></a></li>
+        <li><a href="https://www.instagram.com/schavacalderon_/?hl=es" target="_blank"><img src="/logotipo-de-instagram.png" alt="instagram chava calderon"></a></li>
+        <li><a href="https://www.tiktok.com/@chava.calderon90" target="_blank"><img src="/tik-tok.png" alt="tik tok chava calderon"></a></li>
+      </ul>
+    </nav>
+    
+    <!-- Menú mobile overlay -->
+    <div class="mobile-menu" id="mobile-menu">
+      <button class="close-btn" id="close-btn">
+        <i class="fas fa-times"></i>
+      </button>
+      
+      <ul class="menu">
+        <li><a href="/">Inicio</a></li>
+        <!-- <li><a href="/events">Próximos Eventos</a></li>-->
+        <li><a href="/about">Sobre mí</a></li>
+        <!-- <li><a href="/team">Equipo</a></li> -->
+        <li><a href="/contact">Contacto</a></li>
+        <li><a href="/gallery">Galería</a></li>
+      </ul>
+      
+      <!-- Redes sociales MOVIL -->
+      <ul class="social-icons">
+        <li><a href="https://www.facebook.com/ChavaCalderonMX/" target="_blank"><img src="/facebook.png" alt="facebook chava calderon"></a></li>
+        <li><a href="https://www.instagram.com/schavacalderon_/?hl=es" target="_blank"><img src="/logotipo-de-instagram.png" alt="instagram chava calderon"></a></li>
+        <li><a href="https://www.tiktok.com/@chava.calderon90" target="_blank"><img src="/tik-tok.png" alt="tik tok chava calderon"></a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Script para el funcionamiento del navbar -->
+  <script>
+    /**
+     * Función principal para inicializar el navbar móvil
+     * Maneja la apertura/cierre del menú móvil y sus interacciones
+     */
+    function initNavbar() {
+      // Elementos del DOM
+      const hamburgerBtn = document.getElementById('hamburger-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const closeBtn = document.getElementById('close-btn');
+      
+      // Verificar que todos los elementos existan
+      if (!hamburgerBtn || !mobileMenu || !closeBtn) {
+        console.error('Elementos del navbar no encontrados');
+        return;
+      }
+      
+      // Abrir menú móvil
+      hamburgerBtn.addEventListener('click', function() {
+        mobileMenu.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+      
+      // Cerrar menú móvil
+      closeBtn.addEventListener('click', function() {
+        mobileMenu.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      });
+      
+      // Cerrar menú al hacer clic en los enlaces
+      const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+      mobileMenuLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+          mobileMenu.classList.remove('active');
+          document.body.style.overflow = 'auto';
+        });
+      });
+      
+      // Cerrar menú al hacer clic en el fondo
+      mobileMenu.addEventListener('click', function(e) {
+        if (e.target === mobileMenu) {
+          mobileMenu.classList.remove('active');
+          document.body.style.overflow = 'auto';
+        }
+      });
+      
+      // Cerrar menú con tecla Escape
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+          mobileMenu.classList.remove('active');
+          document.body.style.overflow = 'auto';
+        }
+      });
+    }
+    
+    // Inicializar cuando el DOM esté listo
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initNavbar);
+    } else {
+      initNavbar();
+    }
+  </script>
+
     <div id="contenedor-noticia">
         <div class="loading">Cargando noticia...</div>
     </div>
@@ -74,7 +245,6 @@
                         `).join('')}
                     </div>
                 `;
-                
             }
 
             // Construir el HTML completo
@@ -91,5 +261,131 @@
         }
     });
     </script>
+
+    <!-- ==================== -->
+  <!-- FOOTER              -->
+  <!-- ==================== -->
+  <footer>
+    <!-- Efectos de fondo -->
+    <div class="particles-background" id="particles"></div>
+    
+    <!-- FIGURAS GEOMÉTRICAS DECORATIVAS -->
+    <div class="geometric-shapes">
+      <!-- Esquina superior izquierda -->
+      <div class="shape circle" style="width: 40px; height: 40px; top: 40%; left: 95%; animation-delay: 0s;"></div>
+      <div class="shape triangle" style="top: 10%; left: 19%; animation-delay: 3s;"></div>
+      
+      <!-- Esquina superior derecha -->
+      <div class="shape circle" style="width: 25px; height: 25px; top: 20%; right: 20%; animation-delay: 4s;"></div>
+      
+      <!-- Esquina inferior izquierda -->
+      <div class="shape triangle" style="bottom: 15%; top: 10%; left: 0%; animation-delay: 2s;"></div>
+      <div class="shape circle" style="width: 35px; height: 35px; bottom: 8%; left: 25%; animation-delay: 5s;"></div>
+      
+      <!-- Algunas figuras en los bordes laterales -->
+      <div class="shape circle" style="width: 20px; height: 20px; top: 50%; left: 3%; animation-delay: 6s;"></div>
+    </div>
+    
+    <!-- Efectos visuales -->
+    <div class="waves"></div>
+    <div class="glow-effect"></div>
+    
+    <!-- Contenido del footer -->
+    <div class="footer-container">
+      <!-- Redes sociales -->
+      <div class="footer-social">
+        <ul class="social-icons">
+          <li><a href="https://www.facebook.com/ChavaCalderonMX/" target="_blank"><img src="/facebook.png" alt="facebook chava calderon"></a></li>
+          <li><a href="https://www.instagram.com/schavacalderon_/?hl=es" target="_blank"><img src="/logotipo-de-instagram.png" alt="instagram chava calderon"></a></li>
+          <li><a href="https://www.tiktok.com/@chava.calderon90" target="_blank"><img src="/tik-tok.png" alt="tik tok chava calderon"></a></li>
+        </ul>
+      </div>
+      
+      <!-- Información legal y créditos -->
+      <div class="footer-bottom">
+        <p>&copy; 2025 Chava Calderón. Todos los derechos reservados</p>
+        <p>Desarrollado por <a href="https://geckcodex.online/" target="_blank">GECK Codex</a></p>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- Script para efectos visuales del footer -->
+  <script type="module">
+    /**
+     * Función para crear partículas animadas en el fondo
+     */
+    function initParticles() {
+      const particlesContainer = document.getElementById("particles");
+      
+      /**
+       * Crea una nueva partícula y la anima
+       */
+      function createParticle() {
+        const particle = document.createElement("div");
+        particle.className = "particle";
+        
+        // Tamaño aleatorio entre 1px y 3px
+        const size = Math.random() * 2 + 1;
+        particle.style.width = size + "px";
+        particle.style.height = size + "px";
+        
+        // Posición horizontal aleatoria
+        particle.style.left = Math.random() * 100 + "%";
+        
+        // Duración de animación aleatoria entre 6s y 10s
+        const duration = Math.random() * 4 + 6;
+        particle.style.animationDuration = duration + "s";
+        
+        // Retraso inicial aleatorio hasta 2s
+        const delay = Math.random() * 2;
+        particle.style.animationDelay = delay + "s";
+        
+        // Opacidad aleatoria entre 0.1 y 0.4
+        particle.style.opacity = Math.random() * 0.3 + 0.1;
+        
+        // Añadir partícula al contenedor
+        particlesContainer.appendChild(particle);
+        
+        // Eliminar partícula después de que termine su animación
+        setTimeout(() => {
+          if (particle.parentNode) {
+            particle.parentNode.removeChild(particle);
+          }
+        }, (duration + delay) * 1000);
+      }
+      
+      // Crear nuevas partículas cada 800ms
+      setInterval(createParticle, 800);
+    }
+    
+    // Inicializar partículas cuando el DOM esté listo
+    document.addEventListener("DOMContentLoaded", initParticles);
+    
+    // Efecto de movimiento con el mouse para las figuras geométricas
+    document.addEventListener("mousemove", (e) => {
+      const shapes = document.querySelectorAll(".shape");
+      const mouseX = e.clientX / window.innerWidth;
+      const mouseY = e.clientY / window.innerHeight;
+      
+      shapes.forEach((shape, index) => {
+        const intensity = (index + 1) * 0.2;
+        const moveX = (mouseX - 0.5) * intensity;
+        const moveY = (mouseY - 0.5) * intensity;
+        
+        shape.style.transform += ` translate(${moveX}px, ${moveY}px)`;
+      });
+    });
+    
+    // Efecto hover para los iconos sociales
+    document.querySelectorAll(".social-icons a").forEach(icon => {
+      icon.addEventListener("mouseenter", () => {
+        icon.style.boxShadow = "0 0 25px rgba(0, 191, 255, 0.6)";
+      });
+      
+      icon.addEventListener("mouseleave", () => {
+        icon.style.boxShadow = "";
+      });
+    });
+  </script>
 </body>
 </html>
