@@ -245,29 +245,6 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
             border: 1px solid #dee2e6;
         }
 
-        .add-more-btn {
-            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            min-height: 50px;
-            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.2);
-        }
-
-        .add-more-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
-            background: linear-gradient(135deg, #229954 0%, #27ae60 100%);
-        }
-
         .image-counter {
             background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
             color: white;
@@ -281,29 +258,6 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .clear-images-btn {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            min-height: 50px;
-            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.2);
-        }
-
-        .clear-images-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
-            background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
         }
 
         /* Estado vacío */
@@ -589,28 +543,16 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
                                            multiple 
                                            accept="image/*">
                                     <div class="file-upload-content">
-                                        <div class="file-upload-icon">➕</div>
-                                        <div class="file-upload-text">Agregar nuevas imágenes</div>
+                                        <div class="file-upload-icon">📁</div>
+                                        <div class="file-upload-text">Seleccionar nuevas imágenes</div>
                                         <div class="file-upload-hint">Haz clic para seleccionar archivos o arrastra aquí</div>
                                     </div>
                                 </div>
                                 
-                                <!-- Acciones de imagen -->
-                                <div class="image-actions" id="image_actions" style="display: none;">
-                                    <button type="button" class="add-more-btn" onclick="document.getElementById('additional_images_input').click()">
-                                        ➕ Agregar más imágenes
-                                    </button>
+                                <!-- Contador de imágenes -->
+                                <div class="image-actions" id="image_counter_section">
                                     <div class="image-counter" id="image_counter">0 imágenes</div>
-                                    <button type="button" class="clear-images-btn" onclick="clearAllNewImages()">
-                                        🗑️ Limpiar nuevas
-                                    </button>
                                 </div>
-                                
-                                <input type="file" 
-                                       id="additional_images_input" 
-                                       multiple 
-                                       accept="image/*" 
-                                       style="display: none;">
                             </div>
                         </div>
                     </div>
@@ -631,6 +573,7 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
         let imagenesActuales = [];
         let selectedNewFiles = [];
         let draggedElement = null;
+        let draggedIndex = -1;
         let allImages = []; // Array combinado de todas las imágenes
 
         // Cargar lista de noticias al cargar la página
@@ -645,13 +588,6 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
             document.getElementById('nuevas_imagenes_input').addEventListener('change', function(e) {
                 const files = Array.from(e.target.files);
                 addNewFiles(files);
-            });
-
-            // Event listener para imágenes adicionales
-            document.getElementById('additional_images_input').addEventListener('change', function(e) {
-                const newFiles = Array.from(e.target.files);
-                addNewFiles(newFiles);
-                this.value = '';
             });
 
             // Event listener para el selector de noticias
@@ -808,7 +744,6 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
             
             displayAllImages();
             updateImageCounter();
-            toggleImageActions();
             updateContainerState();
         }
 
@@ -868,18 +803,20 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
             });
         }
 
-        // Configurar drag and drop para las imágenes
+        // Configurar drag and drop para las imágenes (CORREGIDO)
         function setupDragAndDrop(element) {
             element.addEventListener('dragstart', function(e) {
                 draggedElement = this;
+                draggedIndex = parseInt(this.dataset.index);
                 this.classList.add('dragging');
                 e.dataTransfer.effectAllowed = 'move';
-                e.dataTransfer.setData('text/html', this.outerHTML);
+                e.dataTransfer.setData('text/html', ''); // Solo placeholder, no usaremos esto
             });
 
-            element.addEventListener('dragend', function() {
+            element.addEventListener('dragend', function(e) {
                 this.classList.remove('dragging');
                 draggedElement = null;
+                draggedIndex = -1;
                 
                 // Limpiar todos los indicadores de drag-over
                 document.querySelectorAll('.image-preview-item').forEach(item => {
@@ -897,23 +834,23 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
                 }
             });
 
-            element.addEventListener('dragleave', function() {
+            element.addEventListener('dragleave', function(e) {
                 this.classList.remove('drag-over');
             });
 
             element.addEventListener('drop', function(e) {
                 e.preventDefault();
                 
-                if (this !== draggedElement) {
-                    const draggedIndex = parseInt(draggedElement.dataset.index);
+                if (this !== draggedElement && draggedElement) {
                     const targetIndex = parseInt(this.dataset.index);
                     
-                    // Reordenar el array
-                    const draggedImage = allImages[draggedIndex];
-                    allImages.splice(draggedIndex, 1);
+                    // Remover elemento arrastrado de su posición actual
+                    const draggedImage = allImages.splice(draggedIndex, 1)[0];
+                    
+                    // Insertar en la nueva posición
                     allImages.splice(targetIndex, 0, draggedImage);
                     
-                    // Actualizar vista
+                    // Actualizar vista sin duplicar
                     updateAllImages();
                     actualizarOrdenImagenes();
                     showTempMessage('Orden de imágenes actualizado', 'success');
@@ -932,13 +869,17 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
                 zone.addEventListener('dragover', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    this.classList.add('drag-over');
+                    
+                    // Solo activar drag-over si no estamos arrastrando una imagen interna
+                    if (!draggedElement) {
+                        this.classList.add('drag-over');
+                    }
                 });
                 
                 zone.addEventListener('dragleave', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    if (!this.contains(e.relatedTarget)) {
+                    if (!this.contains(e.relatedTarget) && !draggedElement) {
                         this.classList.remove('drag-over');
                     }
                 });
@@ -948,12 +889,15 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
                     e.stopPropagation();
                     this.classList.remove('drag-over');
                     
-                    const files = Array.from(e.dataTransfer.files);
-                    const imageFiles = files.filter(file => file.type.startsWith('image/'));
-                    
-                    if (imageFiles.length > 0) {
-                        addNewFiles(imageFiles);
-                        showTempMessage(`${imageFiles.length} imagen${imageFiles.length !== 1 ? 'es' : ''} agregada${imageFiles.length !== 1 ? 's' : ''}`, 'success');
+                    // Solo procesar archivos si no estamos reorganizando imágenes internas
+                    if (!draggedElement && e.dataTransfer.files.length > 0) {
+                        const files = Array.from(e.dataTransfer.files);
+                        const imageFiles = files.filter(file => file.type.startsWith('image/'));
+                        
+                        if (imageFiles.length > 0) {
+                            addNewFiles(imageFiles);
+                            showTempMessage(`${imageFiles.length} imagen${imageFiles.length !== 1 ? 'es' : ''} agregada${imageFiles.length !== 1 ? 's' : ''}`, 'success');
+                        }
                     }
                 });
             });
@@ -1031,18 +975,16 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
             const currentImages = imagenesActuales.length;
             const newImages = selectedNewFiles.length;
             
-            counter.innerHTML = `
-                <div>${totalImages} imagen${totalImages !== 1 ? 'es' : ''} total${totalImages !== 1 ? 'es' : ''}</div>
-                <div style="font-size: 0.8em; opacity: 0.8;">
-                    ${currentImages} actual${currentImages !== 1 ? 'es' : ''} • ${newImages} nueva${newImages !== 1 ? 's' : ''}
-                </div>
-            `;
-        }
-
-        // Función para mostrar/ocultar acciones
-        function toggleImageActions() {
-            const actions = document.getElementById('image_actions');
-            actions.style.display = selectedNewFiles.length > 0 ? 'flex' : 'none';
+            if (totalImages === 0) {
+                counter.innerHTML = 'Sin imágenes';
+            } else {
+                counter.innerHTML = `
+                    <div>${totalImages} imagen${totalImages !== 1 ? 'es' : ''} total${totalImages !== 1 ? 'es' : ''}</div>
+                    <div style="font-size: 0.8em; opacity: 0.8;">
+                        ${currentImages} actual${currentImages !== 1 ? 'es' : ''} • ${newImages} nueva${newImages !== 1 ? 's' : ''}
+                    </div>
+                `;
+            }
         }
 
         // Función para actualizar estado del contenedor
@@ -1052,21 +994,6 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
                 container.classList.add('has-images');
             } else {
                 container.classList.remove('has-images');
-            }
-        }
-
-        // Función para limpiar solo las nuevas imágenes
-        function clearAllNewImages() {
-            if (selectedNewFiles.length === 0) {
-                showTempMessage('No hay nuevas imágenes para limpiar', 'error');
-                return;
-            }
-            
-            if (confirm('¿Está seguro de que desea eliminar todas las nuevas imágenes?')) {
-                selectedNewFiles = [];
-                updateAllImages();
-                updateFileInput();
-                showTempMessage('Nuevas imágenes eliminadas', 'success');
             }
         }
 
@@ -1106,7 +1033,6 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
             
             // Limpiar inputs de archivos
             document.getElementById('nuevas_imagenes_input').value = '';
-            document.getElementById('additional_images_input').value = '';
             
             // Actualizar vista
             updateAllImages();
