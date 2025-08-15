@@ -7,7 +7,6 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
     exit();
 }
 
-
 ?>
 
 <!DOCTYPE html>
@@ -17,7 +16,62 @@ if (!isset($_SESSION['nombreusuario']) || $_SESSION['tipousuario'] !== 'editor')
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración</title>
     <link rel="stylesheet" href="../estilo.css">
+    <style>
+    /* FUENTE GOTHAM */
+    @import url('https://fonts.cdnfonts.com/css/gotham');
+    * {
+        font-family: 'Gotham', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
+    /* PALETA DE COLORES */
+    body {
+        background-color: #f0f4f8;
+        color: #2a3441;
+    }
+
+    .container {
+        background: white;
+        border: 1px solid rgba(0, 145, 255, 0.2);
+    }
+
+    .header {
+        background: linear-gradient(135deg, #1d4ed8, #083057);
+        color: white;
+    }
+
+    .logout-btn {
+        background: #e74c3c;
+        color: white;
+    }
+
+    .user-info {
+        background: rgba(29, 78, 216, 0.1);
+    }
+
+    .alert {
+        background: #e3f2fd;
+        border-left: 4px solid #1d4ed8;
+    }
+
+    .nav-category {
+        background: white;
+        border: 1px solid #e0e0e0;
+    }
+
+    .nav-link {
+        background: #f8f9fa;
+        border-left: 3px solid #1d4ed8;
+        color: #2a3441;
+    }
+
+    .nav-link:hover {
+        background: #e3f2fd;
+    }
+
+    .nav-category h3 {
+        color: #1d4ed8;
+    }  
+    </style>
 </head>
 <body>
     <div class="container">
