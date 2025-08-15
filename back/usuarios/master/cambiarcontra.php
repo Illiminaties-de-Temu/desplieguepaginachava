@@ -32,138 +32,74 @@ if (isset($_SESSION['mensaje_exito'])) {
     <title>Cambiar Contraseña - Sistema de Administración</title>
     <link rel="stylesheet" href="../estilo.css">
     <style>
-        /* Estilos para los campos de contraseña */
-        .form-group {
-            position: relative;
-        }
-        
-        .form-group input[type="password"],
-        .form-group input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            padding-right: 40px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-            box-sizing: border-box;
-        }
-        
-        .form-group input[type="password"]:focus,
-        .form-group input[type="text"]:focus {
-            outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-        }
-        
-        .toggle-password {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 18px;
-            z-index: 1;
-        }
-        
-        .validation-message {
-            margin-top: 5px;
-            font-size: 12px;
-            padding: 5px;
-            border-radius: 3px;
-            display: block;
-            min-height: 15px;
-        }
-        
-        .validation-success {
-            color: #155724;
-            background-color: #d4edda;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .validation-error {
-            color: #721c24;
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-        }
-        
-        .password-requirements {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 4px;
-            border-left: 4px solid #007bff;
-        }
-        
-        .password-requirements h4 {
-            margin-top: 0;
-            margin-bottom: 10px;
-            color: #495057;
-        }
-        
-        .password-requirements ul {
-            margin: 0;
-            padding-left: 20px;
-        }
-        
-        .requirement {
-            margin-bottom: 5px;
-            color: #dc3545;
-            font-size: 14px;
-        }
-        
-        .requirement.met {
-            color: #28a745;
-        }
-        
-        .alert {
-            padding: 12px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-            border-left: 4px solid;
-        }
-        
-        .alert-info {
-            color: #0c5460;
-            background-color: #d1ecf1;
-            border-left-color: #17a2b8;
-        }
-        
-        .buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        
-        .btn {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            text-decoration: none;
-            display: inline-block;
-        }
-        
-        .btn-secondary {
-            background-color: #6c757d;
-            color: white;
-        }
-        
-        .btn-primary {
-            background-color: #007bff;
-            color: white;
-        }
-        
-        .btn:hover {
-            opacity: 0.9;
-        }
-        
-        .btn:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-        }
-    </style>
+    /* FUENTE GOTHAM */
+    @import url('https://fonts.cdnfonts.com/css/gotham');
+    * {
+        font-family: 'Gotham', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* PALETA DE COLORES */
+    body {
+        background-color: #f0f4f8;
+        color: #2a3441;
+    }
+
+    .container {
+        background: white;
+        border: 1px solid rgba(29, 78, 216, 0.2);
+    }
+
+    .header {
+        background: linear-gradient(135deg, #1d4ed8, #083057);
+        color: white;
+    }
+
+    .logout-btn {
+        background: #e74c3c;
+        color: white;
+    }
+
+    .user-info {
+        background: rgba(29, 78, 216, 0.1);
+    }
+
+    .alert-info {
+        background-color: #e3f2fd;
+        border-left-color: #1d4ed8;
+    }
+
+    .btn-primary {
+        background-color: #1d4ed8;
+        color: white;
+    }
+
+    .btn-secondary {
+        background-color: #2a3441;
+        color: white;
+    }
+
+    .validation-success {
+        color: #155724;
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+    }
+
+    .validation-error {
+        color: #721c24;
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+    }
+
+    .password-requirements {
+        background-color: #f8f9fa;
+        border-left-color: #1d4ed8;
+    }
+
+    .form-group input:focus {
+        border-color: #1d4ed8;
+        box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.25);
+    }
+</style>
 </head>
 <body>
     <div class="container">
