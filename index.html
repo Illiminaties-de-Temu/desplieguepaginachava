@@ -390,6 +390,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Inicializar funcionalidad del carrusel
                 inicializarCarrusel();
+                
+                // NUEVO: Verificador periódico de integridad de IDs
+                verificarIntegridadPeriodica();
             } else {
                 mostrarError('No hay noticias destacadas disponibles');
             }
@@ -418,6 +421,45 @@ document.addEventListener('DOMContentLoaded', function() {
         if (duplicados.length > 0) {
             console.warn('IDs duplicados encontrados:', duplicados);
         }
+        
+        return { ids, duplicados };
+    }
+    
+    // NUEVA: Función para verificar integridad periódica
+    function verificarIntegridadPeriodica() {
+        // Guardar IDs originales al inicio
+        const slides = document.querySelectorAll('.noticia-slide[data-noticia-id]');
+        const idsOriginales = Array.from(slides).map((slide, index) => ({
+            index,
+            id: slide.getAttribute('data-noticia-id'),
+            element: slide
+        }));
+        
+        console.log('🔒 IDs originales guardados:', idsOriginales.map(item => ({index: item.index, id: item.id})));
+        
+        // Verificar cada 2 segundos que los IDs no cambien
+        setInterval(() => {
+            let cambiosDetectados = false;
+            
+            idsOriginales.forEach((original) => {
+                const idActual = original.element.getAttribute('data-noticia-id');
+                if (idActual !== original.id) {
+                    console.error(`🚨 CAMBIO DE ID DETECTADO en slide ${original.index}:`, {
+                        original: original.id,
+                        actual: idActual
+                    });
+                    
+                    // Restaurar ID original
+                    original.element.setAttribute('data-noticia-id', original.id);
+                    console.log(`✅ ID restaurado para slide ${original.index}: ${original.id}`);
+                    cambiosDetectados = true;
+                }
+            });
+            
+            if (cambiosDetectados) {
+                console.log('🔧 Verificación de integridad completada - IDs restaurados');
+            }
+        }, 2000);
     }
     
     // Función para mostrar errores
@@ -436,13 +478,22 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     }
     
-    // Función para manejar el carrusel (mejorada)
+    // Función para manejar el carrusel (CORREGIDA)
     function inicializarCarrusel() {
         const slides = document.querySelectorAll('.noticia-slide');
         const puntos = document.querySelectorAll('.punto');
         const btnAnterior = document.getElementById('botonAnterior');
         const btnSiguiente = document.getElementById('botonSiguiente');
         let slideActual = 0;
+        
+        // IMPORTANTE: Crear array inmutable con los IDs originales para preservar la asociación
+        const slidesData = Array.from(slides).map((slide, index) => ({
+            element: slide,
+            originalId: slide.getAttribute('data-noticia-id'),
+            index: index
+        }));
+        
+        console.log('Slides data preservados:', slidesData.map(s => ({index: s.index, id: s.originalId})));
         
         function mostrarSlide(index) {
             // Validar índice
@@ -451,51 +502,84 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
+            // SOLO cambiar visibilidad, NO tocar los atributos data-noticia-id
             slides.forEach((slide, i) => {
-                slide.classList.toggle('activa', i === index);
+                slide.classList.remove('activa');
                 if (puntos[i]) {
-                    puntos[i].classList.toggle('activo', i === index);
+                    puntos[i].classList.remove('activo');
                 }
             });
+            
+            // Activar el slide correcto
+            slides[index].classList.add('activa');
+            if (puntos[index]) {
+                puntos[index].classList.add('activo');
+            }
+            
             slideActual = index;
             
-            // Debug del slide actual
+            // Debug del slide actual - verificar que el ID se mantiene
             const slideActivo = slides[index];
             if (slideActivo) {
-                const id = slideActivo.getAttribute('data-noticia-id');
-                console.log(`Slide activo: ${index}, ID: ${id}`);
+                const idActual = slideActivo.getAttribute('data-noticia-id');
+                const idOriginal = slidesData[index].originalId;
+                
+                console.log(`Slide activo: ${index}`, {
+                    idActual: idActual,
+                    idOriginal: idOriginal,
+                    coinciden: idActual === idOriginal
+                });
+                
+                // Si los IDs no coinciden, restaurar el original
+                if (idActual !== idOriginal) {
+                    console.warn(`⚠️  ID incorrecto detectado. Restaurando...`);
+                    slideActivo.setAttribute('data-noticia-id', idOriginal);
+                }
             }
         }
         
-        // Eventos de los botones de navegación
+        // Eventos de los botones de navegación (MEJORADOS)
         if (btnAnterior && btnSiguiente) {
             btnAnterior.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                
+                console.log('🔙 Botón anterior clickeado. Slide actual:', slideActual);
                 const nuevoIndex = (slideActual - 1 + slides.length) % slides.length;
+                console.log('🔙 Cambiando a slide:', nuevoIndex);
+                
                 mostrarSlide(nuevoIndex);
             });
             
             btnSiguiente.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                
+                console.log('▶️  Botón siguiente clickeado. Slide actual:', slideActual);
                 const nuevoIndex = (slideActual + 1) % slides.length;
+                console.log('▶️  Cambiando a slide:', nuevoIndex);
+                
                 mostrarSlide(nuevoIndex);
             });
         }
         
-        // Evento click en puntos indicadores
+        // Evento click en puntos indicadores (MEJORADO)
         puntos.forEach((punto, index) => {
             punto.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                
+                console.log(`🎯 Punto ${index} clickeado`);
                 mostrarSlide(index);
             });
         });
         
-        // Cambio automático cada 7 segundos (pausar en hover)
+        // Cambio automático (MEJORADO con más debugging)
         let intervaloCarrusel = setInterval(() => {
+            console.log('⏰ Cambio automático activado. Slide actual:', slideActual);
             const nuevoIndex = (slideActual + 1) % slides.length;
+            console.log('⏰ Cambiando automáticamente a slide:', nuevoIndex);
+            
             mostrarSlide(nuevoIndex);
         }, 7000);
         
