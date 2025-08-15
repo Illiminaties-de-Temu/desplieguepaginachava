@@ -300,51 +300,47 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Limpiar contenedores
                 carrusel.innerHTML = '';
                 puntos.innerHTML = '';
-
-                console.log('Datos de noticia recibidos:', noticia); // Antes de crear slides
-                console.log('ID asignado al slide:', noticia.id); // Al crear cada slide
                 
                 // Crear slides para cada noticia
-               
-                  data.data.forEach((noticia, index) => {
-                      const slide = document.createElement('div');
-                      slide.className = `noticia-slide ${index === 0 ? 'activa' : ''}`;
-                      slide.style.backgroundImage = `url('${noticia.imagen}')`;
-                      
-                      // Guardar el ID en el atributo data
-                      slide.dataset.noticiaId = noticia.id;
-                      
-                      // Contenido del slide (sin cambios)
-                      slide.innerHTML = `
-                          <div class="contenido-noticia">
-                              ${noticia.titulo ? `<h4>${noticia.titulo}</h4>` : ''}
-                              <p>${noticia.contenido}...</p>
-                              <div class="info-noticia">
-                                  <span>${noticia.fecha}</span>
-                              </div>
-                          </div>
-                      `;
-                      
-                      // Evento click CORREGIDO
-                      console.log(`Configurando slide ${index} con ID: ${noticia.id}`);
-                      slide.addEventListener('click', function(e) {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          
-                          // Obtener el ID del atributo data
-                          const idNoticia = this.dataset.noticiaId;
-                          
-                          console.log('Redirigiendo a noticia ID:', idNoticia);
-                          if (!idNoticia || isNaN(idNoticia)) {
-                              console.error('ID de noticia no válido:', idNoticia);
-                              return;
-                          }
-                          
-                          window.location.href = `noticiacompleta.html?id=${idNoticia}`;
-                      });
-                      
-                      carrusel.appendChild(slide);
-
+                data.data.forEach((noticia, index) => {
+                    const slide = document.createElement('div');
+                    slide.className = `noticia-slide ${index === 0 ? 'activa' : ''}`;
+                    slide.style.backgroundImage = `url('${noticia.imagen}')`;
+                    
+                    // 1. Asignar el ID como atributo personalizado (más robusto)
+                    slide.setAttribute('data-noticia-id', noticia.id);
+                    
+                    // 2. Contenido HTML (sin cambios)
+                    slide.innerHTML = `
+                        <div class="contenido-noticia">
+                            ${noticia.titulo ? `<h4>${noticia.titulo}</h4>` : ''}
+                            <p>${noticia.contenido}...</p>
+                            <div class="info-noticia">
+                                <span>${noticia.fecha}</span>
+                            </div>
+                            ${noticia.todas_imagenes && noticia.todas_imagenes.length > 1 ? 
+                                `<div class="contador-imagenes">+${noticia.todas_imagenes.length - 1} imágenes</div>` : ''}
+                        </div>
+                    `;
+                    
+                    // 3. Evento click MEJORADO (con verificación)
+                    slide.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation(); // Importante para evitar conflictos
+                        
+                        const idNoticia = this.getAttribute('data-noticia-id');
+                        
+                        // Verificación adicional
+                        if (!idNoticia || isNaN(idNoticia)) {
+                            console.error('ID de noticia no válido:', idNoticia);
+                            return;
+                        }
+                        
+                        console.log('Redirigiendo a noticia ID:', idNoticia); // Para depuración
+                        window.location.href = `noticiacompleta.html?id=${idNoticia}`;
+                    });
+                    
+                    carrusel.appendChild(slide);
                     // Crear punto indicador
                     const punto = document.createElement('div');
                     punto.className = `punto ${index === 0 ? 'activo' : ''}`;
