@@ -403,7 +403,7 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
                 </script>
             <?php endif; ?>
 
-            <form method="POST" id="createNewsForm" action="../bd/guardar_noticia.php" enctype="multipart/form-data">
+            <form method="POST" id="createNewsForm" action="../bd/guardar_noticia_escri.php" enctype="multipart/form-data">
                 <div class="form-section">
                     <h2>Información de la Noticia</h2>
                     
