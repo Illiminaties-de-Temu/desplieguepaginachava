@@ -342,7 +342,6 @@ document.addEventListener('DOMContentLoaded', function() {
                             <p>${noticia.contenido}...</p>
                             <div class="info-noticia">
                                 <span>${noticia.fecha}</span>
-                                <span class="debug-id" style="color: #ff0; font-size: 12px;">ID: ${noticiaId}</span>
                             </div>
                             ${noticia.todas_imagenes && noticia.todas_imagenes.length > 1 ? 
                                 `<div class="contador-imagenes">+${noticia.todas_imagenes.length - 1} imágenes</div>` : ''}
@@ -647,7 +646,7 @@ document.addEventListener('DOMContentLoaded', function() {
             mostrarSlide(nuevoIndex);
         }, 5000);
         
-        // Pausar carrusel automático cuando el mouse está sobre el carrusel
+      
         
     }
 });
