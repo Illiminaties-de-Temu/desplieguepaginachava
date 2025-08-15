@@ -33,6 +33,12 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
     <title>Crear Noticia - Panel Master</title>
     <link rel="stylesheet" href="../estilo.css">
     <style>
+        /* FUENTE GOTHAM */
+        @import url('https://fonts.cdnfonts.com/css/gotham');
+        * {
+            font-family: 'Gotham', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
         .image-preview-container {
             margin-top: 10px;
             display: flex;
@@ -49,7 +55,7 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
             width: 100px;
             height: 100px;
             object-fit: cover;
-            border: 2px solid #ddd;
+            border: 2px solid #e0e0e0;
             border-radius: 5px;
         }
         
@@ -57,7 +63,7 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
             position: absolute;
             top: -5px;
             right: -5px;
-            background: #ff4444;
+            background: #e74c3c;
             color: white;
             border: none;
             border-radius: 50%;
@@ -69,15 +75,15 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
         }
         
         .remove-image:hover {
-            background: #cc0000;
+            background: #c0392b;
         }
 
         /* Estilos para el campo de imágenes múltiples */
         .file-upload-section {
-            border: 2px dashed #3498db;
+            border: 2px dashed #1d4ed8;
             border-radius: 12px;
             padding: 20px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            background: linear-gradient(135deg, #f0f4f8 0%, #e3f2fd 100%);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -90,17 +96,17 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(52, 152, 219, 0.1), transparent);
+            background: linear-gradient(45deg, transparent, rgba(29, 78, 216, 0.1), transparent);
             transform: rotate(45deg);
             transition: all 0.3s ease;
             opacity: 0;
         }
 
         .file-upload-section:hover {
-            border-color: #2980b9;
-            background: linear-gradient(135deg, #ffffff 0%, #f1f3f4 100%);
+            border-color: #083057;
+            background: linear-gradient(135deg, white 0%, #f0f4f8 100%);
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.15);
+            box-shadow: 0 8px 25px rgba(29, 78, 216, 0.15);
         }
 
         .file-upload-section:hover::before {
@@ -121,22 +127,23 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
 
         .file-upload-icon {
             font-size: 3em;
-            color: #3498db;
+            color: #1d4ed8;
             margin-bottom: 15px;
             display: block;
         }
 
         .file-upload-text {
-            color: #2c3e50;
+            color: #2a3441;
             font-weight: 600;
             font-size: 1.1em;
             margin-bottom: 8px;
         }
 
         .file-upload-hint {
-            color: #7f8c8d;
+            color: #2a3441;
             font-size: 0.9em;
             font-style: italic;
+            opacity: 0.7;
         }
 
         input[type="file"] {
@@ -157,13 +164,13 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
             flex-wrap: wrap;
             justify-content: center;
             padding: 20px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            background: linear-gradient(135deg, #f0f4f8 0%, #e3f2fd 100%);
             border-radius: 15px;
-            border: 1px solid #dee2e6;
+            border: 1px solid #e0e0e0;
         }
 
         .add-more-btn {
-            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #083057 100%);
             color: white;
             border: none;
             padding: 15px 30px;
@@ -176,28 +183,28 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
             align-items: center;
             gap: 12px;
             min-height: 50px;
-            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.2);
+            box-shadow: 0 4px 15px rgba(29, 78, 216, 0.2);
         }
 
         .add-more-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
-            background: linear-gradient(135deg, #229954 0%, #27ae60 100%);
+            box-shadow: 0 8px 25px rgba(29, 78, 216, 0.4);
+            background: linear-gradient(135deg, #083057 0%, #1d4ed8 100%);
         }
 
         .add-more-btn:active {
             transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+            box-shadow: 0 4px 15px rgba(29, 78, 216, 0.3);
         }
 
         .image-counter {
-            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #083057 100%);
             color: white;
             padding: 12px 25px;
             border-radius: 25px;
             font-size: 16px;
             font-weight: 700;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+            box-shadow: 0 4px 15px rgba(29, 78, 216, 0.2);
             border: 2px solid rgba(255, 255, 255, 0.2);
             min-height: 50px;
             display: flex;
@@ -205,12 +212,10 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
             justify-content: center;
         }
 
-
-
         /* Estilos para el checkbox de noticia destacada */
         .highlight-section {
-            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-            border: 2px solid #f39c12;
+            background: linear-gradient(135deg, #e3f2fd 0%, rgba(29, 78, 216, 0.1) 100%);
+            border: 2px solid #1d4ed8;
             border-radius: 12px;
             padding: 20px;
             position: relative;
@@ -226,12 +231,13 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
             font-size: 1.8em;
             opacity: 0.3;
             transition: all 0.3s ease;
+            color: #1d4ed8;
         }
 
         .highlight-section:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(243, 156, 18, 0.2);
-            border-color: #e67e22;
+            box-shadow: 0 8px 25px rgba(29, 78, 216, 0.2);
+            border-color: #083057;
         }
 
         .highlight-section:hover::before {
@@ -263,7 +269,7 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
         .checkbox-style {
             width: 20px;
             height: 20px;
-            border: 2px solid #f39c12;
+            border: 2px solid #1d4ed8;
             border-radius: 4px;
             background: white;
             display: flex;
@@ -274,8 +280,8 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
         }
 
         .custom-checkbox input[type="checkbox"]:checked + .checkbox-style {
-            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-            border-color: #d68910;
+            background: linear-gradient(135deg, #1d4ed8 0%, #083057 100%);
+            border-color: #083057;
             transform: scale(1.1);
         }
 
@@ -291,7 +297,7 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
         }
 
         .checkbox-label {
-            color: #2c3e50;
+            color: #2a3441;
             font-weight: 600;
             font-size: 1.1em;
             margin-bottom: 8px !important;
@@ -300,22 +306,23 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
         }
 
         .form-hint {
-            color: #7f8c8d !important;
+            color: #2a3441 !important;
             font-size: 0.9em !important;
             font-style: italic;
             line-height: 1.4;
             margin: 0 !important;
+            opacity: 0.7;
         }
 
         /* Ajustes para mantener la coherencia con los estilos existentes */
         .form-group label[for="imagen"] {
             margin-bottom: 15px;
             font-size: 1.1em;
-            color: #2c3e50;
+            color: #2a3441;
             font-weight: 600;
         }
 
-            /* Responsive adjustments */
+        /* Responsive adjustments */
         @media (max-width: 768px) {
             .file-upload-section {
                 padding: 15px;
