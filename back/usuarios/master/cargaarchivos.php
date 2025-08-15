@@ -150,59 +150,62 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
 
         /* Botones para agregar más imágenes */
         .image-actions {
-            margin-top: 15px;
+            margin-top: 25px;
             display: flex;
-            gap: 10px;
+            gap: 15px;
             align-items: center;
             flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            border: 1px solid #dee2e6;
         }
 
         .add-more-btn {
             background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 15px 30px;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 16px;
+            font-weight: 700;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
+            min-height: 50px;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.2);
         }
 
         .add-more-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
             background: linear-gradient(135deg, #229954 0%, #27ae60 100%);
         }
 
-        .image-counter {
-            background: #ecf0f1;
-            padding: 8px 15px;
-            border-radius: 20px;
-            color: #2c3e50;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .clear-all-btn {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .clear-all-btn:hover {
+        .add-more-btn:active {
             transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
         }
+
+        .image-counter {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
 
         /* Estilos para el checkbox de noticia destacada */
         .highlight-section {
@@ -312,7 +315,7 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
             font-weight: 600;
         }
 
-        /* Responsive adjustments */
+            /* Responsive adjustments */
         @media (max-width: 768px) {
             .file-upload-section {
                 padding: 15px;
@@ -334,6 +337,37 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
             .image-actions {
                 flex-direction: column;
                 align-items: stretch;
+                gap: 12px;
+                padding: 15px;
+            }
+
+            .add-more-btn {
+                padding: 18px 25px;
+                font-size: 18px;
+                justify-content: center;
+                min-height: 55px;
+            }
+
+            .image-counter {
+                font-size: 18px;
+                padding: 15px 20px;
+                text-align: center;
+                min-height: 55px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .add-more-btn {
+                gap: 15px;
+                padding: 20px;
+                font-size: 20px;
+                min-height: 60px;
+            }
+
+            .image-counter {
+                font-size: 16px;
+                padding: 18px;
+                min-height: 60px;
             }
         }
     </style>
@@ -395,7 +429,7 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
                     <div class="form-row">
                         <div class="form-group">
                             <label for="imagen">Imágenes (puedes seleccionar múltiples):</label>
-                            <div class="file-upload-section">
+                            <div class="file-upload-section" id="initialUploadSection">
                                 <input type="file" 
                                        name="imagen[]" 
                                        id="imagen" 
@@ -417,9 +451,6 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
                                     ➕ Agregar más imágenes
                                 </button>
                                 <div class="image-counter" id="imageCounter">0 imágenes seleccionadas</div>
-                                <button type="button" class="clear-all-btn" onclick="clearAllImages()">
-                                    🗑️ Limpiar todo
-                                </button>
                             </div>
                             
                             <!-- Input oculto para agregar más imágenes -->
@@ -572,10 +603,14 @@ $destacada = $datos_formulario['destacada'] ?? 'no';
 
         function toggleImageActions() {
             const actions = document.getElementById('imageActions');
+            const initialUpload = document.getElementById('initialUploadSection');
+            
             if (selectedFiles.length > 0) {
                 actions.style.display = 'flex';
+                initialUpload.style.display = 'none'; // Ocultar el primer selector cuando hay imágenes
             } else {
                 actions.style.display = 'none';
+                initialUpload.style.display = 'block'; // Mostrar el primer selector cuando no hay imágenes
             }
         }
 
