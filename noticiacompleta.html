@@ -7,10 +7,63 @@
     <link rel="stylesheet" href="/_astro/index.-G2uvBIl.css">
     <link rel="stylesheet" href="/_astro/about.CJdYp1i6.css">
     <style>
-        
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2em;
+        }
+        .error {
+            color: #d32f2f;
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2em;
+        }
+        .imagen-principal {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .imagen-principal img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .galeria-imagenes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .galeria-imagenes img {
+            max-width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .galeria-imagenes img:hover {
+            transform: scale(1.03);
+        }
+        .fecha-noticia {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        .contenido-noticia {
+            margin-top: 20px;
+        }
     </style>
 </head>
-<header>
+<body>
+    <header>
     <nav class="navbar">
       <!-- Botón hamburguesa (solo móvil) -->
       <button class="hamburger-btn" id="hamburger-btn">
@@ -63,7 +116,7 @@
       </ul>
     </div>
   </header>
-<body>
+
     <div id="contenedor-noticia">
         <div class="loading">Cargando noticia...</div>
     </div>
