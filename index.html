@@ -648,19 +648,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
         
         // Pausar carrusel automático cuando el mouse está sobre el carrusel
-        const carrusel = document.getElementById('carruselNoticias');
-        if (carrusel) {
-            carrusel.addEventListener('mouseenter', () => {
-                clearInterval(intervaloCarrusel);
-            });
-            
-            carrusel.addEventListener('mouseleave', () => {
-                intervaloCarrusel = setInterval(() => {
-                    const nuevoIndex = (slideActual + 1) % slides.length;
-                    mostrarSlide(nuevoIndex);
-                }, 7000);
-            });
-        }
+        
     }
 });
 </script>
