@@ -305,47 +305,45 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('ID asignado al slide:', noticia.id); // Al crear cada slide
                 
                 // Crear slides para cada noticia
-                data.data.forEach((noticia, index) => {
-                  const slide = document.createElement('div');
-                  slide.className = `noticia-slide ${index === 0 ? 'activa' : ''}`;
-                  
-                  // Asignar el ID correctamente (dos métodos por seguridad)
-                  slide.dataset.noticiaId = noticia.id;
-                  slide.setAttribute('data-id', noticia.id);
-                    
-                    // 2. Contenido HTML (sin cambios)
-                    slide.innerHTML = `
-                        <div class="contenido-noticia">
-                            ${noticia.titulo ? `<h4>${noticia.titulo}</h4>` : ''}
-                            <p>${noticia.contenido}...</p>
-                            <div class="info-noticia">
-                                <span>${noticia.fecha}</span>
-                            </div>
-                            ${noticia.todas_imagenes && noticia.todas_imagenes.length > 1 ? 
-                                `<div class="contador-imagenes">+${noticia.todas_imagenes.length - 1} imágenes</div>` : ''}
-                        </div>
-                    `;
-                    
-                    // 3. Evento click MEJORADO (con verificación)
-                    slide.addEventListener('click', function(e) {
-                      e.preventDefault();
-                      e.stopPropagation();
+               
+                  data.data.forEach((noticia, index) => {
+                      const slide = document.createElement('div');
+                      slide.className = `noticia-slide ${index === 0 ? 'activa' : ''}`;
+                      slide.style.backgroundImage = `url('${noticia.imagen}')`;
                       
-                      // Obtener el ID de forma más robusta
-                      const idNoticia = noticia.id; // Usamos directamente el ID del objeto noticia
+                      // Guardar el ID en el atributo data
+                      slide.dataset.noticiaId = noticia.id;
                       
-                      console.log('Noticia clickeada - ID:', idNoticia, 'Título:', noticia.titulo); // Debug
+                      // Contenido del slide (sin cambios)
+                      slide.innerHTML = `
+                          <div class="contenido-noticia">
+                              ${noticia.titulo ? `<h4>${noticia.titulo}</h4>` : ''}
+                              <p>${noticia.contenido}...</p>
+                              <div class="info-noticia">
+                                  <span>${noticia.fecha}</span>
+                              </div>
+                          </div>
+                      `;
                       
-                      if (!idNoticia || isNaN(idNoticia)) {
-                          console.error('ID inválido:', idNoticia);
-                          return;
-                      }
+                      // Evento click CORREGIDO
+                      slide.addEventListener('click', function(e) {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          
+                          // Obtener el ID del atributo data
+                          const idNoticia = this.dataset.noticiaId;
+                          
+                          console.log('Redirigiendo a noticia ID:', idNoticia);
+                          if (!idNoticia || isNaN(idNoticia)) {
+                              console.error('ID de noticia no válido:', idNoticia);
+                              return;
+                          }
+                          
+                          window.location.href = `noticiacompleta.html?id=${idNoticia}`;
+                      });
                       
-                      // Usar encodeURIComponent para asegurar que el ID se pase correctamente
-                      window.location.href = `/noticiacompleta.html?id=${encodeURIComponent(idNoticia)}`;
-                  });
-                    
-                    carrusel.appendChild(slide);
+                      carrusel.appendChild(slide);
+
                     // Crear punto indicador
                     const punto = document.createElement('div');
                     punto.className = `punto ${index === 0 ? 'activo' : ''}`;
