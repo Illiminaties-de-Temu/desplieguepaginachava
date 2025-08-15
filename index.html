@@ -286,6 +286,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Cargar noticias destacadas desde la API
     fetch('/back/api_noticias_destacadas.php')
         .then(response => {
             if (!response.ok) throw new Error('Error en la red');
@@ -294,28 +295,40 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (data.success && data.data.length > 0) {
                 const carrusel = document.getElementById('carruselNoticias');
-                const puntos = document.getElementById('puntosCarrusel');
+                const puntosContenedor = document.getElementById('puntosCarrusel');
+                const btnAnterior = document.getElementById('botonAnterior');
+                const btnSiguiente = document.getElementById('botonSiguiente');
                 
+                // Limpiar contenedores
                 carrusel.innerHTML = '';
-                puntos.innerHTML = '';
+                puntosContenedor.innerHTML = '';
                 
+                // Asegurar que los controles sean visibles
+                if (btnAnterior) btnAnterior.style.display = 'block';
+                if (btnSiguiente) btnSiguiente.style.display = 'block';
+                if (puntosContenedor) puntosContenedor.style.display = 'flex';
+                
+                // Crear slides para cada noticia
                 data.data.forEach((noticia, index) => {
                     const slide = document.createElement('div');
                     slide.className = `noticia-slide ${index === 0 ? 'activa' : ''}`;
                     slide.style.backgroundImage = `url('${noticia.imagen}')`;
                     
+                    // Estilos iniciales
+                    slide.style.position = 'absolute';
+                    slide.style.width = '100%';
+                    slide.style.height = '100%';
+                    slide.style.transition = 'opacity 0.5s ease';
+                    
                     if (index === 0) {
-                        slide.style.zIndex = '10';
                         slide.style.opacity = '1';
-                        slide.style.pointerEvents = 'auto';
+                        slide.style.zIndex = '2';
                     } else {
-                        slide.style.zIndex = '1';
                         slide.style.opacity = '0';
-                        slide.style.pointerEvents = 'none';
+                        slide.style.zIndex = '1';
                     }
                     
-                    const noticiaId = String(noticia.id);
-                    slide.setAttribute('data-noticia-id', noticiaId);
+                    slide.setAttribute('data-noticia-id', String(noticia.id));
                     
                     slide.innerHTML = `
                         <div class="contenido-noticia">
@@ -329,31 +342,108 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                     `;
                     
-                    slide.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        
+                    slide.addEventListener('click', function() {
                         if (!this.classList.contains('activa')) return;
                         
                         const idNoticia = this.getAttribute('data-noticia-id');
-                        if (!idNoticia || idNoticia === 'undefined' || idNoticia === 'null') {
-                            alert('Error: ID de noticia no válido');
-                            return;
-                        }
-                        
-                        const url = `noticiacompleta.html?id=${encodeURIComponent(idNoticia)}&t=${Date.now()}`;
-                        window.location.href = url;
+                        window.location.href = `noticiacompleta.html?id=${encodeURIComponent(idNoticia)}`;
                     });
                     
                     carrusel.appendChild(slide);
                     
+                    // Crear punto indicador
                     const punto = document.createElement('div');
                     punto.className = `punto ${index === 0 ? 'activo' : ''}`;
                     punto.setAttribute('data-slide-index', index);
-                    puntos.appendChild(punto);
+                    
+                    // Estilos para los puntos
+                    punto.style.width = '12px';
+                    punto.style.height = '12px';
+                    punto.style.borderRadius = '50%';
+                    punto.style.backgroundColor = index === 0 ? '#ffffff' : 'rgba(255,255,255,0.5)';
+                    punto.style.margin = '0 5px';
+                    punto.style.cursor = 'pointer';
+                    punto.style.transition = 'background-color 0.3s ease';
+                    
+                    puntosContenedor.appendChild(punto);
                 });
                 
-                inicializarCarrusel();
+                // Inicializar funcionalidad del carrusel
+                const slides = document.querySelectorAll('.noticia-slide');
+                const puntos = document.querySelectorAll('.punto');
+                let slideActual = 0;
+                let intervalo;
+                
+                function mostrarSlide(index) {
+                    // Validar índice
+                    if (index < 0 || index >= slides.length) return;
+                    
+                    // Ocultar todos los slides
+                    slides.forEach((slide, i) => {
+                        slide.style.opacity = '0';
+                        slide.style.zIndex = '1';
+                        slide.classList.remove('activa');
+                        
+                        if (puntos[i]) {
+                            puntos[i].style.backgroundColor = 'rgba(255,255,255,0.5)';
+                            puntos[i].classList.remove('activo');
+                        }
+                    });
+                    
+                    // Mostrar slide actual
+                    slides[index].style.opacity = '1';
+                    slides[index].style.zIndex = '2';
+                    slides[index].classList.add('activa');
+                    
+                    // Resaltar punto actual
+                    if (puntos[index]) {
+                        puntos[index].style.backgroundColor = '#ffffff';
+                        puntos[index].classList.add('activo');
+                    }
+                    
+                    slideActual = index;
+                }
+                
+                // Eventos de navegación
+                if (btnAnterior) {
+                    btnAnterior.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        clearInterval(intervalo);
+                        mostrarSlide((slideActual - 1 + slides.length) % slides.length);
+                        iniciarIntervalo();
+                    });
+                }
+                
+                if (btnSiguiente) {
+                    btnSiguiente.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        clearInterval(intervalo);
+                        mostrarSlide((slideActual + 1) % slides.length);
+                        iniciarIntervalo();
+                    });
+                }
+                
+                // Eventos para los puntos
+                puntos.forEach((punto, index) => {
+                    punto.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        clearInterval(intervalo);
+                        mostrarSlide(index);
+                        iniciarIntervalo();
+                    });
+                });
+                
+                // Función para iniciar el intervalo automático
+                function iniciarIntervalo() {
+                    clearInterval(intervalo);
+                    intervalo = setInterval(() => {
+                        mostrarSlide((slideActual + 1) % slides.length);
+                    }, 5000);
+                }
+                
+                // Iniciar el carrusel
+                iniciarIntervalo();
+                
             } else {
                 mostrarError('No hay noticias destacadas disponibles');
             }
@@ -376,71 +466,8 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         `;
     }
-    
-    function inicializarCarrusel() {
-        const slides = document.querySelectorAll('.noticia-slide');
-        const puntos = document.querySelectorAll('.punto');
-        const btnAnterior = document.getElementById('botonAnterior');
-        const btnSiguiente = document.getElementById('botonSiguiente');
-        let slideActual = 0;
-        
-        // Asegurar que los controles estén sobre el carrusel
-        if (btnAnterior) btnAnterior.style.zIndex = '1000';
-        if (btnSiguiente) btnSiguiente.style.zIndex = '1000';
-        if (puntos) puntos.parentElement.style.zIndex = '1000';
-        
-        function mostrarSlide(index) {
-            if (index < 0 || index >= slides.length) return;
-            
-            slides.forEach((slide, i) => {
-                slide.classList.remove('activa');
-                slide.style.opacity = '0';
-                slide.style.pointerEvents = 'none';
-                slide.style.zIndex = '1';
-                
-                if (puntos[i]) {
-                    puntos[i].classList.remove('activo');
-                }
-            });
-            
-            slides[index].classList.add('activa');
-            slides[index].style.opacity = '1';
-            slides[index].style.pointerEvents = 'auto';
-            slides[index].style.zIndex = '10';
-            
-            if (puntos[index]) {
-                puntos[index].classList.add('activo');
-            }
-            
-            slideActual = index;
-        }
-        
-        if (btnAnterior && btnSiguiente) {
-            btnAnterior.addEventListener('click', (e) => {
-                e.preventDefault();
-                mostrarSlide((slideActual - 1 + slides.length) % slides.length);
-            });
-            
-            btnSiguiente.addEventListener('click', (e) => {
-                e.preventDefault();
-                mostrarSlide((slideActual + 1) % slides.length);
-            });
-        }
-        
-        puntos.forEach((punto, index) => {
-            punto.addEventListener('click', (e) => {
-                e.preventDefault();
-                mostrarSlide(index);
-            });
-        });
-        
-        setInterval(() => {
-            mostrarSlide((slideActual + 1) % slides.length);
-        }, 5000);
-    }
 });
-</script>
-      
+</script>      
       <!-- Sección de filtros y más noticias -->
       <div class="seccion-mas-noticias">
         <!-- Grid de noticias -->
