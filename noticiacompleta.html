@@ -10,6 +10,44 @@
     <!-- Estilos de Astro -->
   <link rel="stylesheet" href="/_astro/index.-G2uvBIl.css">
   <link rel="stylesheet" href="/_astro/about.CJdYp1i6.css">
+  <style>
+    :root {
+      /* Variables de color */
+      --azul-primario: #05184a;
+      --azul-secundario: #1d4ed8;
+      --azul-claro: #60a5fa;
+      --azul-muy-claro: #dbeafe;
+      --azul-oscuro: #1e293b;
+      --azul-marino: #0f172a;
+      --azul-cielo: #0ea5e9;
+      --blanco: #ffffff;
+      --gris-claro: #f8fafc;
+      --gris-medio: #64748b;
+      --gris-fuerte: rgb(66, 72, 82);
+      --azul-gradiente: linear-gradient(135deg, #0a1840 0%, #051c40 100%);
+      --azul-fondo-imagenes: linear-gradient(
+        to right,
+        rgba(5, 26, 82, 0.689) 100%,
+        rgba(2, 16, 55, 0.05) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      --azul-fondo: linear-gradient(135deg, #0a1128 0%, #001f54 50%, #034078 100%);
+      --titulo-gradiante: linear-gradient(135deg, #1d4ed8, #05184a);
+    }
+    
+    /* Reset básico */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;
+    }
+    
+    html {
+      overflow-x: hidden;
+    }
+  </style>
+  </style>
 </head>
 <body>
     <header>
@@ -65,6 +103,70 @@
       </ul>
     </div>
   </header>
+  <!-- Script para el funcionamiento del navbar -->
+  <script>
+    /**
+     * Función principal para inicializar el navbar móvil
+     * Maneja la apertura/cierre del menú móvil y sus interacciones
+     */
+    function initNavbar() {
+      // Elementos del DOM
+      const hamburgerBtn = document.getElementById('hamburger-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const closeBtn = document.getElementById('close-btn');
+      
+      // Verificar que todos los elementos existan
+      if (!hamburgerBtn || !mobileMenu || !closeBtn) {
+        console.error('Elementos del navbar no encontrados');
+        return;
+      }
+      
+      // Abrir menú móvil
+      hamburgerBtn.addEventListener('click', function() {
+        mobileMenu.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+      
+      // Cerrar menú móvil
+      closeBtn.addEventListener('click', function() {
+        mobileMenu.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      });
+      
+      // Cerrar menú al hacer clic en los enlaces
+      const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+      mobileMenuLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+          mobileMenu.classList.remove('active');
+          document.body.style.overflow = 'auto';
+        });
+      });
+      
+      // Cerrar menú al hacer clic en el fondo
+      mobileMenu.addEventListener('click', function(e) {
+        if (e.target === mobileMenu) {
+          mobileMenu.classList.remove('active');
+          document.body.style.overflow = 'auto';
+        }
+      });
+      
+      // Cerrar menú con tecla Escape
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+          mobileMenu.classList.remove('active');
+          document.body.style.overflow = 'auto';
+        }
+      });
+    }
+    
+    // Inicializar cuando el DOM esté listo
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initNavbar);
+    } else {
+      initNavbar();
+    }
+  </script>
+
 
     <div id="contenedor-noticia">
         <div class="loading">Cargando noticia...</div>
