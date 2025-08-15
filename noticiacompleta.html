@@ -5,60 +5,110 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Noticia Completa</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            line-height: 1.6;
-        }
-        .loading {
-            text-align: center;
-            padding: 50px;
-            font-size: 1.2em;
-        }
-        .error {
-            color: #d32f2f;
-            text-align: center;
-            padding: 50px;
-            font-size: 1.2em;
-        }
-        .imagen-principal {
-            margin: 20px 0;
-            text-align: center;
-        }
-        .imagen-principal img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .galeria-imagenes {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 20px 0;
-        }
-        .galeria-imagenes img {
-            max-width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-        .galeria-imagenes img:hover {
-            transform: scale(1.03);
-        }
-        .fecha-noticia {
-            color: #666;
-            font-style: italic;
-            margin-bottom: 20px;
-        }
-        .contenido-noticia {
-            margin-top: 20px;
-        }
-    </style>
+/* Incrustar Gotham */
+@font-face {
+    font-family: 'Gotham';
+    src: url('fonts/Gotham.woff2') format('woff2'),
+         url('fonts/Gotham.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --azul-neon: #0091ff;
+    --azul-electrico: #083057;
+    --azul-profundo: #001a33;
+    --gris-metal: #2a3441;
+    --gris-plasma: #404854;
+    --blanco-puro: #ffffff;
+    --blanco-cristal: #ffffffF2;
+}
+
+body {
+    font-family: 'Gotham', sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    line-height: 1.6;
+    background: linear-gradient(135deg, var(--azul-profundo), var(--azul-electrico));
+    color: var(--blanco-cristal);
+    min-height: 100vh;
+    box-shadow: inset 0 0 150px #00000059;
+}
+
+h1 {
+    color: var(--azul-neon);
+    font-weight: 800;
+    text-shadow: 0 2px 8px #00000066;
+}
+
+.loading {
+    text-align: center;
+    padding: 50px;
+    font-size: 1.2em;
+    color: var(--blanco-cristal);
+}
+
+.error {
+    color: #d32f2f;
+    text-align: center;
+    padding: 50px;
+    font-size: 1.2em;
+    background: var(--blanco-puro);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px #00000026;
+}
+
+.imagen-principal {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.imagen-principal img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 15px 45px #00000059;
+}
+
+.galeria-imagenes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.galeria-imagenes img {
+    max-width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 15px #00000026;
+}
+
+.galeria-imagenes img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 15px 35px #00d4ff66;
+}
+
+.fecha-noticia {
+    color: var(--blanco-cristal);
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+.contenido-noticia {
+    margin-top: 20px;
+    background: var(--blanco-puro);
+    color: var(--gris-plasma);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px #00000026;
+}
+</style>
+
 </head>
 <body>
     <div id="contenedor-noticia">
