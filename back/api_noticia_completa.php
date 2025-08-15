@@ -1,4 +1,5 @@
 <?php
+error_log("ID recibido en API: " . $_GET['id']);
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *'); // Permite CORS (temporal para desarrollo)
 

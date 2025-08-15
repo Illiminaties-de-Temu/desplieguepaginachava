@@ -300,6 +300,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Limpiar contenedores
                 carrusel.innerHTML = '';
                 puntos.innerHTML = '';
+
+                console.log('Datos de noticia recibidos:', noticia); // Antes de crear slides
+                console.log('ID asignado al slide:', noticia.id); // Al crear cada slide
                 
                 // Crear slides para cada noticia
                 data.data.forEach((noticia, index) => {
@@ -325,20 +328,20 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     // 3. Evento click MEJORADO (con verificación)
                     slide.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation(); // Importante para evitar conflictos
-                        
-                        const idNoticia = this.getAttribute('data-noticia-id');
-                        
-                        // Verificación adicional
-                        if (!idNoticia || isNaN(idNoticia)) {
-                            console.error('ID de noticia no válido:', idNoticia);
-                            return;
-                        }
-                        
-                        console.log('Redirigiendo a noticia ID:', idNoticia); // Para depuración
-                        window.location.href = `noticiacompleta.html?id=${idNoticia}`;
-                    });
+                      e.preventDefault();
+                      e.stopPropagation();
+                      
+                      const idNoticia = this.getAttribute('data-noticia-id');
+                      
+                      // Verificación adicional
+                      if (!idNoticia || isNaN(idNoticia)) {
+                          console.error('ID de noticia no válido:', idNoticia);
+                          return;
+                      }
+                      
+                      console.log('Redirigiendo a noticia ID:', idNoticia); // Para depuración
+                      window.location.href = `/noticiacompleta.html?id=${idNoticia}`;
+                  });
                     
                     carrusel.appendChild(slide);
                     // Crear punto indicador
