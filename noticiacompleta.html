@@ -81,13 +81,14 @@
   }
 
   .contenido-noticia {
-    align-self: center;
-    padding: 0px;
-    width: 100%;
-    font-size: 1rem;
-    color: var(--azul-oscuro);
-    text-align: justify;
-  }
+  width: 100%;
+  max-width: 100%;
+  align-self: stretch; /* o eliminar esta línea */
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  text-align: justify;
+}
 
   .galeria-imagenes {
     display: flex;
