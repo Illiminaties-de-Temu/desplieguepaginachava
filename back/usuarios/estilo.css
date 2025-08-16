@@ -471,6 +471,7 @@ button[type="submit"]:disabled {
 /* Media queries para responsividad */
 @media (max-width: 768px) {
     .header {
+        align-items: center;
         padding: 30px 100px 30px 100px;
     }
     
