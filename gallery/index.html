@@ -238,7 +238,7 @@
     // Cargar noticias
     async function loadNews(page) {
         try {
-            const response = await fetch(`tu_api.php?page=${page}&per_page=${itemsPerPage}`);
+            const response = await fetch(`../back/api_fotos_galeria.php?page=${page}&per_page=${itemsPerPage}`);
             const data = await response.json();
             
             if (data.success) {
