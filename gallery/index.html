@@ -197,6 +197,7 @@
     font-size: 24px;
     text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
     z-index: 10;
+    pointer-events: none;
 }
 
 /* Estilos básicos de paginación (puedes adaptarlos a tu diseño) */
@@ -275,7 +276,7 @@
         });
     }
 
-    // Agregar estrellas a destacados
+    //agregar estrellas
     function addFeaturedStars() {
         document.querySelectorAll('.gallery-item[data-featured="true"]').forEach(item => {
             const star = document.createElement('div');
@@ -284,15 +285,14 @@
             item.querySelector('.gallery-image').appendChild(star);
         });
     }
-
-    // Manejar clicks en las noticias (Event Delegation)
+    
     galleryGrid.addEventListener('click', function(e) {
-        // Verificar si el click fue en la imagen o en su contenedor
-        const clickedElement = e.target.closest('.gallery-image, .gallery-image img');
-        if (!clickedElement) return;
-        
+        // Versión más flexible que funciona con cualquier elemento dentro del item
         const galleryItem = e.target.closest('.gallery-item');
         if (!galleryItem) return;
+        
+        // Excluir elementos que no deben triggerear la redirección
+        if (e.target.closest('button, a, [data-no-redirect]')) return;
         
         const newsId = galleryItem.dataset.id;
         redirectToNewsDetail(newsId);
