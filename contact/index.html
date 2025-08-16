@@ -1,282 +1,354 @@
-<!DOCTYPE html><html lang="es"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Contactanos</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer"><style>@import"https://fonts.googleapis.com/css2?family=Gothic+A1&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap";:root{--azul-primario: #05184a;--azul-secundario: #1d4ed8;--azul-claro: #60a5fa;--azul-muy-claro: #dbeafe;--azul-oscuro: #1e293b;--azul-marino: #0f172a;--azul-cielo: #0ea5e9;--blanco: #ffffff;--gris-claro: #f8fafc;--gris-medio: #64748b;--gris-fuerte: rgb(66, 72, 82);--azul-gradiente: linear-gradient(135deg, #0a1840 0%, #051c40 100%);--azul-fondo-imagenes: linear-gradient( to right, rgba(5, 26, 82, .689) 100%, rgba(2, 16, 55, .05) 50%, rgba(255, 255, 255, 0) 100% );--azul-fondo: linear-gradient( 135deg, #0a1128 0%, #001f54 50%, #034078 100% );--titulo-gradiante:linear-gradient(135deg, #1d4ed8, #05184a)}*{margin:0;padding:0;box-sizing:border-box;font-family:Franklin Gothic Medium,Arial Narrow,Arial,sans-serif}html{overflow-x:hidden}
-</style>
-<link rel="stylesheet" href="/_astro/about.CJdYp1i6.css">
-<link rel="stylesheet" href="/_astro/contact.D17p_t-i.css"></head> <body> <head></head> <header> <nav class="navbar"> <!-- Botón hamburguesa (solo móvil) --> <button class="hamburger-btn" id="hamburger-btn"> <i class="fas fa-bars"></i> </button> <!-- Logo --> <div class="logo"> <img src="/logo_chava.png" alt="Logo"> </div> <!-- Menú desktop --> <ul class="menu"> <li><a href="/">Inicio</a></li> <!--<li><a href="/events">Próximos Eventos</a></li>--> <li><a href="/about">Sobre mí</a></li> <!-- <li><a href="/team">Equipo</a></li>--> <li><a href="/contact">Contacto</a></li> <li><a href="/gallery">Galería</a></li> </ul> <!-- Redes sociales desktop --> <ul class="social-icons"> <li><a href="https://www.facebook.com/ChavaCalderonMX/" target="_blank"><img src="/facebook.png" alt="facebook chava calderon"></a></li> <li><a href="https://www.instagram.com/schavacalderon_/?hl=es" target="_blank"><img src="/logotipo-de-instagram.png" alt="instagram chava calderon"></a></li> <li><a href="https://www.tiktok.com/@chava.calderon90" target="_blank"><img src="/tik-tok.png" alt="tik tok chava calderon"></a></li> </ul> <!-- Botón lupa (solo móvil) 
-    <button class="search-btn" id="search-btn">
-      <i class="fas fa-search"></i>
-    </button>--> </nav> <!-- Menú mobile overlay --> <div class="mobile-menu" id="mobile-menu"> <button class="close-btn" id="close-btn"> <i class="fas fa-times"></i> </button> <ul class="menu"> <li><a href="/">Inicio</a></li> <!-- <li><a href="/events">Próximos Eventos</a></li>--> <li><a href="/about">Sobre mí</a></li> <!-- <li><a href="/team">Equipo</a></li> --> <li><a href="/contact">Contacto</a></li> <li><a href="/gallery">Galería</a></li> </ul> <!-- Redes sociales MOVIL --> <ul class="social-icons"> <li><a href="https://www.facebook.com/ChavaCalderonMX/" target="_blank"><img src="/facebook.png" alt="facebook chava calderon"></a></li> <li><a href="https://www.instagram.com/schavacalderon_/?hl=es" target="_blank"><img src="/logotipo-de-instagram.png" alt="instagram chava calderon"></a></li> <li><a href="https://www.tiktok.com/@chava.calderon90" target="_blank"><img src="/tik-tok.png" alt="tik tok chava calderon"></a></li> </ul> </div> </header> <script>
-   function initNavbar() {
-    const hamburgerBtn = document.getElementById('hamburger-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const closeBtn = document.getElementById('close-btn');
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contactanos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <style>
+        @import "https://fonts.googleapis.com/css2?family=Gothic+A1&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap";
+        
+        :root {
+            --azul-primario: #05184a;
+            --azul-secundario: #1d4ed8;
+            --azul-claro: #60a5fa;
+            --azul-muy-claro: #dbeafe;
+            --azul-oscuro: #1e293b;
+            --azul-marino: #0f172a;
+            --azul-cielo: #0ea5e9;
+            --blanco: #ffffff;
+            --gris-claro: #f8fafc;
+            --gris-medio: #64748b;
+            --gris-fuerte: rgb(66, 72, 82);
+            --azul-gradiente: linear-gradient(135deg, #0a1840 0%, #051c40 100%);
+            --azul-fondo-imagenes: linear-gradient(to right, rgba(5, 26, 82, .689) 100%, rgba(2, 16, 55, .05) 50%, rgba(255, 255, 255, 0) 100%);
+            --azul-fondo: linear-gradient(135deg, #0a1128 0%, #001f54 50%, #034078 100%);
+            --titulo-gradiante: linear-gradient(135deg, #1d4ed8, #05184a);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif;
+        }
+        
+        html {
+            overflow-x: hidden;
+        }
+    </style>
+    <link rel="stylesheet" href="/_astro/about.CJdYp1i6.css">
+    <link rel="stylesheet" href="/_astro/contact.D17p_t-i.css">
+</head>
 
-    // Verificar que todos los elementos existan
-    if (!hamburgerBtn || !mobileMenu || !closeBtn) {
-      console.error('Elementos del navbar no encontrados');
-      return;
-    }
+<body>
+    <head></head>
+    
+    <header>
+        <nav class="navbar">
+            <!-- Botón hamburguesa (solo móvil) -->
+            <button class="hamburger-btn" id="hamburger-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <!-- Logo -->
+            <div class="logo">
+                <img src="/logo_chava.png" alt="Logo">
+            </div>
+            
+            <!-- Menú desktop -->
+            <ul class="menu">
+                <li><a href="/">Inicio</a></li>
+                <!--<li><a href="/events">Próximos Eventos</a></li>-->
+                <li><a href="/about">Sobre mí</a></li>
+                <!-- <li><a href="/team">Equipo</a></li>-->
+                <li><a href="/contact">Contacto</a></li>
+                <li><a href="/gallery">Galería</a></li>
+            </ul>
+            
+            <!-- Redes sociales desktop -->
+            <ul class="social-icons">
+                <li><a href="https://www.facebook.com/ChavaCalderonMX/" target="_blank"><img src="/facebook.png" alt="facebook chava calderon"></a></li>
+                <li><a href="https://www.instagram.com/schavacalderon_/?hl=es" target="_blank"><img src="/logotipo-de-instagram.png" alt="instagram chava calderon"></a></li>
+                <li><a href="https://www.tiktok.com/@chava.calderon90" target="_blank"><img src="/tik-tok.png" alt="tik tok chava calderon"></a></li>
+            </ul>
+            
+        </nav>
+        
+        <!-- Menú mobile overlay -->
+        <div class="mobile-menu" id="mobile-menu">
+            <button class="close-btn" id="close-btn">
+                <i class="fas fa-times"></i>
+            </button>
+            <ul class="menu">
+                <li><a href="/">Inicio</a></li>
+                <!-- <li><a href="/events">Próximos Eventos</a></li>-->
+                <li><a href="/about">Sobre mí</a></li>
+                <!-- <li><a href="/team">Equipo</a></li> -->
+                <li><a href="/contact">Contacto</a></li>
+                <li><a href="/gallery">Galería</a></li>
+            </ul>
+            
+            <!-- Redes sociales MOVIL -->
+            <ul class="social-icons">
+                <li><a href="https://www.facebook.com/ChavaCalderonMX/" target="_blank"><img src="/facebook.png" alt="facebook chava calderon"></a></li>
+                <li><a href="https://www.instagram.com/schavacalderon_/?hl=es" target="_blank"><img src="/logotipo-de-instagram.png" alt="instagram chava calderon"></a></li>
+                <li><a href="https://www.tiktok.com/@chava.calderon90" target="_blank"><img src="/tik-tok.png" alt="tik tok chava calderon"></a></li>
+            </ul>
+        </div>
+    </header>
+    
+    <script>
+        function initNavbar() {
+            const hamburgerBtn = document.getElementById('hamburger-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const closeBtn = document.getElementById('close-btn');
 
-    // Abrir menú móvil
-    hamburgerBtn.addEventListener('click', function () {
-      mobileMenu.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    });
+            // Verificar que todos los elementos existan
+            if (!hamburgerBtn || !mobileMenu || !closeBtn) {
+                console.error('Elementos del navbar no encontrados');
+                return;
+            }
 
-    // Cerrar menú móvil
-    closeBtn.addEventListener('click', function () {
-      mobileMenu.classList.remove('active');
-      document.body.style.overflow = 'auto';
-    });
+            // Abrir menú móvil
+            hamburgerBtn.addEventListener('click', function () {
+                mobileMenu.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
 
-    // Cerrar menú al hacer clic en los enlaces
-    const mobileMenuLinks = mobileMenu.querySelectorAll('a');
-    mobileMenuLinks.forEach(function (link) {
-      link.addEventListener('click', function () {
-        mobileMenu.classList.remove('active');
-        document.body.style.overflow = 'auto';
-      });
-    });
+            // Cerrar menú móvil
+            closeBtn.addEventListener('click', function () {
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
 
-    // Cerrar menú al hacer clic en el fondo
-    mobileMenu.addEventListener('click', function (e) {
-      if (e.target === mobileMenu) {
-        mobileMenu.classList.remove('active');
-        document.body.style.overflow = 'auto';
-      }
-    });
+            // Cerrar menú al hacer clic en los enlaces
+            const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+            mobileMenuLinks.forEach(function (link) {
+                link.addEventListener('click', function () {
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                });
+            });
 
-    // Botón de búsqueda
-    searchBtn.addEventListener('click', function () {
-      console.log('Búsqueda activada');
-      // Aquí puedes agregar tu lógica de búsqueda
-    });
+            // Cerrar menú al hacer clic en el fondo
+            mobileMenu.addEventListener('click', function (e) {
+                if (e.target === mobileMenu) {
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            });
 
-    // Cerrar menú con tecla Escape
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
-        mobileMenu.classList.remove('active');
-        document.body.style.overflow = 'auto';
-      }
-    });
-  }
+            // Botón de búsqueda
+            searchBtn.addEventListener('click', function () {
+                console.log('Búsqueda activada');
+                // Aquí puedes agregar tu lógica de búsqueda
+            });
 
-  // Inicializar cuando el DOM esté listo
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initNavbar);
-  } else {
-    initNavbar();
-  }
-</script> <main> <section class="seccion-hero" data-astro-cid-m6ckovt4> <div class="contenido-hero" data-astro-cid-m6ckovt4> <!-- Contenido de texto a la derecha --> <div class="contenido-superpuesto" data-astro-cid-m6ckovt4> <h2 data-astro-cid-m6ckovt4>CONTACTO</h2> </div> </div> </section>   <div class="container"> <!-- Hero Section --> <section class="hero-section"> <div class="hero-content"> <h2 class="main-title">Portal de Comunicación Ciudadana</h2> <p class="subtitle">"Tu voz es importante para construir el país que queremos"</p> <div class="hero-stats"> <div class="stat-item"> <span class="stat-number" id="messagesReceived">12,847</span> <span class="stat-label">Mensajes Recibidos</span> </div> <div class="stat-item"> <span class="stat-number" id="responsesGiven">8,932</span> <span class="stat-label">Respuestas Enviadas</span> </div> <div class="stat-item"> <span class="stat-number" id="initiativesCreated">156</span> <span class="stat-label">Iniciativas Creadas</span> </div> </div> </div> </section> <!-- Communication Form Section --> <section class="communication-section"> <div class="communication-container"> <div class="form-header"> <h2 class="form-title">Comparte tu Inquietud o Comentario</h2> <p class="form-description">
-Estamos para escucharte. Aquí te dejamos nuestros datos de contacto:
-</p> <div class="contact-info"> <div class="contact-item"> <strong>📍 Dirección:</strong><br>
-Francisco Sarabia y República de Cuba<br>
-Colonia Américas, C.P. 33880
-</div> <div class="contact-item"> <strong>📧 Correo:</strong><br> <a href="mailto:presidencia@hidalgodelparral.gob.mx">presidencia@hidalgodelparral.gob.mx</a> </div> <div class="contact-item"> <strong>📞 Teléfono:</strong><br> <a href="tel:6275274700">627 527 4700</a> </div> </div> </div> <!-- Aquí iría el formulario si lo tienes --> </div> </section> </div> <div class="contenido"> <div class="cajaTexto"> <h2>Contáctanos</h2> <p>¿Tienes alguna pregunta o comentario? Nos encantaría saber de ti. Completa el formulario a continuación y te responderemos a la brevedad posible.</p> <form class="formulario-contacto"> <div class="campo-formulario"> <label for="nombre">Nombre completo</label> <input type="text" id="nombre" name="nombre" required> </div> <div class="campo-formulario"> <label for="email">Correo electrónico</label> <input type="email" id="email" name="email" required> </div> <div class="campo-formulario"> <label for="asunto">Asunto</label> <input type="text" id="asunto" name="asunto" required> </div> <div class="campo-formulario"> <label for="mensaje">Mensaje</label> <textarea id="mensaje" name="mensaje" rows="5" required></textarea> </div> <button type="submit" class="boton-enviar">Enviar mensaje</button> </form> </div> <!-- 
-                <form class="communication-form" id="communicationForm">
-                     Progress Bar 
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill"></div>
-                    </div>
-                    
-                    <div class="step-indicator">
-                        <div class="step active" data-step="1">
-                            <div class="step-number">1</div>
-                            <span>Información Básica</span>
-                        </div>
-                        <div class="step" data-step="2">
-                            <div class="step-number">2</div>
-                            <span>Tu Mensaje</span>
-                        </div>
-                        <div class="step" data-step="3">
-                            <div class="step-number">3</div>
-                            <span>Confirmación</span>
-                        </div>
-                    </div>
-                    
-                    
-                    <div class="form-step active" id="step1">
-                        <h3 class="step-title">👤 Información Básica</h3>
-                        <div class="input-grid">
-                            <div class="form-group">
-                                <label class="form-label" for="name">Nombre Completo</label>
-                                <input type="text" id="name" class="form-input" placeholder="Tu nombre completo" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="email">Correo Electrónico</label>
-                                <input type="email" id="email" class="form-input" placeholder="tu@email.com" required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="topic">Tema Principal</label>
-                            <select id="topic" class="form-input" required>
-                                <option value="">Selecciona el tema de tu mensaje</option>
-                                <option value="economia">💰 Economía y Empleo</option>
-                                <option value="salud">🏥 Salud Pública</option>
-                                <option value="educacion">🎓 Educación</option>
-                                <option value="seguridad">🛡️ Seguridad</option>
-                                <option value="infraestructura">🏗️ Infraestructura</option>
-                                <option value="social">🤝 Desarrollo Social</option>
-                                <option value="medio-ambiente">🌱 Medio Ambiente</option>
-                                <option value="otros">📋 Otros Temas</option>
-                            </select>
-                        </div>
-                        
-                        <div class="step-actions">
-                            <div></div>
-                            <button type="button" class="btn btn-primary" onclick="nextStep()">
-                                Continuar 👉
-                            </button>
-                        </div>
-                    </div>
-                    
-                    
-                    <div class="form-step" id="step2">
-                        <h3 class="step-title">✍️ Tu Mensaje al Presidente</h3>
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="messageType">Tipo de Comunicación</label>
-                            <select id="messageType" class="form-input" required>
-                                <option value="">¿Qué tipo de mensaje es?</option>
-                                <option value="inquietud">💭 Inquietud o Preocupación</option>
-                                <option value="propuesta">💡 Propuesta o Sugerencia</option>
-                                <option value="felicitacion">👏 Felicitación o Apoyo</option>
-                                <option value="queja">⚠️ Queja o Denuncia</option>
-                                <option value="peticion">📝 Petición Específica</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="subject">Asunto</label>
-                            <input type="text" id="subject" class="form-input" placeholder="Resumen breve de tu mensaje" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="message">Tu Mensaje</label>
-                            <textarea id="message" class="form-input form-textarea" placeholder="Comparte tu inquietud, propuesta o comentario. El Presidente leerá personalmente tu mensaje..." required></textarea>
-                            <div class="character-count" id="charCount">0 / 1000 caracteres</div>
-                            <div class="message-tips">
-                                <p><strong>💡 Consejos para tu mensaje:</strong></p>
-                                <ul>
-                                    <li>Sé claro y específico sobre tu situación</li>
-                                    <li>Explica cómo te afecta el tema</li>
-                                    <li>Si tienes propuestas, compártelas</li>
-                                    <li>Mantén un tono respetuoso</li>
-                                </ul>
-                            </div>
-                        </div>
-                        
-                        <div class="input-grid">
-                            <div class="form-group">
-                                <label class="form-label" for="urgency">Urgencia</label>
-                                <select id="urgency" class="form-input" required>
-                                    <option value="">Nivel de urgencia</option>
-                                    <option value="baja">📋 Baja - Comentario general</option>
-                                    <option value="media">⚡ Media - Situación importante</option>
-                                    <option value="alta">🚨 Alta - Requiere atención pronta</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="responsePreference">Respuesta</label>
-                                <select id="responsePreference" class="form-input" required>
-                                    <option value="">¿Prefieres respuesta?</option>
-                                    <option value="email">📧 Por correo electrónico</option>
-                                    <option value="public">📱 Respuesta pública</option>
-                                    <option value="no-response">🤐 No requiero respuesta</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="privacy-notice">
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="privacyAccept" required>
-                                <label for="privacyAccept">
-                                    Acepto que mis datos sean utilizados para dar seguimiento a mi comunicación y autorizo el contacto por parte de la Presidencia si es necesario.
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <div class="step-actions">
-                            <button type="button" class="btn btn-secondary" onclick="prevStep()">
-                                👈 Anterior
-                            </button>
-                            <button type="button" class="btn btn-primary" onclick="nextStep()">
-                                Revisar Mensaje 👉
-                            </button>
-                        </div>
-                    </div>
-                    
-                    
-                    <div class="form-step" id="step3">
-                        <h3 class="step-title">✅ Revisión Final</h3>
-                        <div class="confirmation-card">
-                            <div class="confirmation-header">
-                                <h4>Mensaje dirigido al Presidente Carlos Mendoza</h4>
-                            </div>
-                            <div class="confirmation-grid">
-                                <div>
-                                    <span class="confirm-label">De:</span>
-                                    <span class="confirm-value" id="confirmName"></span>
-                                </div>
-                                <div>
-                                    <span class="confirm-label">Email:</span>
-                                    <span class="confirm-value" id="confirmEmail"></span>
-                                </div>
-                                <div>
-                                    <span class="confirm-label">Tema:</span>
-                                    <span class="confirm-value" id="confirmTopic"></span>
-                                </div>
-                                <div>
-                                    <span class="confirm-label">Tipo:</span>
-                                    <span class="confirm-value" id="confirmMessageType"></span>
-                                </div>
-                                <div>
-                                    <span class="confirm-label">Urgencia:</span>
-                                    <span class="confirm-value" id="confirmUrgency"></span>
-                                </div>
-                            </div>
-                            <div class="confirm-subject">
-                                <span class="confirm-label">Asunto:</span>
-                                <p class="confirm-value" id="confirmSubject"></p>
-                            </div>
-                            <div class="confirm-message">
-                                <span class="confirm-label">Mensaje:</span>
-                                <p class="confirm-value" id="confirmMessage"></p>
-                            </div>
-                        </div>
-                        
-                        <div class="step-actions">
-                            <button type="button" class="btn btn-secondary" onclick="prevStep()">
-                                👈 Editar
-                            </button>
-                            <button type="submit" class="btn btn-primary" id="submitBtn">
-                                📨 Enviar al Presidente
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="success-message" id="successMessage">
-                        <div class="success-icon">📨</div>
-                        <h4 class="success-title">¡Mensaje Enviado al Presidente!</h4>
-                        <p class="success-text">Tu comunicación ha sido recibida exitosamente. El Presidente Carlos Mendoza revisa personalmente todos los mensajes ciudadanos.</p>
-                        <div class="tracking-info">
-                            <p><strong>Número de seguimiento:</strong> <span id="trackingNumber"></span></p>
-                            <p>Tiempo estimado de respuesta: <span id="responseTime"></span></p>
-                        </div>
-                        <div class="next-steps">
-                            <h5>Próximos pasos:</h5>
-                            <ul>
-                                <li>Recibirás un acuse de recibo por email</li>
-                                <li>Tu mensaje será clasificado y asignado</li>
-                                <li>El área correspondiente dará seguimiento</li>
-                                <li>Recibirás respuesta según tu preferencia</li>
-                            </ul>
-                        </div>
-                        <button type="button" class="btn btn-primary" onclick="resetForm()" style="margin-top: 20px;">
-                            📝 Enviar Otro Mensaje
-                        </button>
-                    </div>
-                </form>
+            // Cerrar menú con tecla Escape
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+
+        // Inicializar cuando el DOM esté listo
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initNavbar);
+        } else {
+            initNavbar();
+        }
+    </script>
+    
+    <main>
+        <section class="seccion-hero" data-astro-cid-m6ckovt4>
+            <div class="contenido-hero" data-astro-cid-m6ckovt4>
+                <!-- Contenido de texto a la derecha -->
+                <div class="contenido-superpuesto" data-astro-cid-m6ckovt4>
+                    <h2 data-astro-cid-m6ckovt4>CONTACTO</h2>
+                </div>
             </div>
         </section>
---> <!-- Recent Messages Section --> <section class="recent-messages-section"> <h2 class="section-title">Mensajes Recientes del Presidente</h2> <div class="messages-grid"> <div class="message-card"> <div class="message-date">Hace 2 días</div> <p>"He leído con atención los mensajes sobre el sistema de salud. Estamos trabajando en mejoras concretas que verán pronto."</p> </div> <div class="message-card"> <div class="message-date">Hace 5 días</div> <p>"Gracias por sus propuestas sobre educación. Sus ideas están siendo consideradas en nuestros nuevos programas educativos."</p> </div> <div class="message-card"> <div class="message-date">Hace 1 semana</div> <p>"La seguridad es prioridad. He leído cada mensaje sobre este tema y estamos reforzando las estrategias en las zonas más afectadas."</p> </div> </div> </section> </div> <script type="module" src="/_astro/contact.astro_astro_type_script_index_0_lang.n0W-iw02.js"></script> </main> <footer> <!-- Efectos de fondo --> <div class="particles-background" id="particles"></div> <!-- FIGURAS REDISTRIBUIDAS Y REDUCIDAS --> <div class="geometric-shapes"> <!-- Esquina superior izquierda --> <div class="shape circle" style="width: 40px; height: 40px; top: 40%; left: 95%; animation-delay: 0s;"></div> <div class="shape triangle" style="top: 10%; left: 19%; animation-delay: 3s;"></div> <!-- Esquina superior derecha --> <div class="shape circle" style="width: 25px; height: 25px; top: 20%; right: 20%; animation-delay: 4s;"></div> <!-- Esquina inferior izquierda --> <div class="shape triangle" style="bottom: 15%; top: 10%; left: 0%; animation-delay: 2s;"></div> <div class="shape circle" style="width: 35px; height: 35px; bottom: 8%; left: 25%; animation-delay: 5s;"></div> <!-- Esquina inferior derecha --> <!-- Algunas figuras en los bordes laterales --> <div class="shape circle" style="width: 20px; height: 20px; top: 50%; left: 3%; animation-delay: 6s;"></div> </div> <div class="waves"></div> <div class="glow-effect"></div> <!-- Contenido del footer --> <div class="footer-container"> <div class="footer-social"> <ul class="social-icons"> <li><a href="https://www.facebook.com/ChavaCalderonMX/" target="_blank"><img src="/facebook.png" alt="facebook chava calderon"></a></li> <li><a href="https://www.instagram.com/schavacalderon_/?hl=es" target="_blank"><img src="/logotipo-de-instagram.png" alt="instagram chava calderon"></a></li> <li><a href="https://www.tiktok.com/@chava.calderon90" target="_blank"><img src="/tik-tok.png" alt="tik tok chava calderon"></a></li> </ul> </div> <div class="footer-bottom"> <p>&copy; 2025 Chava Calderón. Todos los derechos reservados</p> <p>Desarrollado por <a href="https://geckcodex.online/" target="_blank">GECK Codex</a></p> </div> </div> </footer> <script type="module">function i(){const t=document.getElementById("particles");function s(){const e=document.createElement("div");e.className="particle";const n=Math.random()*2+1;e.style.width=n+"px",e.style.height=n+"px",e.style.left=Math.random()*100+"%";const a=Math.random()*4+6;e.style.animationDuration=a+"s";const o=Math.random()*2;e.style.animationDelay=o+"s",e.style.opacity=Math.random()*.3+.1,t.appendChild(e),setTimeout(()=>{e.parentNode&&e.parentNode.removeChild(e)},(a+o)*1e3)}setInterval(s,800)}document.addEventListener("DOMContentLoaded",i);document.addEventListener("mousemove",t=>{const s=document.querySelectorAll(".shape"),e=t.clientX/window.innerWidth,n=t.clientY/window.innerHeight;s.forEach((a,o)=>{const r=(o+1)*.2,d=(e-.5)*r,c=(n-.5)*r;a.style.transform+=` translate(${d}px, ${c}px)`})});document.querySelectorAll(".social-icons a").forEach(t=>{t.addEventListener("mouseenter",()=>{t.style.boxShadow="0 0 25px rgba(0, 191, 255, 0.6)"}),t.addEventListener("mouseleave",()=>{t.style.boxShadow=""})});</script> </body></html>
+        
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <div class="hero-content">
+                    <h2 class="main-title">Portal de Comunicación Ciudadana</h2>
+                    <p class="subtitle">"Tu voz es importante para construir el país que queremos"</p>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" id="messagesReceived">12,847</span>
+                            <span class="stat-label">Mensajes Recibidos</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="responsesGiven">8,932</span>
+                            <span class="stat-label">Respuestas Enviadas</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="initiativesCreated">156</span>
+                            <span class="stat-label">Iniciativas Creadas</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Communication Form Section -->
+            <section class="communication-section">
+                <div class="communication-container">
+                    <div class="form-header">
+                        <h2 class="form-title">Comparte tu Inquietud o Comentario</h2>
+                        <p class="form-description">
+                            Estamos para escucharte. Aquí te dejamos nuestros datos de contacto:
+                        </p>
+                        <div class="contact-info">
+                            <div class="contact-item">
+                                <strong>📍 Dirección:</strong><br>
+                                Francisco Sarabia y República de Cuba<br>
+                                Colonia Américas, C.P. 33880
+                            </div>
+                            <div class="contact-item">
+                                <strong>📧 Correo:</strong><br>
+                                <a href="mailto:presidencia@hidalgodelparral.gob.mx">presidencia@hidalgodelparral.gob.mx</a>
+                            </div>
+                            <div class="contact-item">
+                                <strong>📞 Teléfono:</strong><br>
+                                <a href="tel:6275274700">627 527 4700</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Aquí iría el formulario si lo tienes -->
+                </div>
+            </section>
+        </div>
+        
+        <div class="contenido">
+            <div class="cajaTexto">
+                <h2>Contáctanos</h2>
+                <p>¿Tienes alguna pregunta o comentario? Nos encantaría saber de ti. Completa el formulario a continuación y te responderemos a la brevedad posible.</p>
+                <form class="formulario-contacto">
+                    <div class="campo-formulario">
+                        <label for="nombre">Nombre completo</label>
+                        <input type="text" id="nombre" name="nombre" required>
+                    </div>
+                    <div class="campo-formulario">
+                        <label for="email">Correo electrónico</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="campo-formulario">
+                        <label for="asunto">Asunto</label>
+                        <input type="text" id="asunto" name="asunto" required>
+                    </div>
+                    <div class="campo-formulario">
+                        <label for="mensaje">Mensaje</label>
+                        <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="boton-enviar">Enviar mensaje</button>
+                </form>
+            </div>
+            
+            <!-- Recent Messages Section -->
+            <section class="recent-messages-section">
+                <h2 class="section-title">Mensajes Recientes del Presidente</h2>
+                <div class="messages-grid">
+                    <div class="message-card">
+                        <div class="message-date">Hace 2 días</div>
+                        <p>"He leído con atención los mensajes sobre el sistema de salud. Estamos trabajando en mejoras concretas que verán pronto."</p>
+                    </div>
+                    <div class="message-card">
+                        <div class="message-date">Hace 5 días</div>
+                        <p>"Gracias por sus propuestas sobre educación. Sus ideas están siendo consideradas en nuestros nuevos programas educativos."</p>
+                    </div>
+                    <div class="message-card">
+                        <div class="message-date">Hace 1 semana</div>
+                        <p>"La seguridad es prioridad. He leído cada mensaje sobre este tema y estamos reforzando las estrategias en las zonas más afectadas."</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <script type="module" src="/_astro/contact.astro_astro_type_script_index_0_lang.n0W-iw02.js"></script>
+    </main>
+    
+    <footer>
+        <!-- Efectos de fondo -->
+        <div class="particles-background" id="particles"></div>
+        
+        <!-- FIGURAS REDISTRIBUIDAS Y REDUCIDAS -->
+        <div class="geometric-shapes">
+            <!-- Esquina superior izquierda -->
+            <div class="shape circle" style="width: 40px; height: 40px; top: 40%; left: 95%; animation-delay: 0s;"></div>
+            <div class="shape triangle" style="top: 10%; left: 19%; animation-delay: 3s;"></div>
+            <!-- Esquina superior derecha -->
+            <div class="shape circle" style="width: 25px; height: 25px; top: 20%; right: 20%; animation-delay: 4s;"></div>
+            <!-- Esquina inferior izquierda -->
+            <div class="shape triangle" style="bottom: 15%; top: 10%; left: 0%; animation-delay: 2s;"></div>
+            <div class="shape circle" style="width: 35px; height: 35px; bottom: 8%; left: 25%; animation-delay: 5s;"></div>
+            <!-- Esquina inferior derecha -->
+            <!-- Algunas figuras en los bordes laterales -->
+            <div class="shape circle" style="width: 20px; height: 20px; top: 50%; left: 3%; animation-delay: 6s;"></div>
+        </div>
+        
+        <div class="waves"></div>
+        <div class="glow-effect"></div>
+        
+        <!-- Contenido del footer -->
+        <div class="footer-container">
+            <div class="footer-social">
+                <ul class="social-icons">
+                    <li><a href="https://www.facebook.com/ChavaCalderonMX/" target="_blank"><img src="/facebook.png" alt="facebook chava calderon"></a></li>
+                    <li><a href="https://www.instagram.com/schavacalderon_/?hl=es" target="_blank"><img src="/logotipo-de-instagram.png" alt="instagram chava calderon"></a></li>
+                    <li><a href="https://www.tiktok.com/@chava.calderon90" target="_blank"><img src="/tik-tok.png" alt="tik tok chava calderon"></a></li>
+                </ul>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Chava Calderón. Todos los derechos reservados</p>
+                <p>Desarrollado por <a href="https://geckcodex.online/" target="_blank">GECK Codex</a></p>
+            </div>
+        </div>
+    </footer>
+    
+    <script type="module">
+        function i() {
+            const t = document.getElementById("particles");
+            function s() {
+                const e = document.createElement("div");
+                e.className = "particle";
+                const n = Math.random() * 2 + 1;
+                e.style.width = n + "px", e.style.height = n + "px", e.style.left = Math.random() * 100 + "%";
+                const a = Math.random() * 4 + 6;
+                e.style.animationDuration = a + "s";
+                const o = Math.random() * 2;
+                e.style.animationDelay = o + "s", e.style.opacity = Math.random() * .3 + .1, t.appendChild(e), setTimeout(() => {
+                    e.parentNode && e.parentNode.removeChild(e)
+                }, (a + o) * 1e3)
+            }
+            setInterval(s, 800);
+        }
+        
+        document.addEventListener("DOMContentLoaded", i);
+        
+        document.addEventListener("mousemove", t => {
+            const s = document.querySelectorAll(".shape"),
+                e = t.clientX / window.innerWidth,
+                n = t.clientY / window.innerHeight;
+            s.forEach((a, o) => {
+                const r = (o + 1) * .2,
+                    d = (e - .5) * r,
+                    c = (n - .5) * r;
+                a.style.transform += ` translate(${d}px, ${c}px)`
+            })
+        });
+        
+        document.querySelectorAll(".social-icons a").forEach(t => {
+            t.addEventListener("mouseenter", () => {
+                t.style.boxShadow = "0 0 25px rgba(0, 191, 255, 0.6)"
+            }), t.addEventListener("mouseleave", () => {
+                t.style.boxShadow = ""
+            })
+        });
+    </script>
+</body>
+</html>
