@@ -91,7 +91,7 @@ try {
             'contenido' => $contenidoBreve . (str_word_count($noticia['contenido']) > 10 ? '...' : ''),
             'imagen' => $imagenPrincipal,
             'fecha' => date('d M Y', strtotime($noticia['fecha'])),
-            'autor' => 'Redacción', // Valor por defecto ya que no existe en tu estructura
+            //'autor' => 'Redacción', // Valor por defecto ya que no existe en tu estructura
             'imagenes' => array_map(function($img) {
                 return '/back/' . $img;
             }, $imagenes)
