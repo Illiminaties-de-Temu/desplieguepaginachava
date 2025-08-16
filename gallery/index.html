@@ -180,73 +180,154 @@
     
     <div class="container">
       <div class="gallery-grid" id="galleryGrid">
-        <!-- Elementos de la galería -->
-        <div class="gallery-item" data-category="naturaleza">
-          <div class="gallery-image">
-            <img src="/foto_chava_gente_adentro.jpg" alt="Montaña">
-          </div>
-          <div class="gallery-overlay">
-            <div class="gallery-content"></div>
-          </div>
-        </div>
-        
-        <div class="gallery-item" data-category="arquitectura">
-          <div class="gallery-image">
-            <img src="/foto_chava_bandera.jpg" alt="Arquitectura">
-          </div>
-          <div class="gallery-content-permanent"></div>
-        </div>
-        
-        <div class="gallery-item" data-category="arte">
-          <div class="gallery-image">
-            <img src="/foto_chava_gente_afuera.jpg" alt="Arte">
-          </div>
-          <div class="gallery-overlay">
-            <div class="gallery-content"></div>
-          </div>
-        </div>
-        
-        <div class="gallery-item" data-category="naturaleza">
-          <div class="gallery-image">
-            <img src="/foto_chava_gente.jpg" alt="Bosque">
-          </div>
-          <div class="gallery-content-permanent"></div>
-        </div>
-        
-        <div class="gallery-item" data-category="arquitectura">
-          <div class="gallery-image">
-            <img src="/foto_chava_persona.jpg" alt="Rascacielos">
-          </div>
-          <div class="gallery-overlay">
-            <div class="gallery-content"></div>
-          </div>
-        </div>
-        
-        <div class="gallery-item" data-category="arte">
-          <div class="gallery-image">
-            <img src="/foto_chava_escritorio.jpg" alt="Escultura">
-          </div>
-          <div class="gallery-content-permanent"></div>
-        </div>
-        
-        <div class="gallery-item" data-category="naturaleza">
-          <div class="gallery-image">
-            <img src="/foto_chava_sillon.jpg" alt="Bosque niebla">
-          </div>
-          <div class="gallery-overlay">
-            <div class="gallery-content"></div>
-          </div>
-        </div>
-        
-        <div class="gallery-item" data-category="arquitectura">
-          <div class="gallery-image">
-            <img src="/acerca.jpg" alt="Puente">
-          </div>
-          <div class="gallery-content-permanent"></div>
-        </div>
+          <!-- Las noticias se cargarán aquí dinámicamente -->
       </div>
+    
+      <!-- Contenedor de paginación -->
+      <div id="pagination"></div>
     </div>
   </main>
+<style>
+  /* Estilo solo para la estrella - no afecta tu CSS existente */
+.featured-star {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: gold;
+    font-size: 24px;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+    z-index: 10;
+}
+
+/* Estilos básicos de paginación (puedes adaptarlos a tu diseño) */
+#pagination {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.pagination-btn {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.pagination-btn.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.pagination-btn:hover:not(.active) {
+    background: #f0f0f0;
+}
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const galleryGrid = document.getElementById('galleryGrid');
+    const paginationContainer = document.getElementById('pagination');
+    let currentPage = 1;
+    const itemsPerPage = 4; // Ajusta según tus necesidades
+
+    // Cargar noticias
+    async function loadNews(page) {
+        try {
+            const response = await fetch(`../back/api_fotos_galeria.php?page=${page}&per_page=${itemsPerPage}`);
+            const data = await response.json();
+            
+            if (data.success) {
+                renderNews(data.data);
+                updatePagination(data.pagination);
+                addFeaturedStars();
+            }
+        } catch (error) {
+            console.error('Error al cargar noticias:', error);
+        }
+    }
+
+    // Renderizar noticias
+    function renderNews(news) {
+        galleryGrid.innerHTML = '';
+        
+        news.forEach(item => {
+            const newsElement = document.createElement('div');
+            newsElement.className = 'gallery-item';
+            newsElement.dataset.featured = item.destacada;
+            newsElement.dataset.id = item.id;
+            
+            newsElement.innerHTML = `
+                <div class="gallery-image">
+                    <img src="${item.imagen}" alt="Noticia ${item.id}" loading="lazy">
+                </div>
+                <div class="gallery-overlay">
+                    <div class="gallery-content"></div>
+                </div>
+            `;
+            
+            galleryGrid.appendChild(newsElement);
+        });
+    }
+
+    // Agregar estrellas a destacados
+    function addFeaturedStars() {
+        document.querySelectorAll('.gallery-item[data-featured="true"]').forEach(item => {
+            const star = document.createElement('div');
+            star.className = 'featured-star';
+            star.innerHTML = '★';
+            item.querySelector('.gallery-image').appendChild(star);
+        });
+    }
+
+    // Actualizar paginación
+    function updatePagination(pagination) {
+        paginationContainer.innerHTML = '';
+        
+        // Botón Anterior
+        if (pagination.has_prev_page) {
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'pagination-btn';
+            prevBtn.textContent = 'Anterior';
+            prevBtn.addEventListener('click', () => {
+                currentPage--;
+                loadNews(currentPage);
+            });
+            paginationContainer.appendChild(prevBtn);
+        }
+        
+        // Números de página
+        for (let i = 1; i <= pagination.total_pages; i++) {
+            const pageBtn = document.createElement('button');
+            pageBtn.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
+            pageBtn.textContent = i;
+            pageBtn.addEventListener('click', () => {
+                currentPage = i;
+                loadNews(currentPage);
+            });
+            paginationContainer.appendChild(pageBtn);
+        }
+        
+        // Botón Siguiente
+        if (pagination.has_next_page) {
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'pagination-btn';
+            nextBtn.textContent = 'Siguiente';
+            nextBtn.addEventListener('click', () => {
+                currentPage++;
+                loadNews(currentPage);
+            });
+            paginationContainer.appendChild(nextBtn);
+        }
+    }
+
+    // Cargar primera página
+    loadNews(currentPage);
+});
+</script>
 
   <!-- Pie de página -->
   <footer>

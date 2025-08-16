@@ -34,9 +34,9 @@ try {
                 IFNULL(Titulo, '') AS titulo, 
                 IFNULL(Contenido, '') AS contenido, 
                 IFNULL(Imagenes, '') AS imagenes, 
-                IFNULL(fecha, '') AS fecha
+                IFNULL(fecha, '') AS fecha,
+                IFNULL(Destacada,'') AS destacada
             FROM noticias
-            WHERE destacada = 'si' OR destacada = 1
             ORDER BY fecha DESC
             LIMIT 10";
 
@@ -77,13 +77,7 @@ try {
             $imagenPrincipal = '/back/' . $imagenes[0];
         }
 
-        // Limitar contenido a 10 palabras
-        $contenidoBreve = implode(' ', 
-            array_slice(
-                preg_split('/\s+/', strip_tags($noticia['contenido'])), 
-                0, 6
-            )
-        );
+        
 
         $response['data'][] = [
             'id' => (int)$noticia['id'],
@@ -91,7 +85,6 @@ try {
             'contenido' => $contenidoBreve . (str_word_count($noticia['contenido']) > 10 ? '...' : ''),
             'imagen' => $imagenPrincipal,
             'fecha' => date('d M Y', strtotime($noticia['fecha'])),
-            //'autor' => 'Redacción', // Valor por defecto ya que no existe en tu estructura
             'imagenes' => array_map(function($img) {
                 return '/back/' . $img;
             }, $imagenes)
