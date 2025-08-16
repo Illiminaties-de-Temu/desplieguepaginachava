@@ -436,8 +436,6 @@ button[type="submit"]:disabled {
 }
 
 
-/* Añade estas reglas al final de tu archivo CSS */
-
 /* Asegurar que el header tenga suficiente espacio para los elementos absolutos */
 .header {
     padding: 30px 120px 30px 120px; /* Más espacio en los lados para los botones */
@@ -448,13 +446,13 @@ button[type="submit"]:disabled {
 /* Ajustar posición del user-info para pantallas pequeñas */
 .user-info {
     position: absolute;
-    top: 80px; /* Cambiado de 30px para evitar superposición */
+    top: 40px; /* Cambiado de 30px para evitar superposición */
     right: 30px;
     background: rgba(255,255,255,0.1);
     padding: 5px 10px;
     border-radius: 25px;
     backdrop-filter: blur(10px);
-    font-size: 0.9em; /* Tamaño de fuente más pequeño */
+    font-size: 1em; /* Tamaño de fuente más pequeño */
     max-width: 250px; /* Ancho máximo */
     white-space: nowrap;
     overflow: hidden;
@@ -464,10 +462,10 @@ button[type="submit"]:disabled {
 /* Ajustar el logout-btn para pantallas pequeñas */
 .logout-btn {
     position: absolute;
-    top: 20px;
+    top: 40px;
     left: 20px;
     padding: 8px 15px;
-    font-size: 0.9em;
+    font-size: 1em;
 }
 
 /* Media queries para responsividad */
@@ -477,7 +475,7 @@ button[type="submit"]:disabled {
     }
     
     .header h1 {
-        font-size: 1.8em;
+        font-size: 1.4em;
         margin-top: 20px;
     }
     
