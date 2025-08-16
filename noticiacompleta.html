@@ -99,14 +99,14 @@
   /* Galería de imágenes estilo collage */
   .galeria-imagenes {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 10px;
     margin: 20px 0;
   }
 
   .galeria-imagenes img {
     width: 100%;
-    height: 150px;
+    height: 200px;
     object-fit: cover;
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
@@ -168,11 +168,11 @@
 
   @media (max-width: 768px) {
     .galeria-imagenes {
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     }
     
     .galeria-imagenes img {
-      height: 120px;
+      height: 160px;
     }
     
     .contenido-noticia {
