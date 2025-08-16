@@ -55,12 +55,13 @@
 
   /* Estilos para la noticia */
   #contenedor-noticia {
-    padding: 20px;
+    padding: 30px;
     background-color: var(--gris-claro);
     color: var(--gris-fuerte);
     max-width: 900px;
     margin: auto;
     border-radius: 12px;
+    line-height: 1.6;
   }
 
   #contenedor-noticia h1 {
@@ -75,33 +76,83 @@
   }
 
   .fecha-noticia {
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     color: var(--gris-medio);
     margin-bottom: 5px;
   }
 
   .contenido-noticia {
-  width: 100%;
-  max-width: 100%;
-  align-self: stretch; /* o eliminar esta línea */
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  text-align: justify;
-  color: var(--azul-marino);
-}
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin: 20px 0;
+    box-sizing: border-box;
+    text-align: justify;
+    color: var(--azul-oscuro);
+    font-size: 1.1rem;
+  }
 
+  .contenido-noticia p {
+    margin-bottom: 1.2em;
+  }
+
+  /* Galería de imágenes estilo collage */
   .galeria-imagenes {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
+    margin: 20px 0;
   }
 
   .galeria-imagenes img {
-    max-width: 100%;
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .galeria-imagenes img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+
+  /* Modal para imagen ampliada */
+  .modal-imagen {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.9);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal-contenido {
+    max-width: 90%;
+    max-height: 90%;
+  }
+
+  .modal-contenido img {
+    width: 100%;
+    height: auto;
+    max-height: 90vh;
+    object-fit: contain;
+  }
+
+  .cerrar-modal {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-size: 35px;
+    font-weight: bold;
+    cursor: pointer;
   }
 
   .loading, .error {
@@ -113,6 +164,24 @@
 
   .error {
     color: red;
+  }
+
+  @media (max-width: 768px) {
+    .galeria-imagenes {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+    
+    .galeria-imagenes img {
+      height: 120px;
+    }
+    
+    .contenido-noticia {
+      font-size: 1rem;
+    }
+
+    #contenedor-noticia {
+      padding: 15px;
+    }
   }
 </style>
      
@@ -303,7 +372,8 @@
                 imagenesHTML += `
                     <div class="galeria-imagenes">
                         ${noticia.imagenes.map((img, index) => `
-                            <img src="${img}" alt="Imagen ${index + 1} de la noticia">
+                            <img src="${img}" alt="Imagen ${index + 1} de la noticia" 
+                                 onclick="abrirModal('${img}')">
                         `).join('')}
                     </div>
                 `;
@@ -319,8 +389,46 @@
                 <div class="contenido-noticia">
                     ${noticia.contenido || 'Contenido no disponible'}
                 </div>
+                <!-- Modal para imágenes -->
+                <div id="modal-imagen" class="modal-imagen">
+                    <span class="cerrar-modal" onclick="cerrarModal()">&times;</span>
+                    <div class="modal-contenido">
+                        <img id="imagen-ampliada" src="" alt="Imagen ampliada">
+                    </div>
+                </div>
             `;
         }
+
+        // Funciones para el modal (definidas en el ámbito global)
+        window.abrirModal = function(src) {
+            const modal = document.getElementById('modal-imagen');
+            const imgAmpliada = document.getElementById('imagen-ampliada');
+            
+            imgAmpliada.src = src;
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.cerrarModal = function() {
+            const modal = document.getElementById('modal-imagen');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        };
+
+        // Cerrar modal al hacer clic fuera de la imagen
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('modal-imagen');
+            if (e.target === modal) {
+                cerrarModal();
+            }
+        });
+
+        // Cerrar modal con tecla ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                cerrarModal();
+            }
+        });
     });
     </script>
 
