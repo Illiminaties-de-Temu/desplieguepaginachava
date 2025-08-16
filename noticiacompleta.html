@@ -340,10 +340,7 @@
             `;
         }
 
-        // Obtener los datos de la noticia
-        console.log('ID recibido en URL:', noticiaId); // Para depuración
-
-        // Fetch para validar mejor:
+                // Fetch para validar mejor:
         fetch(`/back/api_noticia_completa.php?id=${encodeURIComponent(noticiaId)}`)
             .then(response => {
                 if (!response.ok) {
