@@ -188,11 +188,15 @@
     </div>
   </main>
 <style>
-  /* Estilo solo para la estrella - no afecta tu CSS existente */
+.gallery-image {
+  position: relative;   /* Necesario para posicionar .featured-star */
+  overflow: visible;    /* Deja que la cinta sobresalga */
+}
+
 .featured-star {
   position: absolute;
-  top: -1.5rem;   /* Sube el contenedor hacia arriba */
-  right: 0;       /* Pegado al borde derecho */
+  top: -1.5rem;  /* Sube la cinta */
+  right: 0;
   z-index: 10;
 }
 
