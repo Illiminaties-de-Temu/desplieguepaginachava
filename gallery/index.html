@@ -206,6 +206,11 @@
   display: block;
 }
 
+.gallery-item {
+  position: relative; /* Para que la cinta se posicione respecto a toda la tarjeta */
+  overflow: visible;  /* Permite que sobresalga */
+}
+
 /* Estilos básicos de paginación (puedes adaptarlos a tu diseño) */
 #pagination {
     display: flex;
@@ -284,7 +289,7 @@
 
     //agregar estrellas
     function addFeaturedStars() {
-        document.querySelectorAll('.gallery-item[data-featured="true"]').forEach(item => {
+        document.querySelectorAll('.gallery-image[data-featured="true"]').forEach(item => {
             const star = document.createElement('div');
             star.className = 'featured-star';
             star.innerHTML = '<img src="banner.svg" style="width: 4.5rem;height: 50%;">';
