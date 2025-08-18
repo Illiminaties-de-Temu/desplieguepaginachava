@@ -190,10 +190,15 @@
 <style>
   /* Estilo solo para la estrella - no afecta tu CSS existente */
 .featured-star {
-     width: 4.5rem;
+    position: absolute;
+    width: 4.5rem;
     height: auto;
     transform: rotateY(180deg); /* como si diera la vuelta */
     transform-origin: right; 
+    font-size: 24px;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+    z-index: 10;
+    pointer-events: none;
 }
 
 /* Estilos básicos de paginación (puedes adaptarlos a tu diseño) */
