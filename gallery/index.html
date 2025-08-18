@@ -288,13 +288,16 @@
 
     //agregar estrellas
     function addFeaturedStars() {
-        document.querySelectorAll('.gallery-item[data-featured="true"]').forEach(item => {
-            const star = document.createElement('div');
-            star.className = 'featured-star';
-            star.innerHTML = '<img src="banner.svg" style="width: 4.5rem;height: 50%;">';
-            item.querySelector('.gallery-image').appendChild(star);
-        });
-    }
+    document.querySelectorAll('.gallery-item[data-featured="true"]').forEach(item => {
+        const star = document.createElement('div');
+        star.className = 'featured-star';
+        star.innerHTML = `
+            <img src="banner.svg" alt="Destacado" style="width: 100%; height: auto;">
+        `;
+        item.querySelector('.gallery-image').appendChild(star);
+    });
+}
+    
     
     galleryGrid.addEventListener('click', function(e) {
         // Versión más flexible que funciona con cualquier elemento dentro del item
