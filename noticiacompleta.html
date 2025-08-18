@@ -313,12 +313,12 @@
         <div class="loading">Cargando noticia...</div>
     </div>
 
-    <script>
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         const contenedor = document.getElementById('contenedor-noticia');
         const urlParams = new URLSearchParams(window.location.search);
         const noticiaId = urlParams.get('id');
-
+    
         // Verificar si hay un ID
         if (!noticiaId) {
             contenedor.innerHTML = `
@@ -340,7 +340,7 @@
             `;
         }
 
-                // Fetch para validar mejor:
+        // Fetch para validar mejor:
         fetch(`/back/api_noticia_completa.php?id=${encodeURIComponent(noticiaId)}`)
             .then(response => {
                 if (!response.ok) {
@@ -396,20 +396,39 @@
             `;
         }
 
-        // Funciones para el modal (definidas en el ámbito global)
+        // Variables globales para el control de imágenes
+        let imagenesGaleria = [];
+        let imagenActualIndex = 0;
+
+        // Funciones para el modal
         window.abrirModal = function(src) {
             const modal = document.getElementById('modal-imagen');
             const imgAmpliada = document.getElementById('imagen-ampliada');
             
+            // Obtener todas las imágenes de la galería
+            imagenesGaleria = Array.from(document.querySelectorAll('.galeria-imagenes img')).map(img => img.src);
+            imagenActualIndex = imagenesGaleria.indexOf(src);
+            
             imgAmpliada.src = src;
             modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
+            
+            // Agregar eventos de teclado y touch
+            document.addEventListener('keydown', manejarTeclado);
+            imgAmpliada.addEventListener('touchstart', manejarTouchStart, false);
+            imgAmpliada.addEventListener('touchend', manejarTouchEnd, false);
         };
 
         window.cerrarModal = function() {
             const modal = document.getElementById('modal-imagen');
             modal.style.display = 'none';
             document.body.style.overflow = 'auto';
+            
+            // Remover eventos al cerrar el modal
+            document.removeEventListener('keydown', manejarTeclado);
+            const imgAmpliada = document.getElementById('imagen-ampliada');
+            imgAmpliada.removeEventListener('touchstart', manejarTouchStart, false);
+            imgAmpliada.removeEventListener('touchend', manejarTouchEnd, false);
         };
 
         // Cerrar modal al hacer clic fuera de la imagen
@@ -420,14 +439,59 @@
             }
         });
 
-        // Cerrar modal con tecla ESC
-        document.addEventListener('keydown', function(e) {
+        // Función para cambiar imagen
+        function cambiarImagen(direccion) {
+            imagenActualIndex += direccion;
+            
+            // Circular entre las imágenes
+            if (imagenActualIndex >= imagenesGaleria.length) {
+                imagenActualIndex = 0;
+            } else if (imagenActualIndex < 0) {
+                imagenActualIndex = imagenesGaleria.length - 1;
+            }
+            
+            document.getElementById('imagen-ampliada').src = imagenesGaleria[imagenActualIndex];
+        }
+
+        // Manejo de teclado
+        function manejarTeclado(e) {
             if (e.key === 'Escape') {
                 cerrarModal();
+            } else if (e.key === 'ArrowRight') {
+                cambiarImagen(1);
+            } else if (e.key === 'ArrowLeft') {
+                cambiarImagen(-1);
             }
-        });
+        }
+
+        // Variables para manejar el swipe
+        let xInicio = null;
+
+        function manejarTouchStart(e) {
+            xInicio = e.touches[0].clientX;
+        }
+
+        function manejarTouchEnd(e) {
+            if (!xInicio) return;
+            
+            let xFin = e.changedTouches[0].clientX;
+            let diferencia = xInicio - xFin;
+            
+            // Determinar si fue un swipe significativo
+            if (Math.abs(diferencia) > 50) {
+                if (diferencia > 0) {
+                    // Swipe izquierda - siguiente imagen
+                    cambiarImagen(1);
+                } else {
+                    // Swipe derecha - imagen anterior
+                    cambiarImagen(-1);
+                }
+            }
+            
+            xInicio = null;
+        }
     });
-    </script>
+</script>
 
     <!-- ==================== -->
   <!-- FOOTER              -->
