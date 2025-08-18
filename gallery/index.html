@@ -188,35 +188,99 @@
     </div>
   </main>
 <style>
-  /* Estilo solo para la estrella - no afecta tu CSS existente */
-.gallery-item .gallery-image {
-    position: relative;
-    overflow: visible; /* Evita que corte el banner */
-    min-height: 100px; /* Asegura altura mínima */
+/* Contenedor principal de la galería */
+#galleryGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
 }
 
+/* Items de la galería */
+.gallery-item {
+    position: relative; /* Referencia para posicionamiento absoluto */
+    margin-top: 3rem; /* Espacio para el banner superior */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.gallery-item:hover {
+    transform: translateY(-5px);
+}
+
+/* Contenedor de imagen (nueva estructura) */
+.gallery-image-container {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding-top: 100%; /* Relación 1:1 (ajustar según necesidades) */
+    overflow: visible; /* Permite que el banner se muestre fuera */
+}
+
+/* Imagen dentro del contenedor */
+.gallery-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.gallery-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Overlay */
+.gallery-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 15;
+}
+
+.gallery-item:hover .gallery-overlay {
+    opacity: 1;
+}
+
+/* Banner SVG destacado */
 .featured-star {
     position: absolute;
-    top: -2.963rem; /* 47.4px / 16 = 2.963rem */
+    top: -2.963rem; /* 47.4px en rem */
     right: 10px;
     width: 4.5rem;
     height: auto;
-    z-index: 10;
+    z-index: 20; /* Por encima del overlay */
     pointer-events: none;
-    background: transparent; /* Debug: cambia a red para verificar posición */
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
-.gallery-item {
-    margin-top: 3rem; /* Espacio para el banner */
+.featured-star img {
+    width: 100%;
+    height: auto;
+    display: block;
 }
 
-/* Estilos básicos de paginación (puedes adaptarlos a tu diseño) */
+/* Paginación */
 #pagination {
     display: flex;
     justify-content: center;
     gap: 5px;
     margin-top: 20px;
     flex-wrap: wrap;
+    padding: 20px 0;
 }
 
 .pagination-btn {
@@ -225,6 +289,7 @@
     background: #fff;
     cursor: pointer;
     border-radius: 3px;
+    transition: all 0.2s ease;
 }
 
 .pagination-btn.active {
@@ -235,6 +300,16 @@
 
 .pagination-btn:hover:not(.active) {
     background: #f0f0f0;
+}
+
+/* Efecto de carga */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.gallery-item {
+    animation: fadeIn 0.5s ease forwards;
 }
 </style>
 
