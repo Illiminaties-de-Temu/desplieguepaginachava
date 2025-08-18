@@ -188,14 +188,14 @@
     </div>
   </main>
 <style>
-.gallery-image {
-  position: relative;   /* Necesario para posicionar .featured-star */
-  overflow: visible;    /* Deja que la cinta sobresalga */
+.gallery-item {
+  position: relative; /* Para que la cinta se posicione respecto a toda la tarjeta */
+  overflow: visible;  /* Permite que sobresalga */
 }
 
 .featured-star {
   position: absolute;
-  top: -1.5rem;  /* Sube la cinta */
+  top: -1.5rem;  /* cuelga hacia afuera */
   right: 0;
   z-index: 10;
 }
@@ -205,6 +205,7 @@
   height: auto;
   display: block;
 }
+
 
 /* Estilos básicos de paginación (puedes adaptarlos a tu diseño) */
 #pagination {
