@@ -189,19 +189,25 @@
   </main>
 <style>
   /* Estilo solo para la estrella - no afecta tu CSS existente */
-
-.gallery-item .gallery-image{
-  position: relative;
+.gallery-item .gallery-image {
+    position: relative;
+    overflow: visible; /* Evita que corte el banner */
+    min-height: 100px; /* Asegura altura mínima */
 }
 
 .featured-star {
     position: absolute;
     top: -2.963rem; /* 47.4px / 16 = 2.963rem */
-    right: 10px; /* Ajusta según necesites */
+    right: 10px;
     width: 4.5rem;
-    height: auto; /* Mantiene la proporción del SVG */
+    height: auto;
     z-index: 10;
     pointer-events: none;
+    background: transparent; /* Debug: cambia a red para verificar posición */
+}
+
+.gallery-item {
+    margin-top: 3rem; /* Espacio para el banner */
 }
 
 /* Estilos básicos de paginación (puedes adaptarlos a tu diseño) */
