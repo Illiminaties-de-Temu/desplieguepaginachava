@@ -265,39 +265,46 @@
 
     // Renderizar noticias
     function renderNews(news) {
-        galleryGrid.innerHTML = '';
+      galleryGrid.innerHTML = '';
+      
+      news.forEach(item => {
+        const newsElement = document.createElement('div');
+        newsElement.className = 'gallery-item';
+        newsElement.dataset.featured = item.destacada;
+        newsElement.dataset.id = item.id;
         
-        news.forEach(item => {
-            const newsElement = document.createElement('div');
-            newsElement.className = 'gallery-item';
-            newsElement.dataset.featured = item.destacada;
-            newsElement.dataset.id = item.id;
-            
-            newsElement.innerHTML = `
-                <div class="gallery-image">
-                    <img src="${item.imagen}" alt="Noticia ${item.id}" loading="lazy">
-                </div>
-                <div class="gallery-overlay">
-                    <div class="gallery-content"></div>
-                </div>
-            `;
-            
-            galleryGrid.appendChild(newsElement);
-        });
+        newsElement.innerHTML = `
+          <div class="gallery-image-container">
+            <div class="gallery-image">
+              <img src="${item.imagen}" alt="Noticia ${item.id}" loading="lazy">
+            </div>
+            <div class="gallery-overlay">
+              <div class="gallery-content"></div>
+            </div>
+          </div>
+        `;
+        
+        galleryGrid.appendChild(newsElement);
+      });
     }
 
     //agregar estrellas
     function addFeaturedStars() {
-    document.querySelectorAll('.gallery-item[data-featured="true"]').forEach(item => {
+      document.querySelectorAll('.gallery-item[data-featured="true"]').forEach(item => {
         const star = document.createElement('div');
         star.className = 'featured-star';
-        star.innerHTML = `
-            <img src="banner.svg" alt="Destacado" style="width: 100%; height: auto;">
-        `;
-        item.querySelector('.gallery-image').appendChild(star);
-    });
-}
-    
+        
+        // Opción 1: Usar el SVG como imagen
+        star.innerHTML = '<img src="banner.svg" style="width:100%;height:auto;">';
+        
+        // Opción 2: Incrustar SVG directamente (recomendado)
+        // star.innerHTML = `<svg...>...</svg>`;
+        
+        // Añadir al contenedor principal en lugar de .gallery-image
+        item.querySelector('.gallery-image-container').appendChild(star);
+      });
+
+    }
     
     galleryGrid.addEventListener('click', function(e) {
         // Versión más flexible que funciona con cualquier elemento dentro del item
