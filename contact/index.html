@@ -173,34 +173,203 @@
         </section>
         
         
-        <div class="contenido">
-            <div class="cajaTexto">
-                <h2>Contáctanos</h2>
-                <p>¿Tienes alguna pregunta o comentario? Nos encantaría saber de ti. Completa el formulario a continuación y te responderemos a la brevedad posible.</p>
-                <form class="formulario-contacto">
-                    <div class="campo-formulario">
-                        <label for="nombre">Nombre completo</label>
-                        <input type="text" id="nombre" name="nombre" required>
-                    </div>
-                    <div class="campo-formulario">
-                        <label for="email">Correo electrónico</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="campo-formulario">
-                        <label for="asunto">Asunto</label>
-                        <input type="text" id="asunto" name="asunto" required>
-                    </div>
-                    <div class="campo-formulario">
-                        <label for="mensaje">Mensaje</label>
-                        <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
-                    </div>
-                    <button type="submit" class="boton-enviar">Enviar mensaje</button>
-                </form>
+        <div class="contenedor-principal">
+        <div class="cabecera">
+            <h1><i class="fab fa-whatsapp"></i> Contáctanos por WhatsApp</h1>
+            <p>Envíanos un mensaje directamente a nuestro WhatsApp</p>
+        </div>
+        
+        <div class="cajaTexto">
+            <form class="formulario-contacto" id="formularioContacto">
+                <div class="campo-formulario">
+                    <label for="nombre">Nombre completo</label>
+                    <input type="text" id="nombre" name="nombre" required>
+                    <div class="campo-error" id="errorNombre">Por favor ingresa tu nombre completo</div>
+                </div>
+                
+                <div class="campo-formulario">
+                    <label for="email">Correo electrónico</label>
+                    <input type="email" id="email" name="email" required>
+                    <div class="campo-error" id="errorEmail">Por favor ingresa un correo electrónico válido</div>
+                </div>
+                
+                <div class="campo-formulario">
+                    <label for="asunto">Asunto</label>
+                    <select id="asunto" name="asunto" required>
+                        <option value="">Selecciona un asunto</option>
+                        <option value="Consulta general">Consulta general</option>
+                        <option value="Soporte técnico">Soporte técnico</option>
+                        <option value="Información de productos">Información de productos</option>
+                        <option value="Cotización">Cotización</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                    <div class="campo-error" id="errorAsunto">Por favor selecciona un asunto</div>
+                </div>
+                
+                <div class="campo-formulario">
+                    <label for="mensaje">Mensaje</label>
+                    <textarea id="mensaje" name="mensaje" rows="5" required placeholder="Escribe tu mensaje aquí..."></textarea>
+                    <div class="campo-error" id="errorMensaje">Por favor ingresa tu mensaje</div>
+                </div>
+                
+                <button type="submit" class="boton-enviar">
+                    <i class="fab fa-whatsapp"></i> Enviar por WhatsApp
+                </button>
+            </form>
+            
+            <div class="mensaje-exito" id="mensajeExito">
+                <i class="fas fa-check-circle"></i> ¡Listo! Serás redirigido a WhatsApp para enviar tu mensaje.
             </div>
             
+            <div class="info-whatsapp">
+                <h3><i class="fas fa-info-circle"></i> ¿Cómo funciona?</h3>
+                <p>Al completar el formulario y hacer clic en "Enviar por WhatsApp", se abrirá la aplicación de WhatsApp con tu mensaje predefinido. Solo tendrás que confirmar el envío.</p>
+                
+                <div class="numero-telefono">
+                    <i class="fas fa-phone"></i>
+                    <span>Número de WhatsApp: +1 (123) 456-7890</span>
+                </div>
+            </div>
         </div>
-        <script type="module" src="/_astro/contact.astro_astro_type_script_index_0_lang.n0W-iw02.js"></script>
+    </div>
     </main>
+
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const formulario = document.getElementById('formularioContacto');
+            const mensajeExito = document.getElementById('mensajeExito');
+            
+            // Elementos de error para cada campo
+            const errorNombre = document.getElementById('errorNombre');
+            const errorEmail = document.getElementById('errorEmail');
+            const errorAsunto = document.getElementById('errorAsunto');
+            const errorMensaje = document.getElementById('errorMensaje');
+            
+            // Número de WhatsApp de destino (cambiar por el número deseado)
+            const telefonoWhatsApp = "526271546289"; // Número en formato internacional sin símbolos
+            
+            // Función para validar email
+            function isValidEmail(email) {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            }
+            
+            // Función para mostrar error en un campo
+            function mostrarError(campo, elementoError, mensaje) {
+                campo.style.borderColor = '#e74c3c';
+                elementoError.textContent = mensaje;
+                elementoError.style.display = 'block';
+            }
+            
+            // Función para limpiar error de un campo
+            function limpiarError(campo, elementoError) {
+                campo.style.borderColor = '#ddd';
+                elementoError.style.display = 'none';
+            }
+            
+            // Validación en tiempo real
+            document.getElementById('nombre').addEventListener('blur', function() {
+                if (this.value.trim() === '') {
+                    mostrarError(this, errorNombre, 'Por favor ingresa tu nombre completo');
+                } else {
+                    limpiarError(this, errorNombre);
+                }
+            });
+            
+            document.getElementById('email').addEventListener('blur', function() {
+                if (!isValidEmail(this.value)) {
+                    mostrarError(this, errorEmail, 'Por favor ingresa un correo electrónico válido');
+                } else {
+                    limpiarError(this, errorEmail);
+                }
+            });
+            
+            document.getElementById('asunto').addEventListener('change', function() {
+                if (this.value === '') {
+                    mostrarError(this, errorAsunto, 'Por favor selecciona un asunto');
+                } else {
+                    limpiarError(this, errorAsunto);
+                }
+            });
+            
+            document.getElementById('mensaje').addEventListener('blur', function() {
+                if (this.value.trim() === '') {
+                    mostrarError(this, errorMensaje, 'Por favor ingresa tu mensaje');
+                } else {
+                    limpiarError(this, errorMensaje);
+                }
+            });
+            
+            // Manejar el envío del formulario
+            formulario.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                let isValid = true;
+                
+                // Validar nombre
+                const nombre = document.getElementById('nombre');
+                if (nombre.value.trim() === '') {
+                    mostrarError(nombre, errorNombre, 'Por favor ingresa tu nombre completo');
+                    isValid = false;
+                } else {
+                    limpiarError(nombre, errorNombre);
+                }
+                
+                // Validar email
+                const email = document.getElementById('email');
+                if (!isValidEmail(email.value)) {
+                    mostrarError(email, errorEmail, 'Por favor ingresa un correo electrónico válido');
+                    isValid = false;
+                } else {
+                    limpiarError(email, errorEmail);
+                }
+                
+                // Validar asunto
+                const asunto = document.getElementById('asunto');
+                if (asunto.value === '') {
+                    mostrarError(asunto, errorAsunto, 'Por favor selecciona un asunto');
+                    isValid = false;
+                } else {
+                    limpiarError(asunto, errorAsunto);
+                }
+                
+                // Validar mensaje
+                const mensaje = document.getElementById('mensaje');
+                if (mensaje.value.trim() === '') {
+                    mostrarError(mensaje, errorMensaje, 'Por favor ingresa tu mensaje');
+                    isValid = false;
+                } else {
+                    limpiarError(mensaje, errorMensaje);
+                }
+                
+                // Si el formulario es válido, redirigir a WhatsApp
+                if (isValid) {
+                    // Mostrar mensaje de éxito
+                    mensajeExito.style.display = 'block';
+                    
+                    // Formatear el mensaje para WhatsApp
+                    const mensajeWhatsApp = `Hola, mi nombre es ${nombre.value}. Asunto: ${asunto.value}. ${mensaje.value}. Mi correo es: ${email.value}`;
+                    
+                    // Codificar el mensaje para URL
+                    const mensajeCodificado = encodeURIComponent(mensajeWhatsApp);
+                    
+                    // Crear el enlace de WhatsApp
+                    const urlWhatsApp = `https://wa.me/${telefonoWhatsApp}?text=${mensajeCodificado}`;
+                    
+                    // Redirigir a WhatsApp después de un breve retraso para que el usuario vea el mensaje de éxito
+                    setTimeout(function() {
+                        window.open(urlWhatsApp, '_blank');
+                    }, 1500);
+                    
+                    // Opcional: resetear el formulario después de 3 segundos
+                    setTimeout(function() {
+                        formulario.reset();
+                        mensajeExito.style.display = 'none';
+                    }, 4000);
+                }
+            });
+        });
+    </script>
     
     <footer>
         <!-- Efectos de fondo -->
