@@ -1,84 +1,25 @@
-/* ===== RESET Y VARIABLES ===== */
+/* ===== RESET GENERAL ===== */
 [data-astro-cid-m6ckovt4] {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-:root {
-  /* Colores */
-  --navy-primary: #0C265E;
-  --navy-dark: #0d1254;
-  --navy-light: #3f51b5;
-  --navy-accent: #303f9f;
-  --white: #ffffff;
-  --light-gray: #f8fafc;
-  --medium-gray: #e2e8f0;
-  --dark-gray: #334155;
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --error: #ef4444;
-  --info: #3b82f6;
-  --azul-oscuro: var(--navy-primary);
-  --gris-claro: var(--light-gray);
-  --blanco: var(--white);
-
-  /* Espaciados */
-  --spacing-xs: .25rem;
-  --spacing-sm: .5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-2xl: 3rem;
-  --spacing-3xl: 4rem;
-
-  /* Tipografía */
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
-
-  /* Bordes */
-  --border-radius: .75rem;
-  --border-radius-lg: 1rem;
-  --border-radius-xl: 1.5rem;
-
-  /* Sombras */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / .05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / .1), 0 2px 4px -2px rgb(0 0 0 / .1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / .1), 0 4px 6px -4px rgb(0 0 0 / .1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1);
-
-  /* Transiciones */
-  --transition-fast: .15s ease-in-out;
-  --transition-normal: .3s ease-in-out;
-  --transition-slow: .5s ease-in-out;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* ===== ESTILOS BASE ===== */
+/* ===== ESTILOS DEL BODY ===== */
 body {
   line-height: 1.6;
   color: var(--azul-oscuro);
   background-color: var(--gris-claro);
 }
 
-/* ===== SECCIÓN HERO ===== */
+/* ===== SECCIÓN HERO PRINCIPAL ===== */
 .seccion-hero[data-astro-cid-m6ckovt4] {
   position: relative;
   width: 100%;
   height: 100vh;
   min-height: 600px;
   max-height: 1200px;
-  background: linear-gradient(to top, #01010165 100%, #0210378e 0%, #fff0 1%), 
-              url(/foto_chava_escritorio_primer_plano.jpg) center/cover no-repeat;
+  background: linear-gradient(to top, #01010165 100%, #0210378e 0%, #fff0 1%), url(/foto_chava_escritorio_primer_plano.jpg) center/cover no-repeat;
   background-position: center top;
   background-size: cover;
   background-attachment: fixed;
@@ -131,6 +72,60 @@ body {
   text-shadow: 2px 2px 8px rgba(0, 0, 0, .7);
   font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.2;
+}
+
+/* ===== VARIABLES CSS ===== */
+:root {
+  --navy-primary: #0C265E;
+  --navy-dark: #0d1254;
+  --navy-light: #3f51b5;
+  --navy-accent: #303f9f;
+  --white: #ffffff;
+  --light-gray: #f8fafc;
+  --medium-gray: #e2e8f0;
+  --dark-gray: #334155;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --info: #3b82f6;
+  --azul-oscuro: var(--navy-primary);
+  --gris-claro: var(--light-gray);
+  --blanco: var(--white);
+  
+  --spacing-xs: .25rem;
+  --spacing-sm: .5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+  
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  --border-radius: .75rem;
+  --border-radius-lg: 1rem;
+  --border-radius-xl: 1.5rem;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / .05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / .1), 0 2px 4px -2px rgb(0 0 0 / .1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / .1), 0 4px 6px -4px rgb(0 0 0 / .1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1);
+  
+  --transition-fast: .15s ease-in-out;
+  --transition-normal: .3s ease-in-out;
+  --transition-slow: .5s ease-in-out;
+}
+
+/* ===== RESET GENERAL ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 /* ===== SECCIÓN HERO ALTERNATIVA ===== */
@@ -596,7 +591,7 @@ body {
   border-top: 1px solid var(--medium-gray);
 }
 
-/* ===== CONFIRMACIÓN ===== */
+/* ===== TARJETA DE CONFIRMACIÓN ===== */
 .confirmation-card {
   background: linear-gradient(135deg, var(--light-gray) 0%, var(--white) 100%);
   padding: var(--spacing-xl);
@@ -735,7 +730,7 @@ body {
   font-weight: var(--font-weight-bold);
 }
 
-/* ===== MENSAJES RECIENTES ===== */
+/* ===== SECCIÓN DE MENSAJES RECIENTES ===== */
 .recent-messages-section {
   margin-top: var(--spacing-3xl);
 }
@@ -808,7 +803,7 @@ body {
   font-family: var(--font-secondary);
 }
 
-/* ===== CONTACTO ===== */
+/* ===== INFORMACIÓN DE CONTACTO ===== */
 .contact-info {
   margin-top: 1.5rem;
   display: flex;
@@ -913,11 +908,6 @@ body {
     margin-bottom: 1.5rem;
   }
   
-  .contenido {
-    flex-direction: column;
-    margin-top: 40px;
-  }
-  
   .container {
     padding: var(--spacing-sm);
   }
@@ -992,11 +982,6 @@ body {
   
   .contenido-superpuesto[data-astro-cid-m6ckovt4] h2[data-astro-cid-m6ckovt4] {
     margin-bottom: 1rem;
-  }
-  
-  .contenido {
-    flex-direction: column;
-    margin-top: 40px;
   }
   
   .hero-section {
