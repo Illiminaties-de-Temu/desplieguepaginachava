@@ -357,9 +357,7 @@
                     mensajeError.style.display = 'none';
                     
                     // Formatear el mensaje para WhatsApp
-                    const mensajeWhatsApp = `Hola, mi nombre es ${nombre.value}.            
-                    Asunto: ${asunto.value}. ${mensaje.value}.          
-                    Mi teléfono es: ${telefono.value}`;
+                    const mensajeWhatsApp = `Hola, mi nombre es ${nombre.value}.        Asunto: ${asunto.value}. ${mensaje.value}.  Mi teléfono es: ${telefono.value}`;
                     
                     // Codificar el mensaje para URL
                     const mensajeCodificado = encodeURIComponent(mensajeWhatsApp);
