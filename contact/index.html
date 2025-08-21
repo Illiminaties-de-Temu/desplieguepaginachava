@@ -255,7 +255,7 @@
             const errorMensaje = document.getElementById('errorMensaje');
             
             // Número de WhatsApp de destino (México)
-            const telefonoWhatsApp = "526275211721";
+            const telefonoWhatsApp = "526271546289";
             
             // Función para validar teléfono
             function isValidPhone(phone) {
@@ -357,7 +357,7 @@
                     mensajeError.style.display = 'none';
                     
                     // Formatear el mensaje para WhatsApp
-                    const mensajeWhatsApp = `Hola, mi nombre es ${nombre.value}.  Asunto: ${asunto.value}. ${mensaje.value}.  Mi teléfono es: ${telefono.value}`;
+                    const mensajeWhatsApp = `Hola, mi nombre es ${nombre.value}.\nAsunto: ${asunto.value}. \n${mensaje.value}.  \nMi teléfono es: ${telefono.value}`;
                     
                     // Codificar el mensaje para URL
                     const mensajeCodificado = encodeURIComponent(mensajeWhatsApp);
