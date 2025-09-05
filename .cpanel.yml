@@ -1,4 +1,7 @@
 deployment:
   tasks:
+    # Definimos la carpeta de destino donde vive tu web
     - export DEPLOYPATH=/home4/arielfer/chavacalderon.mx
-    - /bin/cp -R * $DEPLOYPATH
+    
+    # Eliminamos los archivos viejos (excepto .git y cpanel.yml)
+    - /bin/rsync -a --delete --exclude '.git' --exclude '.cpanel.yml' ./ $DEPLOYPATH
