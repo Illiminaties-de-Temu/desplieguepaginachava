@@ -20,5 +20,5 @@ deployment:
     - chmod -R 755 $DEPLOYPATH
     - chown -R $(whoami):$(whoami) $DEPLOYPATH
 
-    # 4. Mensaje final
+    # 4. Mensaje fina
     - echo "Despliegue completado correctamente."
