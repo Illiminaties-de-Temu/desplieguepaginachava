@@ -1,0 +1,4 @@
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home4/arielfer/chavacalderon.mx
+    - /bin/cp -R * $DEPLOYPATH

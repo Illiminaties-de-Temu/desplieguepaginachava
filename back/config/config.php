@@ -1,8 +1,8 @@
 <?php
-$servername = "127.0.0.1:3306";
-$username = "u748465009_GECKCODEX";
+$servername = "localhost:3306";
+$username = "arielfer_GECKCODEX";
 $password = "IluminatiesdetemuCodigo33";
-$dbname = "u748465009_paginachava";
+$dbname = "arielfer_chavamxbd";
 
 try {
     // Intentamos establecer la conexión a la base de datos utilizando PDO
