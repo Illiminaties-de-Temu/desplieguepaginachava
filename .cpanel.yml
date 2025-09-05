@@ -1,4 +1,24 @@
+---
+# Archivo .cpanel.yml optimizado para despliegue automático
 deployment:
+  # Carpeta de despliegue en el servidor
+  environment:
+    DEPLOYPATH: /home4/arielfer/chavacalderon.mx
+
+  # Tareas a ejecutar durante el despliegue
   tasks:
-    - export DEPLOYPATH=/home4/arielfer/chavacalderon.mx
-    - /bin/rsync -a --delete --exclude '.git' --exclude '.cpanel.yml' ./ $DEPLOYPATH
+    # 1. Mostrar mensaje de inicio (opcional)
+    - echo "Iniciando despliegue en $DEPLOYPATH..."
+
+    # 2. Sincronizar archivos desde el repositorio al directorio de despliegue
+    - /bin/rsync -av --delete \
+        --exclude='.git' \
+        --exclude='.cpanel.yml' \
+        ./ $DEPLOYPATH
+
+    # 3. Opcional: ajustar permisos de archivos para evitar problemas de lectura/escritura
+    - chmod -R 755 $DEPLOYPATH
+    - chown -R $(whoami):$(whoami) $DEPLOYPATH
+
+    # 4. Mensaje final
+    - echo "Despliegue completado correctamente."
