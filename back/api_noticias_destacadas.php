@@ -37,6 +37,7 @@ try {
                 IFNULL(fecha, '') AS fecha,
                 IFNULL(Destacada,'') AS destacada
             FROM noticias
+            WHERE Destacada = 'si'
             ORDER BY fecha DESC
             LIMIT 10";
 
